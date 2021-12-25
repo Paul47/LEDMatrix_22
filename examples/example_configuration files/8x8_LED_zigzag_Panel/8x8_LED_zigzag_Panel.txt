@@ -1,0 +1,19 @@
+8x8_zigzag_Panel
+
+copy this file to the LEDMatrix_22 library forlder and rename it to LEDMatrix_22.h
+
+This configuration file is for one 8x8 led matrix with each row zigzaging back and forth.
+The 1st led is in the top left corner.
+#include the run_report option in the sketch to see a list of the settings in the serial monitor.
+Change the defines as needed for your hardware setup.
+
+1      8
+>>>>>>>>
+<<<<<<<<
+>>>>>>>>
+<<<<<<<<
+>>>>>>>>
+<<<<<<<<
+>>>>>>>>
+<<<<<<<<
+8 rows 64 leds

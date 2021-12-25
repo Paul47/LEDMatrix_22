@@ -1,0 +1,12 @@
+1x144 led strip
+
+copy this file to the LEDMatrix_22 library forlder and rename it to LEDMatrix_22.h
+
+This configuration file is for one led strip rather than a matrix.
+This is done by setting the horizontel size (x) = 144 leds, and the vertical (y) = 1.
+The 1st led is in the top left corner (actually the start of the strip).
+
+The example code Cylon_12.ino is an excellent example fot a single strip.
+
+#include the run_report option in the sketch to see a list of the settings in the serial monitor.
+Change the defines as needed for your hardware setup.

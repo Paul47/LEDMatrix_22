@@ -1,0 +1,46 @@
+32x32_4x4_tiles_zigzag_NO_extender
+
+copy this file to the LEDMatrix_22 library forlder and rename it to LEDMatrix_22.h
+
+LED Strip Extender:
+(Please read the manual for details on the LED Extender hardware).
+This small hardware shield for Teensy, or as a stand alone PCB for MCUs multiplexes
+output pins to drive up to 4 led strips (or 4 sections of a matrix array).
+This reduces the number of pins needed to control the array. Why? By reducing the
+number of leds in each strip, the quality of the led display is improved. 
+For APA102/DOTSTAR leds this can remove display brakedoen while increasing the
+total number of addressable leds in the matrix.
+
+This config is set up for 4 extenders, each supporrting 4 leds strips for a total
+of 16 strips! In this 32x32 led panel, each 8x8 tile has it's own input wires
+support very high transmission and refresh rates.
+
+led matrix:
+This configuration file is for 16 8x8 led matrix tiles organized in 4 rows.
+The tiles in all rows go from left to right. Within a tile, each row zigzags back and forth.
+The 1st led is in the top left corner.
+#include the run_report option in the sketch to see a list of the settings in the serial monitor.
+Change the defines as needed for your hardware setup.
+
+tile 1      Tile 2   Tile 3  Tile 4
+0      7     
+>>>>>>>>    -->      -->     >>>>>>>>
+<<<<<<<<                     <<<<<<<<
+.......                      .......
+>>>>>>>>                     >>>>>>>>
+<<<<<<<<                     <<<<<<<<
+8 rows                       8 rows
+64 leds                      64 leds
+tile 5      Tile 6   Tile 7  Tile 8
+ -->         -->      -->      -->  
+tile 9      Tile 10  Tile 11 Tile 12
+ -->         -->      -->      --> 
+tile 13     Tile 14  Tile 15 Tile 16
+>>>>>>>>     -->      -->    >>>>>>>>
+<<<<<<<<                     <<<<<<<<
+.......                      .......
+>>>>>>>>                     >>>>>>>>
+<<<<<<<<                     <<<<<<<<
+8 rows                       8 rows
+64 leds                      64 leds
+                             NUM_LEDS = 1024

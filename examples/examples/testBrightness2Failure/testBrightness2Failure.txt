@@ -1,0 +1,6 @@
+testBrightness2Failure for LEDMatrix_22 library
+
+APA102, DotStar and similar leds, are sensitive to receving data and passing it along a long strip of leds. The maximum limit is a combination of Brightness, speed (spi_Mhz) and frames per second (fps) for the best balance. Use this sketch to find that balance.
+
+Count the number of brightness levels until your matrix panel leds breakup.
+Adjust the speed (Mhz) and frames per second (fps) for the best balance.

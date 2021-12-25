@@ -1,0 +1,12 @@
+//fontTest.ino will run on any size panel
+
+You can use Adafruit_GFX default and custom fonts with LEDMatrix_22. You can dowbload these fonts with the Adafruit library or ither web sites.
+
+Using custom fonts can be confusing. This example shows how to include and use these fonts. One point to note is that AF default fonts x,y is in the upper left of the character. Custom foints x,y is in the lower left. Wrapping does not appear to work with all custom fonts.
+
+
+    cFTest();   //This test creates a structure array to load an use multiple custom fonts.
+
+    //fontTest(TomThumb, text);     //simple font test with a small font
+    //textTest();               //These two use the default font
+    //printTest();

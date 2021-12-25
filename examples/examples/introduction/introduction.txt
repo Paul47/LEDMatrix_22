@@ -1,0 +1,16 @@
+introduction.ino sketch for LENMatrix_22
+
+RUN LEDMatrix_22.ino 1ST TO TEST YOUR LED MATRIX PANEL HARDWARE AND SOFTWARE CONFIGURATION
+
+This sketch introduces you to the numberous functions of this library. Here are the demo functions. These should work regardless of the size of your panel, but some may look odd if the panel is smaller than 16x16.
+For 24 bit bitmapping and sprites see the sketyches specific to those library functions. Don't try these until you have the basics down.
+
+
+    Scottish_Flag
+    canvasTest
+    textTest
+    invertTest
+    printTest
+    StepThru
+    Cylon
+    flowingRainbow

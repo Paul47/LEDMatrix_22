@@ -1,0 +1,30 @@
+16x16_2x2 tiles_zigzag_NO_extender
+
+copy this file to the LEDMatrix_22 library forlder and rename it to LEDMatrix_22.h
+
+This configuration file is for 4 8x8 led matrix tiles organized in 2 rows.
+The tiles both go from left to right. Within tile, each row zigzags back and forth.
+The 1st led is in the top left corner.
+#include the run_report option in the sketch to see a list of the settings in the serial monitor.
+Change the defines as needed for your hardware setup.
+
+tile 1      Tile 2
+0      7   0      7  
+>>>>>>>>   >>>>>>>>
+<<<<<<<<   <<<<<<<<
+.......    .......
+>>>>>>>>   >>>>>>>>
+<<<<<<<<   <<<<<<<<
+8 rows     8 rows
+64 leds    64 leds
+
+tile 3      Tile 4
+0      7   0      7  
+>>>>>>>>   >>>>>>>>
+<<<<<<<<   <<<<<<<<
+.......    .......
+>>>>>>>>   >>>>>>>>
+<<<<<<<<   <<<<<<<<
+8 rows     8 rows
+64 leds    64 leds
+NUM_LEDS = 256

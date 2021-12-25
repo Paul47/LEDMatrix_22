@@ -1,0 +1,32 @@
+# Table_Mark_Estes_22
+Mark Estes' Table code modified (yet again) to work with the LEDMatrix_22 library.
+Steps through 113 patterns, and modifies the patterns on following passes.
+With this library should be scalable to any size LED matrix panel.
+However, not all patterns will be centered in both x and y for non-square panels.
+
+#Mods
+Just a few global changes needed for example change class to leds.
+Fixed for bugs in #8 and #9 that caused lockup
+
+#Table.h
+Split out  variable and functions definitions to this header for clarity
+
+
+#Pattern control
+Via the arduino serial port, turn off line endings, and use 'n' and 'p' to change patterrns 
+or send '80' to jump to pattern 80 directly.
+
+# Table_Mark_Estes (previous version from marc merlin)
+Mark Estes' Table code modified to work with just a matrix
+
+#define BESTPATTERNS (Table.h)
+Lets you see some of my favourite patterns given that the whole list is
+otherwise 113 patterns long :)
+
+#Video examples (from marc merlin)
+* 64x64 with audio: https://photos.app.goo.gl/qLS14Ad6UzCng3Q23
+* More 64x64 with audio: https://photos.app.goo.gl/syEPi7O97hgsWKb53
+* My 32x24 panel compilation of my favourite patterns: https://www.youtube.com/watch?v=SSllLL5SGCg
+
+Below is a demo of that code running on top of SmartMatrix::GFX:
+![image](https://user-images.githubusercontent.com/1369412/54888844-266bc480-4e5e-11e9-904e-75f417a7d9d2.png)

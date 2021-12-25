@@ -1,0 +1,171 @@
+Creating an array for the led values
+
+//------------------- create the total matrix panel array -------------------
+#if HAS_EXTENDER
+    /* 
+    If you are using 2-wire leds (APA102 or similar) and the Dr. Oldies LED Strip Extenders, 
+    define HAS_EXTENDER as true and configure the Extender section settings in Configuration_21.h.
+    This is the only call you need to complete sewtup of the matrix is this line of leds.ExtInit
+    */
+    leds.ExtInit(NUM_LEDS, NUM_BANKS, NUM_STRIPS, BRIGHTNESS);      //Extender - init params for Extender functions
+#else
+    /*
+    LEDMatrix_21 uses a slightly different .addLeds format then FastLED sketches. 
+    FastLED requires different .addLeds format depending on the type of led: 1-wirw, 2-wire, or Neopixel
+    Here are a few exmaples:
+    1. LEDs requiring DATA + CLOCK such as APA102. Also called 2-wire LEDs
+         FastLED.addLeds<CHIPSET, DATA, CLOCK, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_21.h
+ 
+    2. LEDs that have no CLOCK such as NEOpixel or WS2812x. Also called 1-wire LEDs
+
+    2a. If CHIPSET == NEOPIXEL, use this version. NOT Allowed with Teensyx MCUs
+         Use the fomat in c. below, and use the real led type name WS2811, WS2812, or SK6812.
+            FastLED.addLeds<NEOPIXEL, DATA>(leds[0], NUM_LEDS);
+        2b. All other processors do not require this NUM_STRIPS constant
+                FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_21.h
+        2c. Teensy MCU boards
+             #define (FASTLED_TEENSY4) or #define (FASTLED_TEENSY3) in Configuration_21.h
+             Teensy MCU requires a NUM_STRIPS parameter at the beginning of the .addLeds call.
+             FastLED requires the number of strips (NUM_STRIPS) as the 1st .addLeds parameter. 
+             NUM_STRIPS is usually 1 unless you are doing parallel led strips.
+                #ifndef NUM_STRIPS        
+                   #define NUM_STRIPS 1    //in case NUM_STRIPS is not defined in configuration_21.h
+                #endif
+                FastLED.addLeds<NUM_STRIPS, CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_21.h
+                //                  ^ for TEENSYx whithout NUM_STRIPS all leds on full white
+     */
+//Teensy4 defined in Configuration_21.h
+#ifndef NUM_STRIPS        
+    #define NUM_STRIPS 1    //in case NUM_STRIPS is not defined in configuration_21.h
+#endif
+    FastLED.addLeds<NUM_STRIPS, CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_21.h
+    //                  ^ for TEENSYx whithout NUM_STRIPS all leds on full white
+
+#endif
+
+
+"NEOPIXELS" and Teensy MCU
+Configuring AdaFuit's NEOpixels will not work with FastLED and Teensy. Use the corresponding real type of WS2811, WS2812, or SK6812.
+
+     FastLED.addLeds<NEOPIXEL, DATA>(leds[0], NUM_LEDS);  // COMPILES but Teensy displays as solid color
+	 
+	 FastLED.addLeds<NUM_STRIPS, NEOPIXEL, DATA>(leds[0], NUM_LEDS); //COMILE ERROR!!!
+	 
+  
+Selecting led types
+You may need to try a number of FastLED led types to geet one to work for you. For example, NEOPIXEL has it's own type that FastLED handles differently from WS2812 even though they are similar leds.
+TX18138 (a newer 2.2mm x 2.2mm) uses FastLED type TM1829 
+
+
+============================================================================================
+
+FastLED and #defined constants
+
+FastLED requires most matrix parameterd to be #defined rather than declared. This is for primarily for speed.
+This can make programming more complicated whenb you want to use these parameters in you code.
+LEDMatrix_21 creates CONSTANT variables for each of these matrix defines. With the popularity of 32 bit 
+MCUs like Teensy, using contant variables is not as critical a speed loss as 8 bit MCUs like Arduino UNO. 
+While you cannot change the values of these variables, I recommend your use these rather than the defined tokens
+unless speed is critical. Here are the constant variable alias for each defined one. 
+
+===== List of all definitions describing the matrix panel ======
+**Matrix Panel
+leds.matrixWidth		MATRIX_WIDTH			//former LEDMatrix use negative value for reverse direction
+leds.matriHeight		MATRIX_HEIGHT			//former LEDMatrix use negative value for reverse direction
+leds.matrixType			MATRIX_TYPE				//HORIZONTAL_MATRIX, VERTICAL_MATRIX,
+												//HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_M
+                **what direction does the FIRST row of LEDs flow?
+leds.ledHrorizDir		HORIZ_DIR				//LEFT_2_RIGHT, RIGHT_2_LEFT
+leds.ledVertDir			VERT_DIR				//BOTTOM_UP, TOP_DOWN
+**Tiles/Blocks
+leds.tileWidth			MATRIX_TILE_WIDTH		// width of EACH MATRIX "cell" (not total in the matrix panel)
+leds.tileHeight			MATRIX_TILE_HEIGHT		// height of each matrix "cell"
+leds.tilesPerRow		MATRIX_TILE_H			// number of matrices arranged horizontally
+leds.tilesPerCol		MATRIX_TILE_V			// number of matrices arranged vertically
+leds.tileLedsFlow		EDS_IN_TILE				//HORIZONTAL_MATRIX, VERTICAL_MATRIX,
+												//HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
+leds.tileFlow			TILES_IN_MATRIX 		//HORIZONTAL_BLOCKS, VERTICAL_BLOCKS,
+												//HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
+leds.tileLedHorizDir	LEDS_HORIZ_DIR			//LEFT_2_RIGHT, RIGHT_2_LEFT
+leds.tileLedVertDir		LEDS_VERT_DIR			//BOTTOM_UP, TOP_DOWN
+**Exdtender
+leds.numBanks			NUM_BANKS				// 1 to 4 extender "banks"
+leds.stripsPerBank		STRIPS_PER_BANK			//1 or more but 4 strips per Bank is the most
+leds.ledsPerBank		LEDS_PER_BANK			//equally split the total number of leds across all banks
+
+
+===============================================================================================
+
+//>>>>>>>>>>>>>>>new setup format 12/25/21<<<<<<<<<<<<<<<<<<<<<<<
+
+//------------------------ Setup and loop ------------------------
+void setup() {
+
+#if HAS_EXTENDER
+    /* 
+    If you are using 2-wire leds (APA102 or similar) and the Dr. Oldies LED Strip Extenders, 
+    define HAS_EXTENDER as true and configure the Extender section settings in Configuration_21.h.
+    This is the only call you need to complete sewtup of the matrix is this line of leds.ExtInit
+    */
+    leds.ExtInit(NUM_LEDS, NUM_BANKS, NUM_STRIPS, BRIGHTNESS);      //Extender - init params for Extender functions
+#else
+    /*
+    LEDMatrix_21 uses a slightly different .addLeds format then FastLED sketches. 
+    FastLED requires different .addLeds format depending on the type of led: 1-wirw, 2-wire, or Neopixel
+    Here are a few exmaples:
+    1. LEDs requiring DATA + CLOCK such as APA102. Also called 2-wire LEDs
+         FastLED.addLeds<CHIPSET, DATA, CLOCK, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_21.h
+ 
+    2. LEDs that have no CLOCK such as NEOpixel or WS2812x. Also called 1-wire LEDs
+
+    2a. If CHIPSET == NEOPIXEL, use this version. NOT Allowed with Teensyx MCUs
+         Use the fomat in c. below, and use the real led type name WS2811, WS2812, or SK6812.
+            FastLED.addLeds<NEOPIXEL, DATA>(leds[0], NUM_LEDS);
+        2b. All other processors do not require this NUM_STRIPS constant
+                FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_21.h
+        2c. Teensy MCU boards
+             #define (FASTLED_TEENSY4) or #define (FASTLED_TEENSY3) in Configuration_21.h
+             Teensy MCU requires a NUM_STRIPS parameter at the beginning of the .addLeds call.
+             FastLED requires the number of strips (NUM_STRIPS) as the 1st .addLeds parameter. 
+             NUM_STRIPS is usually 1 unless you are doing parallel led strips.
+                #ifndef NUM_STRIPS        
+                   #define NUM_STRIPS 1    //in case NUM_STRIPS is not defined in configuration_21.h
+                #endif
+                FastLED.addLeds<NUM_STRIPS, CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_21.h
+                //                  ^ for TEENSYx whithout NUM_STRIPS all leds on full white
+     */
+
+#endif
+}
+
+
+//>>>>>>>>>>>>>>>older setup format 12/24/21<<<<<<<<<<<<<<<<<<<<<<<
+
+
+//------------------------ Setup and loop ------------------------
+void setup() {
+
+#if HAS_EXTENDER
+    leds.ExtInit(NUM_LEDS, NUM_BANKS, NUM_STRIPS, BRIGHTNESS);      //Extender - init params for Extender functions
+#else
+    //1. LEDs requiring DATA + CLOCK such as APA102. Also called 2-wire LEDs
+    //FastLED.addLeds<CHIPSET, DATA, CLOCK, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_21.h
+ 
+    //2. LEDs that have no CLOCK such as NEOpixel or WS2812x. Also called 1-wire LEDs
+    //   Teensy MCU requires a NUM_STRIPS parameter at the beginning of the call
+        #if defined (FASTLED_TEENSY4) || defined (FASTLED_TEENSY3)      
+            #ifndef NUM_STRIPS        
+                #define NUM_STRIPS 1    //in case NUM_STRIPS is not defined in configuration_21.h
+            #endif
+            FastLED.addLeds<NUM_STRIPS, CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_21.h
+            //                  ^ for TEENSYx whithout NUM_STRIPS all leds on full white
+        #else
+          #if CHIPSET == NEOPIXEL
+            FastLED.addLeds<NEOPIXEL, DATA>(leds[0], NUM_LEDS);
+          #else
+            //3. All other processors do not require this NUM_STRIPS constant
+            FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_21.h
+          #endif
+        #endif
+#endif
+}
