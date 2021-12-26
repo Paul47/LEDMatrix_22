@@ -1,7 +1,8 @@
+//LEDMatrix_22.ino
+
+
 
 //useful for debugging
-//#define pt(msg)     Serial.println(msg);    //Serial.println MACRO
-//#define ptt(msg)     Serial.print(msg);    //Serial.printl MACRO
 #define pt(msg)     Serial.println(msg);    //Serial.println MACRO
 #define ptt(msg)     Serial.print(msg);    //Serial.printl MACRO
 
@@ -12,33 +13,6 @@ Consider renaming your configurations (and changing the #include "myConfiguratio
 in the library folder.
 */
 
-
-/*===== List of all definitions describing the matrix panel ====== 
-**Matrix Panel
-leds.matrixWidth     MATRIX_WIDTH	        //former LEDMatrix use negative value for reverse direction
-leds.matriHeight     MATRIX_HEIGHT	        //former LEDMatrix use negative value for reverse direction
-leds.matrixType      MATRIX_TYPE	        //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
-                    	                //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_M
-                **what direction does the FIRST row of LEDs flow?
-leds.ledHrorizDir    HORIZ_DIR	            //LEFT_2_RIGHT, RIGHT_2_LEFT
-leds.ledVertDir       VERT_DIR	            //BOTTOM_UP, TOP_DOWN
-**Tiles/Blocks
-leds.tileWidth      MATRIX_TILE_WIDTH	    // width of EACH MATRIX "cell" (not total in the matrix panel)
-leds.tileHeight        MATRIX_TILE_HEIGHT	    // height of each matrix "cell"
-leds.tilesPerRow    MATRIX_TILE_H	        // number of matrices arranged horizontally 
-leds.tilesPerCol    MATRIX_TILE_V 	        // number of matrices arranged vertically
-leds.tileLedsFlow     LEDS_IN_TILE	        //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
-                                        //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
-leds.tileFlow        TILES_IN_MATRIX	        //HORIZONTAL_BLOCKS, VERTICAL_BLOCKS,
-                                        //HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
-leds.tileLedHorizDir   LEDS_HORIZ_DIR	        //LEFT_2_RIGHT, RIGHT_2_LEFT
-leds.tileLedVertDir    EDS_VERT_DIR     	    //BOTTOM_UP, TOP_DOWN
-**Exdtender
-leds.numBanks        NUM_BANKS 	            // 1 to 4 extender "banks"
-leds.stripsPerBank   STRIPS_PER_BANK	        //1 or more but 4 strips per Bank is the most
-leds.ledsPerBank      LEDS_PER_BANK	        //equally split the total number of leds across all banks
-*/
-
 #include <LEDMatrix_22.h>
 #include"TT_numbers_Progmem.h"      //Tom Thumb number set 0-9
 
@@ -46,16 +20,13 @@ leds.ledsPerBank      LEDS_PER_BANK	        //equally split the total number of 
 int16_t X[5] = { -1, -1, -1, -1, -1 }; //ul,ur,ll,lr,center of matrix
 int16_t Y[5] = { -1, -1, -1, -1, -1 };
 
+//zero now but will resize in matrixSpecs()
+//#define leds.numTiles = MATRIX_TILE_V
+uint8_t* tileCentrx = (uint8_t*)malloc(sizeof(uint8_t) * 0);
+uint8_t* tileCentry = (uint8_t*)malloc(sizeof(uint8_t) * 0);
+uint8_t* tileULx = (uint8_t*)malloc(sizeof(uint8_t) * 0);
+uint8_t* tileULy = (uint8_t*)malloc(sizeof(uint8_t) * 0);
 
-#if HAS_BLOCKS
-    //zero now but will resize in matrixSpecs()
-    //#define leds.numTiles = MATRIX_TILE_V
-    uint8_t* tileCentrx = (uint8_t*)malloc(sizeof(uint8_t) * 0);  
-    uint8_t* tileCentry = (uint8_t*)malloc(sizeof(uint8_t) * 0);
-    uint8_t* tileULx = (uint8_t*)malloc(sizeof(uint8_t) * 0);
-    uint8_t* tileULy = (uint8_t*)malloc(sizeof(uint8_t) * 0);
-
-#endif
 
 /* DEBUGGING REPORT - sent to the serial terminal
 To run report define RUN_REPORT, the Report Generator code will be included
@@ -69,31 +40,60 @@ after all parameters are defined <<<
 
 //------------------- create the total matrix panel array -------------------
 #if HAS_EXTENDER || HAS_BLOCKS 
-        // leds in block/tile width, height      led flow IN THE TILE      # tiles in the matrix h, v    How tiles flow in the matrix
-    cLEDMatrix<MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, LEDS_IN_TILE, MATRIX_TILE_H_DIR, MATRIX_TILE_V_DIR, TILES_IN_MATRIX> leds;      //leds array configured
-#else
-    cLEDMatrix<MATRIX_WIDTH_DIR, MATRIX_HEIGHT_DIR, MATRIX_TYPE> leds;  // create our matrix based on matrix definition only
-#endif
+    // leds in block/tile width, height      led flow IN THE TILE      # tiles in the matrix h, v    How tiles flow in the matrix
+        cLEDMatrix<MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, LEDS_IN_TILE, MATRIX_TILE_H_DIR, MATRIX_TILE_V_DIR, TILES_IN_MATRIX> leds;      //leds array configured
+    #else
+        cLEDMatrix<MATRIX_WIDTH_DIR, MATRIX_HEIGHT_DIR, MATRIX_TYPE> leds;  // create our matrix based on matrix definition only
+    #endif
 
 //if run report is defined, the report_Generator.cpp code will be included
 //>>>> the code MUST BE INCLUDED HERE after all parameters are defined
 #ifdef RUN_REPORT
-    #include ".\report_Generator\report_Generator.cpp"
+#include ".\report_Generator\report_Generator.cpp"
 #endif
 
 //------------------------ Setup and loop ------------------------
 void setup() {
     //if run report is defined, the report_Generator.cpp code will be included
     #ifdef RUN_REPORT
-      // run_report();       //also open Serial port
+        run_report();       //also open Serial port
     #endif
 
-   #if HAS_EXTENDER
-        leds.ExtInit(NUM_LEDS, NUM_BANKS, NUM_STRIPS, BRIGHTNESS);      //Extender - init params for Extender functions
-    #else
-        FastLED.addLeds<CHIPSET, DATA, CLOCK, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(leds[0], NUM_LEDS).setCorrection(CORRECTION);
-     #endif
-   exerciseStart();     //setup the exercise and open serial port
+ #if HAS_EXTENDER
+    /* 
+    If you are using 2-wire leds (APA102 or similar) and the Dr. Oldies LED Strip Extenders, 
+    define HAS_EXTENDER as true and configure the Extender section settings in Configuration_22.h.
+    This is the only call you need to complete sewtup of the matrix is this line of leds.ExtInit
+    */
+    leds.ExtInit(NUM_LEDS, NUM_BANKS, NUM_STRIPS, BRIGHTNESS);      //Extender - init params for Extender functions
+#else
+    /*
+    LEDMatrix_22 uses a slightly different .addLeds format then FastLED sketches. 
+    FastLED requires different .addLeds format depending on the type of led: 1-wirw, 2-wire, or Neopixel
+    Here are a few exmaples:
+    1. LEDs requiring DATA + CLOCK such as APA102. Also called 2-wire LEDs
+         FastLED.addLeds<CHIPSET, DATA, CLOCK, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_22.h
+ 
+    2. LEDs that have no CLOCK such as NEOpixel or WS2812x. Also called 1-wire LEDs
+
+    2a. If CHIPSET == NEOPIXEL, use this version. NOT Allowed with Teensyx MCUs
+         Use the fomat in c. below, and use the real led type name WS2811, WS2812, or SK6812.
+            FastLED.addLeds<NEOPIXEL, DATA>(leds[0], NUM_LEDS);
+        2b. All other processors do not require this NUM_STRIPS constant
+                FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_22.h
+        2c. Teensy MCU boards
+             #define (FASTLED_TEENSY4) or #define (FASTLED_TEENSY3) in Configuration_22.h
+             Teensy MCU requires a NUM_STRIPS parameter at the beginning of the .addLeds call.
+             FastLED requires the number of strips (NUM_STRIPS) as the 1st .addLeds parameter. 
+             NUM_STRIPS is usually 1 unless you are doing parallel led strips.
+                #ifndef NUM_STRIPS        
+                   #define NUM_STRIPS 1    //in case NUM_STRIPS is not defined in configuration_22.h
+                #endif
+                FastLED.addLeds<NUM_STRIPS, CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION);   //defines need to be set in config_22.h
+                //                  ^ for TEENSYx whithout NUM_STRIPS all leds on full white
+     */
+ #endif
+    exerciseStart();     //setup the exercise and open serial port
 }
 
 void loop() {
@@ -140,7 +140,7 @@ void loop() {
             break;
         case 'f':
             pt("");
-            stepThruStrips();
+            //ppd 12/21 stepThruStrips();
             pt("Done done with strips");
             value = 0;
             break;
@@ -175,8 +175,8 @@ void matrixSpecs() {
         tileCentry = (uint8_t*)realloc(tileCentry, leds.numTiles);
         tileULx = (uint8_t*)realloc(tileULx, leds.numTiles);
         tileULy = (uint8_t*)realloc(tileULy, leds.numTiles);
-     }
- 
+    }
+
     //capture x,y in upper left corner of each tile
     uint8_t c = 0;          //tile count
     for (uint8_t j = 0; j < leds.tilesPerCol; j++) {
@@ -220,8 +220,8 @@ void showBanks() {
             leds.LEDShow();
             FastLED.delay(1000);
         }
-     }
-    else{
+    }
+    else {
         pt(">>>> NO Banks defined");
     }
 }
@@ -237,7 +237,7 @@ void stepThruTiles() {
             pt("Tiles too small for numbers");
             return;
         }
-        
+
         leds.clear();
 
         for (uint8_t i = 0; i < leds.numTiles; i++) {
@@ -313,10 +313,10 @@ void TringleDraw() {
 
     x0 = X[0];
     y0 = Y[0];
-    x1 = X[0]+2;
+    x1 = X[0] + 2;
     y1 = Y[0];
     x2 = X[0];
-    y2 = Y[0]+2;
+    y2 = Y[0] + 2;
 
     leds.drawRectangle(0, 0, leds.matrixWidth - 1, leds.matrixHeight - 1, CRGB::White); //Draw white frame
     //upper left
@@ -326,10 +326,10 @@ void TringleDraw() {
     color = CRGB::Blue;
     x0 = X[1];
     y0 = Y[1];
-    x1 = X[1]-2;
+    x1 = X[1] - 2;
     y1 = Y[1];
     x2 = X[1];
-    y2 = Y[1]+2;
+    y2 = Y[1] + 2;
     //upper right
     leds.drawTriangle(x0, y0, x1, y1, x2, y2, color);
     leds.LEDShow();
@@ -337,10 +337,10 @@ void TringleDraw() {
     color = CRGB::Green;
     x0 = X[2];
     y0 = Y[2];
-    x1 = X[2]+2;
+    x1 = X[2] + 2;
     y1 = Y[2];
     x2 = X[2];
-    y2 = Y[2]-2;
+    y2 = Y[2] - 2;
     //lower left
     leds.drawTriangle(x0, y0, x1, y1, x2, y2, color);
     leds.LEDShow();
@@ -348,10 +348,10 @@ void TringleDraw() {
     color = CRGB::Yellow;
     x0 = X[3];
     y0 = Y[3];
-    x1 = X[3]-2;
+    x1 = X[3] - 2;
     y1 = Y[3];
     x2 = X[3];
-    y2 = Y[3]-2;
+    y2 = Y[3] - 2;
     //lower right
     leds.drawTriangle(x0, y0, x1, y1, x2, y2, color);
 
@@ -369,9 +369,9 @@ void exerciseStart() {
     menu();          //also come back here when done
 }
 
-void menu(){
-  //  leds.clear();   //clear matrix of last exercise
-  //  leds.LEDShow();
+void menu() {
+    //  leds.clear();   //clear matrix of last exercise
+    //  leds.LEDShow();
 
     pt("*Sketh functionality*");
     pt("Locate and exercise your matrix panel, Extender Banks and Strips.");
@@ -439,7 +439,7 @@ void memoryTest() {
 }
 
 //simple led step through 1 at a time
-void stepThruBanks() {   
+void stepThruBanks() {
     static uint8_t here = 0;        //cabge on return call 3 ways
     leds.clear();
     FastLED.delay(1000);
@@ -449,7 +449,7 @@ void stepThruBanks() {
         }
         if (here == 1) { leds.LEDShow(); FastLED.delay(500); }
     }
-    if(here == 0) { leds.LEDShow(); FastLED.delay(1000); }
+    if (here == 0) { leds.LEDShow(); FastLED.delay(1000); }
 
     for (int16_t y = leds.tileHeight; y < 2 * leds.tileHeight; y++) {
         for (int16_t x = 0; x < leds.matrixWidth; x++) {
@@ -467,7 +467,7 @@ void stepThruBanks() {
     }
     if (here == 0) { leds.LEDShow(); FastLED.delay(1000); }
 
-    for (int16_t y = 3* leds.tileHeight; y < 4* leds.tileHeight; y++) {
+    for (int16_t y = 3 * leds.tileHeight; y < 4 * leds.tileHeight; y++) {
         for (int16_t x = 0; x < leds.matrixWidth; x++) {
             leds.drawPixel(x, y, CRGB::Yellow);
         }
@@ -478,7 +478,7 @@ void stepThruBanks() {
     here++;
     if (here > 2) { here = 0; }
 }
-
+/*    //ppd 12/21
 void stepThruStrips() {
 
     if (leds.hasExtender) {
@@ -505,6 +505,9 @@ void stepThruStrips() {
         pt(">>>> NO Strips enabled");
     }
 }
+*/
+
+
 
 //=================================== text testing section ============================
 /*
