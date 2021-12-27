@@ -1,15 +1,15 @@
 Menu driven mappin tests for LEDMatrix_22 library
 
-This sketch allows you to test the mapping of your matrix panel. These menu functions are available through the serial terminal. The general report is printed first so you can review your settimgs.
+This sketch allows you to test the mapping of your matrix panel. These menu functions are available through the serial terminal. The general report is printed first so you can review your settings.
 
-If your setting do not include tiling or the extender hardware, these choices will be diabled.
+If your setting do not include tiling or the extender hardware, these choices will be disabled.
 
 MOST PROBLEMS ARE CAUSED BY IMPROPER SETTINGS OF THE MATRIX PANEL, TILES/BLOCKS. OR EXTENER SETTINGS
 
 Note: TT_numbers_Progmem.h is a small Tom Thumb file with only numbers to display 
 
-MENUtileing and bank sequences.
-    *Sketh functionality*
+MENU tiling and bank sequences.
+    *Sketch functionality*
     Locate and exercise your matrix panel, Extender Banks and Strips.
     This is an interactive menu on serial monitor to select functions:
         If no blocks, menu stops after 'd' 
@@ -19,7 +19,8 @@ MENUtileing and bank sequences.
     b. Draw triangles in starting corner and each corner of matrix
     IF HAS_BLOCKS
     c.    Draw arrows in starting corners and centers of tiles
-    d.    Light up each block/tile AND print the number of the Block in sequence
+    d.    Light up each block/tile AND print the number of the Block in
+          sequence
     IF HAS_EXTENDER
     e.    Light up each Bank and number in sequence
     f.    Light up each strips
