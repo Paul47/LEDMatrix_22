@@ -22,20 +22,20 @@
     * The lookup table option allows for irregularly shaped LED physical layouts. 
 * A report generator to comfirm proper LED array mapping configuration.
 * Method names now use Adafruit_GFX naming (for similar methods).
-* Along with a soon-to-be-release extender shield, 2-wire LEDs (APA102, sk9822, etc.) can be wired in multiple Banks to reduce LED strip length. The extender: 
-    * Eliminates LED "sparkle" and flashing (a frustrating problem with these LED types) by reducing the number of LEDS needed in series.
+* Along with a soon-to-be-release LEDExtender shield, 1-wire and 2-wire LEDs can be multiplexed in multiple Banks to total reduce LED strip length or control 16 seperate strings. The extender: 
+    * Eliminates LED "sparkle" and flashing (a frustrating problem with 2-wire LED types) by reducing the number of LEDS needed in series.
     * With proper power supplies, and wiring, the Extender can support up to 256 LEDs per strip. That's 4,096 LEDs! A 32 bit MCU such as the Teensy 4.0/4.1 is required.
     * Multiplexes controller wiring, reducing pin count. Up to 16 LED strips/panels with only 8 wires! (4 for 2 DATA + 2 CLOCK pins, and up to 4 more "enable" pins to switch between Banks of LED strips.
     * Voltage step up from 3.3v to 5v.
     * Isolates of the MCU from the LED wiring. 
 * Limitations in this library version:
-    * SmartMatrix has transitioned into a software + hardware solution for HUB75 LED panels. LEDMatrix_22 currently does not support SmartMatrix or HUB75 hardware.
-    *  3-wire Neomatrix LED strips and arrays (WS2812, etc.) have not yet been tested with this library. 
+    * SmartMatrix has transitioned into a software + hardware solution for HUB75 LED panels. 
+       LEDMatrix_22 currently does not support SmartMatrix or HUB75 hardware.
 
 ###The LEDMatrix_22 manual can be accessed with the wiki button above
 
 ### Using multiple LED Strips together but not as a matrix or panel? 
-Check out the LEDStrips_22 library. This library is designed to use the LEDExtender shields to control up to 16 LED strips with 8 controller pins (the same as above). 
+This library is designed to use up to 4 seperate led strips (1-wire or 2-wire). With optional LEDExtender shields control up to 16 LED strips with 8 controller pins. 
 
 ## Single Matrix 
 In this arrangement, one long led strip is cut into multiple rows to create an x,y array. As with previous LEDMatrix versions, the strips can be arranged into rows a zigzag, or left-2-right/right-2-left patterns. In this configuration you are limited to the length of the strip before sparkles/breakup occurs. SPI pins can be used to meet the demand of refreshing long data strings. This approach uses one FastLED Controller. 
@@ -138,7 +138,7 @@ Now, using the LEDExtender we can break up the 32x32 matrix and insert a second 
     void LEDShow(uint8_t Bank, uint8_t gBrightness);
     void LEDShow(uint8_t Bank1, uint8_t Bank2, uint8_t gBrightness);
     void LEDShow(uint8_t Bank1, uint8_t Bank2, uint8_t Bank3, uint8_t gBrightness);
-    CRGB* ExtInit(uint16_t numLeds, uint8_t numBanks, uint8_t numStrips, uint8_t brightness);
+    void addLeds());  (replaces FastLed.addLeds)
     void defineBanks();
 
 ```
