@@ -185,19 +185,12 @@ public:
 #endif  //if true
 
 
-#if HAS_EXTENDER     //Is there 1 or more Extendered enabled?
     boolean hasExtender = HAS_EXTENDER;     //otherwise leave these a defalut of zero
     const uint8_t numBanks = NUM_BANKS;
     const uint8_t stripsPerBank = STRIPS_PER_BANK;
     const int16_t ledsPerBank = LEDS_PER_BANK;
     const int16_t ledsPerStrip = LEDS_PER_STRIP;
-#else     //if false OR not defined:  leave these a default of zero and no missing variable compile error
-    boolean hasExtender = 0;
-    const uint8_t numBanks = 0;
-    const uint8_t stripsPerBank = 0;
-    const int16_t ledsPerBank = 0;
-    const int16_t ledsPerStrip = 0;
-#endif  //is true?
+
 
   public:
     cLEDMatrixBase();
@@ -301,7 +294,7 @@ public:
     void LEDShow(uint8_t Bank, uint8_t gBrightness);
     void LEDShow(uint8_t Bank1, uint8_t Bank2, uint8_t gBrightness);
     void LEDShow(uint8_t Bank1, uint8_t Bank2, uint8_t Bank3, uint8_t gBrightness);
-    void ExtInit(uint16_t numLeds, uint8_t numBanks, uint8_t numStrips, uint8_t brightness);
+    void addLeds();
     void defineBanks();
 
 private:

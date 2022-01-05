@@ -25,11 +25,7 @@ in the library folder.
 //------------------------ Setup and loop ------------------------
 void setup() {
 
-   #if HAS_EXTENDER
-        leds.ExtInit(NUM_LEDS, NUM_BANKS, NUM_STRIPS, BRIGHTNESS);      //Extender - init params for Extender functions
-    #else
-        FastLED.addLeds<CHIPSET, DATA, CLOCK, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(leds[0], NUM_LEDS).setCorrection(CORRECTION);
-     #endif
+    leds.addLeds();     //no parameters required
 }
 
 void loop() {

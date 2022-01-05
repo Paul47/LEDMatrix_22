@@ -13,7 +13,6 @@
                                                                                      
 //#define FASTLED_TEENSY3 //no teensy4 enabled for DATA_RATE_MHZ()
 #define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
-//#define FASTLED_TEENSY3
 #define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
 #define FRAMES_PER_SECOND(x) EVERY_N_MILLISECONDS(1000/x)   //useful for controlling display updating
 
@@ -34,15 +33,20 @@ instead of calculating with mXY(x,y). The table is stored in PROGMEM.
 #define TX18138		TM1829
 
 //======================== set up physical LED type, number ========================= 
-#define COLOR_ORDER GRB		//ppd12/21 BGR
-#define CHIPSET     TX18138	//WS2812, APA102, NEOPIXEL      //see FastLED docs or examples for list
-#define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
+//NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
+#define CHIPSET             APA102   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
+#define CLOCK_PIN_REQUIRED  true  //Does this LED need DATA + CLOCK??
 
-//DATA_RATE_MHZ - APA102 is up to 24Mhz predicted only - WORKS EVEN IF SPI PINS NOT USED
-#define SPI_MHZ         8   //8 working: 6. at 8 see individual led white flashes (sparkles)
-//set Max Refresh Rate set in setup() after size set
-#define refresh_fps     30  //working: 10-60    //default in chip defines is 400
-#define BRIGHTNESS      10  //10  //working: 20 to 40. ??? with 2 power supplies up to 100
+#define COLOR_ORDER GRB		//Set the color order. Most 1-wirw types like WS2812B are GRB.
+#define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
+#define BRIGHTNESS  10  //CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
+
+#if CLOCK_PIN_REQUIRED  //these apply only to 2-wire leds
+    //DATA_RATE_MHZ - APA102 is up to 24Mhz predicted only - WORKS EVEN IF SPI PINS NOT USED
+    #define SPI_MHZ         8   //8 working: 6. at 8 see individual led white flashes (sparkles)
+    //set Max Refresh Rate set in setup() after size set
+    #define refresh_fps     30  //working: 10-60    //default in chip defines is 400
+#endif
 
 
 //============ set up physical LED arrangement in overall matrix then blocks within the matrix ============= 
@@ -51,23 +55,51 @@ instead of calculating with mXY(x,y). The table is stored in PROGMEM.
     Previous LEDMatrix versions use a negative value for reserved (right to left)
     and (bottom to top). Use HORIZ_DIR and VERT_DIR below to do this.
 */
-#define MATRIX_WIDTH    8 * 4    //former LEDMatrix use negative value for reversed (right to left)
-#define MATRIX_HEIGHT   16    //former LEDMatrix use negative value for reversed (bottom to top)
+#define MATRIX_WIDTH    8 * 2    //former LEDMatrix use negative value for reversed (right to left)
+#define MATRIX_HEIGHT   8 * 2   //former LEDMatrix use negative value for reversed (bottom to top)
+#define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 	//the total number of LEDs in your display calculated
 
 //if this is a simple matrix (no tiles/blocks), then define the flow of the led strip(s), otherwise ignore
 #define MATRIX_TYPE     HORIZONTAL_MATRIX     //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
-                                                     //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX };
+                                                   //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX };
 
 //what direction does the FIRST row of LEDs in the matrix panel go (not within the tiles if you have them)? 
 #define HORIZ_DIR      LEFT_2_RIGHT    //LEFT_2_RIGHT, RIGHT_2_LEFT
 #define VERT_DIR       TOP_DOWN        //BOTTOM_UP, TOP_DOWN
 
-//For a simple matrix use the SPI pins available, otherwise these are ignored
-#define DATA    14
-#define CLOCK   13
+//================== Select the data or data+clock pins =========================
+/*   
+If you are NOT using the LEDS Extender Shields, but want to use up to 4 separate led strips, 
+set HAS_EXTENDER (below) to true, set the Banks = 1, and the NUM_STRIPS to your strips. 
+Be sure to assign the DATA or DATA/CLOCK  pins correctly. Teensy boards limit the useable pins for 1-wire led strips. 
+For 1-wire leds, it appears that only some Teensy pins will work at DATA lines.
 
-//the total number of LEDs in your display calculated
-#define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 
+Usable pins: 
+Teensy LC:   1, 4, 5, 24 
+Teensy 3.2:  1, 5, 8, 10, 31   (overclock to 120 MHz for pin 8) 
+Teensy 3.5:  1, 5, 8, 10, 26, 32, 33, 48 
+Teensy 3.6:  1, 5, 8, 10, 26, 32, 33 
+Teensy 4.0:  1, 8, 14, 17, 20, 24, 29, 39
+Teensy 4.1:  1, 8, 14, 17, 20, 24, 29, 35, 47, 53
+
+More details are here: https://github.com/PaulStoffregen/WS2812Serial
+*/
+
+#if CLOCK_PIN_REQUIRED
+    // 2-wire pin selection 
+    //Select your DATA/CLOCK pins - if using the Extender shield pin selections are limted
+                                    //depends on how Teensy is rotated on the Extender board   
+    #define DATA_1          1       //Teensy with Extender only 1 or 14 
+    #define CLOCK_1         12       //Teensy with Extender only 12 or 15
+    #define DATA_2          13       //Teensy with Extender only 13 or 16
+    #define CLOCK_2         14       //Teensy with Extender only 14 or 17
+#else   //1-wire DATA only. Teensy pins are limted to just a few
+        //if other MCU change as desired
+    #define DATA_1          1       //Teensy 4x 1, Teensy 3.5/3.6    1
+    #define DATA_2          8       //Teensy 4x 8, Teensy 3.5/3.6    8
+    #define DATA_3         17       //Teensy 4x 17, Teensy 3.5/3.6  10
+    #define DATA_4         20       //Teensy 4x 20, Teensy 3.5/3.6  26
+#endif
 
 //================== tiles/blocks in the matrix panel =========================
 /*
@@ -78,19 +110,19 @@ instead of calculating with mXY(x,y). The table is stored in PROGMEM.
  3. If NOT 1 or 2, use this section to describe your tile layout in you martix/panel.
     LEDMatrix will calculate the x,y offsets.
 */
-#define HAS_BLOCKS  true//ppd12/21 
+#define HAS_BLOCKS  true
 #if HAS_BLOCKS
 
-    #define MATRIX_TILE_WIDTH   8 // width of EACH MATRIX "cell" (not total display)
-    #define MATRIX_TILE_HEIGHT  8 // height of each matrix "cell" 
-    #define MATRIX_TILE_H       4// number of matrices arranged horizontally (positive value only)
-    #define MATRIX_TILE_V       2  // number of matrices arranged vertically (positive value only)
-    #define LEDS_IN_TILE        HORIZONTAL_MATRIX    //LED sequence within each tile:
+    #define MATRIX_TILE_WIDTH   8               // width of EACH MATRIX "cell" (not total display)
+    #define MATRIX_TILE_HEIGHT  8               // height of each matrix "cell" 
+    #define MATRIX_TILE_H       2               // number of matrices arranged horizontally (positive value only)
+    #define MATRIX_TILE_V       2               // number of matrices arranged vertically (positive value only)
+    #define LEDS_IN_TILE        HORIZONTAL_ZIGZAG_MATRIX    //LED sequence within each tile:
                                                             //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                                             //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
     #define TILES_IN_MATRIX     HORIZONTAL_BLOCKS   //sequence of tiles in the entire panel
-                                                    //HORIZONTAL_BLOCKS, VERTICAL_BLOCKS,
-                                                    //HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
+                                                            //HORIZONTAL_BLOCKS, VERTICAL_BLOCKS,
+                                                            //HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
     /*
         what direction does the FIRST row of LEDs in each individual tile go?
     */
@@ -100,7 +132,7 @@ instead of calculating with mXY(x,y). The table is stored in PROGMEM.
     //================================= end of Tiles/Blocks ==============================
 
 //================== setup number of extenders and LED "strips" in each bank =========================
-#define HAS_EXTENDER  false//ppd12/21  //true/false Dr Oldies LED Extender shields                                       //ppd
+#define HAS_EXTENDER  true     //true/false Dr Oldies LED Extender shields                                       //ppd
 #if  HAS_EXTENDER
     /*
     4 wire LEDs are limited in the number of LEDs that can be adrressed on each strip. Too many LEDEs
@@ -110,8 +142,8 @@ instead of calculating with mXY(x,y). The table is stored in PROGMEM.
     be address with the SAME 4 PINS, plus 1 "enable" pin for each of the 4 extender boards 
     - 16 strips with only 8 pins! This drametically increases the total number of addressable LEDs! 
     */
-    #define NUM_BANKS           4      // 1 to 4 extender "banks"
-    #define STRIPS_PER_BANK     4       //1 or more but 4 strips per Bank is the most effiicient use of the hardware
+    #define NUM_BANKS           1      // 1 to 4 extender "banks"
+    #define STRIPS_PER_BANK     1       //1 or more but 4 strips per Bank is the most efficient use of the hardware
 
     //total number of strips used
     #define NUM_STRIPS      STRIPS_PER_BANK * NUM_BANKS 
@@ -124,20 +156,16 @@ instead of calculating with mXY(x,y). The table is stored in PROGMEM.
        By roitating the Teensy board, you can use for Bank control pins 18,19,20,12 nd for data/clock pins 14,15,16,17.. 
        Alternate pins (18-21) depend on how Teensy is rotated on the Extender board
        */
-    #define BANK_PIN_0          5   //5 or 18 
-    #define BANK_PIN_1          6   //6 or 19
-    #define BANK_PIN_2          7   //7 or 20
-    #define BANK_PIN_3          8   //8 or 21
+    #define BANK_PIN_0          3   //3 
+    #define BANK_PIN_1          4   //4
+    #define BANK_PIN_2          5   //5
+    #define BANK_PIN_3          6   //6
     
     /*-----------------choose DATA and CLOCK pins in the bank (all banks use the same pins)
         The same data/clock pins are used for all Banks, and made active by the BANK_PIN above. 
         All 4 are required regardless of 2, 3, or 4 physical strips per Bank are present.
         Alternate pins (14-17) depend on how Teensy is rotated on the Extender board
         */
-    #define DATA_1          1       //1 or 14
-    #define CLOCK_1         2       //2 or 15
-    #define DATA_2          3       //3 or 16
-    #define CLOCK_2         4       //4 or 17
 
     /*
     Now slice and dice the FastLED array up into a Bank size then into strips in each Bank
@@ -152,13 +180,27 @@ instead of calculating with mXY(x,y). The table is stored in PROGMEM.
     #if HAS_BLOCKS  //TOTAL LEDS IN THE ENTIRE MATRIX
         #define NUM_LEDS_CALC          MATRIX_TILE_WIDTH * MATRIX_TILE_H * MATRIX_TILE_HEIGHT * MATRIX_TILE_V	//leds total on entire matrix panel
         #if NUM_LEDS != NUM_LEDS_CALC
-        #warning ">>> Your NUM_LEDS does not equal the calculated MATRIX_WIDTH * MATRIX_HEIGHT <<<"
+        #warning ">>> Your NUM_LEDS does not equal the calculated MATRIX_WIDTH * MATRIX_HEIGHT check MATRIX_TILE_ V and H <<<"
         #endif
     #endif
-#endif  //HAS_EXTENDER
- //================================= end of Extender Control ==============================
+#endif  //HAS_EXTENDER true
 
-//need to set these 2 as NEGATIVE for cLEDMatrix if direction is "reversed"
+//================================= end of USER DATA for Extender Control ==============================
+
+//house keeping if no Extender present - set all to 1 with no Bank pins.
+#if ! HAS_EXTENDER
+    #define NUM_BANKS           1
+    #define STRIPS_PER_BANK     1
+    #define NUM_STRIPS          1
+    #define LEDS_PER_BANK       NUM_LEDS/NUM_BANKS
+    #define LEDS_PER_STRIP      LEDS_PER_BANK / STRIPS_PER_BANK 
+    #define BANK_PIN_0          -1
+    #define BANK_PIN_1          -1
+    #define BANK_PIN_2          -1
+    #define BANK_PIN_3          -1
+#endif      // HAS_EXTENDER false
+
+//housekeeping for matrix - need to set these 2 as NEGATIVE for FastLEDS cLEDMatrix if direction is "reversed"
 #define LEFT_2_RIGHT true
 #define RIGHT_2_LEFT false
 #define BOTTOM_UP   true
@@ -185,4 +227,4 @@ instead of calculating with mXY(x,y). The table is stored in PROGMEM.
 #else
 #define MATRIX_TILE_V_DIR   MATRIX_TILE_V
 #endif
-
+//================== end of house keeping =====================

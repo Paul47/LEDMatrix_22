@@ -45,7 +45,7 @@ void setup() {
 #ifdef RUN_REPORT
     run_report();       //also open Serial port
 #endif
-    leds.ExtInit(NUM_LEDS, NUM_BANKS, NUM_STRIPS, BRIGHTNESS);      //Extender - init params for Extender functions
+    leds.addLeds();     //no parameters required
     memoryTest();
 }
 
