@@ -17,8 +17,9 @@
 #define FRAMES_PER_SECOND(x) EVERY_N_MILLISECONDS(1000/x)   //useful for controlling display updating
 
 /* If XYTable_LookUp is defined below, use an external table named XYTable_LookUp.h,
-in the library folder to map the LEDs in XYTable[y][x]
-instead of calculating with mXY(x,y). The table is stored in PROGMEM.
+in the library folder to map the LEDs in XYTable[y][x] instead of 
+calculating with mXY(x,y). The table is stored in PROGMEM. For irregular led
+arrays, look at the LEDMatrix manual for details.
 */
 //#define XYTable_LookUp
 

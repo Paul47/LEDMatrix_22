@@ -32,7 +32,8 @@ Both files must be in the libary older. If not defined, these 2 files are not ne
 
 /* If XYTable_LookUp is defined in Configuration_22.h, use an external table named XYTable_LookUp.h,
 in the library folder to map the LEDs in XYTable[y][x]
-instead of calculating with mXY(x,y). The table is stored in PROGMEM.
+instead of calculating with mXY(x,y). The table is stored in PROGMEM. For irregular led
+arrays, look at the LEDMatrix manual for details.
 */
 //#define XYTable_LookUp
 #ifdef XYTable_LookUp

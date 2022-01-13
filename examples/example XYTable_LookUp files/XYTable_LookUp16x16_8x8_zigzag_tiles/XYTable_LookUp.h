@@ -2,8 +2,8 @@
 /* XYTable_LookUp16x16.h					
 					
 This table is layed out in X=horizontal in each row and Y=vertical rows.					
- NOTE: Addressing is: XYTable[y][x] NOT x,y	
- For irregular led arrays, look at the LEDMatrix manual for details.				
+ Addressing is: XYTable[y][x] NOT x,y				
+					
 */					
 const uint16_t  PROGMEM XYTable[][16] = {					
   0,  1,  2,  3,  4,  5,  6,  7, 64, 65, 66, 67, 68, 69, 70, 71,
