@@ -17,9 +17,8 @@
 #define FRAMES_PER_SECOND(x) EVERY_N_MILLISECONDS(1000/x)   //useful for controlling display updating
 
 /* If XYTable_LookUp is defined below, use an external table named XYTable_LookUp.h,
-in the library folder to map the LEDs in XYTable[y][x] instead of 
-calculating with mXY(x,y). The table is stored in PROGMEM. For irregular led
-arrays, look at the LEDMatrix manual for details.
+in the library folder to map the LEDs in XYTable[y][x]
+instead of calculating with mXY(x,y). The table is stored in PROGMEM.
 */
 //#define XYTable_LookUp
 
@@ -35,8 +34,8 @@ arrays, look at the LEDMatrix manual for details.
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
-#define CHIPSET             APA102   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
-#define CLOCK_PIN_REQUIRED  true  //Does this LED need DATA + CLOCK??
+#define CHIPSET             WS2812   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
+#define CLOCK_PIN_REQUIRED  false  //Does this LED need DATA + CLOCK??
 
 #define COLOR_ORDER GRB		//Set the color order. Most 1-wirw types like WS2812B are GRB.
 #define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
@@ -56,12 +55,12 @@ arrays, look at the LEDMatrix manual for details.
     Previous LEDMatrix versions use a negative value for reserved (right to left)
     and (bottom to top). Use HORIZ_DIR and VERT_DIR below to do this.
 */
-#define MATRIX_WIDTH    8    //former LEDMatrix use negative value for reversed (right to left)
-#define MATRIX_HEIGHT   8   //former LEDMatrix use negative value for reversed (bottom to top)
+#define MATRIX_WIDTH    16    //former LEDMatrix use negative value for reversed (right to left)
+#define MATRIX_HEIGHT   16   //former LEDMatrix use negative value for reversed (bottom to top)
 #define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 	//the total number of LEDs in your display calculated
 
 //if this is a simple matrix (no tiles/blocks), then define the flow of the led strip(s), otherwise ignore
-#define MATRIX_TYPE     HORIZONTAL_ZIGZAG_MATRIX     //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
+#define MATRIX_TYPE     HORIZONTAL_MATRIX     //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
                                                    //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX };
 
 //what direction does the FIRST row of LEDs in the matrix panel go (not within the tiles if you have them)? 
@@ -75,7 +74,6 @@ set HAS_EXTENDER (below) to true, set the Banks = 1, and the NUM_STRIPS to your 
 Be sure to assign the DATA or DATA/CLOCK  pins correctly. Teensy boards limit the useable pins for 1-wire led strips. 
 For 1-wire leds, it appears that only some Teensy pins will work at DATA lines.
 
-For 1-wire leds, it appears that only some Teensy pins will work as DATA lines.
 Usable pins: 
 Teensy LC:   1, 4, 5, 24 
 Teensy 3.2:  1, 5, 8, 10, 31   (overclock to 120 MHz for pin 8) 
@@ -102,6 +100,36 @@ More details are here: https://github.com/PaulStoffregen/WS2812Serial
     #define DATA_3         17       //Teensy 4x 17, Teensy 3.5/3.6  10
     #define DATA_4         20       //Teensy 4x 20, Teensy 3.5/3.6  26
 #endif
+
+//================== tiles/blocks in the matrix panel =========================
+/*
+ 1. Is your matrix panel made up of blocks/cells of LEDs? 
+    If yes, set HAS_BLOCKS to true and ignore  this section.
+ 2. Are you using your own x,y lookup table? 
+    If yes, enable XYTable_LookUp in LEDMatric_22.h and ignore this section.
+ 3. If NOT 1 or 2, use this section to describe your tile layout in you martix/panel.
+    LEDMatrix will calculate the x,y offsets.
+*/
+#define HAS_BLOCKS  true
+#if HAS_BLOCKS
+
+    #define MATRIX_TILE_WIDTH   8               // width of EACH MATRIX "cell" (not total display)
+    #define MATRIX_TILE_HEIGHT  8               // height of each matrix "cell" 
+    #define MATRIX_TILE_H       2               // number of matrices arranged horizontally (positive value only)
+    #define MATRIX_TILE_V       2               // number of matrices arranged vertically (positive value only)
+    #define LEDS_IN_TILE        HORIZONTAL_ZIGZAG_MATRIX    //LED sequence within each tile:
+                                                            //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
+                                                            //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
+    #define TILES_IN_MATRIX     HORIZONTAL_BLOCKS   //sequence of tiles in the entire panel
+                                                            //HORIZONTAL_BLOCKS, VERTICAL_BLOCKS,
+                                                            //HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
+    /*
+        what direction does the FIRST row of LEDs in each individual tile go?
+    */
+    #define LEDS_HORIZ_DIR      LEFT_2_RIGHT    //LEFT_2_RIGHT, RIGHT_2_LEFT
+    #define LEDS_VERT_DIR       TOP_DOWN        //BOTTOM_UP, TOP_DOWN
+#endif
+    //================================= end of Tiles/Blocks ==============================
 
 //================================= end of USER DATA for Extender Control ==============================
 

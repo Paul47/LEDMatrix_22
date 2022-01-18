@@ -35,8 +35,8 @@ arrays, look at the LEDMatrix manual for details.
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
-#define CHIPSET             APA102   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
-#define CLOCK_PIN_REQUIRED  true  //Does this LED need DATA + CLOCK??
+#define CHIPSET             WS2812B   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
+#define CLOCK_PIN_REQUIRED  false  //Does this LED need DATA + CLOCK??
 
 #define COLOR_ORDER GRB		//Set the color order. Most 1-wirw types like WS2812B are GRB.
 #define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
@@ -73,8 +73,8 @@ arrays, look at the LEDMatrix manual for details.
 If you are NOT using the LEDS Extender Shields, but want to use up to 4 separate led strips, 
 set HAS_EXTENDER (below) to true, set the Banks = 1, and the NUM_STRIPS to your strips. 
 Be sure to assign the DATA or DATA/CLOCK  pins correctly. Teensy boards limit the useable pins for 1-wire led strips. 
-For 1-wire leds, it appears that only some Teensy pins will work at DATA lines.
 
+For 1-wire leds, it appears that only some Teensy pins will work as DATA lines.
 Usable pins: 
 Teensy LC:   1, 4, 5, 24 
 Teensy 3.2:  1, 5, 8, 10, 31   (overclock to 120 MHz for pin 8) 
@@ -86,8 +86,7 @@ Teensy 4.1:  1, 8, 14, 17, 20, 24, 29, 35, 47, 53
 More details are here: https://github.com/PaulStoffregen/WS2812Serial
 */
 
-#if CLOCK_PIN_REQUIRED
-    // 2-wire pin selection 
+#if CLOCK_PIN_REQUIRED     // 2-wire pin selection 
     //Select your DATA/CLOCK pins - if using the Extender shield pin selections are limted
                                     //depends on how Teensy is rotated on the Extender board   
     #define DATA_1          1       //Teensy with Extender only 1 or 14 
@@ -157,10 +156,17 @@ More details are here: https://github.com/PaulStoffregen/WS2812Serial
        By roitating the Teensy board, you can use for Bank control pins 18,19,20,12 nd for data/clock pins 14,15,16,17.. 
        Alternate pins (18-21) depend on how Teensy is rotated on the Extender board
        */
+#if CLOCK_PIN_REQUIRED  //2-wire
+    #define BANK_PIN_0          5   //6 
+    #define BANK_PIN_1          6   //6
+    #define BANK_PIN_2          7    //7
+    #define BANK_PIN_3          8    //8
+#else                   //1-wire
     #define BANK_PIN_0          3   //3 
     #define BANK_PIN_1          4   //4
     #define BANK_PIN_2          5   //5
     #define BANK_PIN_3          6   //6
+#endif
     
     /*-----------------choose DATA and CLOCK pins in the bank (all banks use the same pins)
         The same data/clock pins are used for all Banks, and made active by the BANK_PIN above. 

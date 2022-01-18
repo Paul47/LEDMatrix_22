@@ -60,7 +60,7 @@ void setup() {
     #endif
 
     leds.addLeds();     //no parameters required
-
+    exerciseStart();
 }
 
 void loop() {
@@ -123,7 +123,7 @@ void loop() {
 
 
 void matrixSpecs() {
-
+    //set up variables for this matrix panel
     //4 corners - ul,ur,ll,lr
     X[0] = 0;
     Y[0] = 0;
@@ -331,8 +331,7 @@ void TringleDraw() {
 //anything needed to initialize sketch here
 void exerciseStart() {
     leds.clear();
-    run_report();       //also open Serial port
-    matrixSpecs();
+    matrixSpecs();      //initialize matrix panel variables for this sketch
     menu();          //also come back here when done
 }
 

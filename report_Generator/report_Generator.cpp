@@ -186,9 +186,9 @@ void listBlocks() {
 void listBanks(){
     #ifdef HAS_EXTENDER
     #if HAS_EXTENDER
-            uint8_t strip = 0;
+            uint8_t strip = 0;  //strip loop from 0-3 but physical strips are 1-4
             int16_t ledCount;
-            uint8_t col = 10;
+            uint8_t col = 10;   //field widths for report
             if (NUM_STRIPS == 0 || NUM_BANKS == 0) {return;}
             pt("Strips Report");
             ptt("  NUM_STRIPS = "); pt(NUM_STRIPS);
@@ -203,16 +203,16 @@ void listBanks(){
             //NOTE: this index is reversed - from top down - thats  the way FastLED sets up the memory
             uint16_t stripStart[NUM_STRIPS];    //may need these segment points during programming
             uint8_t index = NUM_STRIPS - 1;
-        for (int8_t i = 0; i < NUM_STRIPS; i++) {
-                stripStart[index] = i * LEDS_PER_STRIP;
-                index--;
-        }
-        #ifdef CLOCK_1
+            for (int8_t i = 0; i < NUM_STRIPS; i++) {
+                    stripStart[index] = i * LEDS_PER_STRIP;
+                    index--;
+            }
+        #if CLOCK_PIN_REQUIRED  //2-wire leds
             ptt("      strip");  ptt("  Data pin"); ptt("  Clock pin"); ptt(" StripStart"); pt("   StripEnd");
             for (uint8_t i = 0; i < NUM_BANKS; i++) {
                 ptt("Bank =  "); pt(i);
                     #if STRIPS_PER_BANK  > 0
-                        fmt(strip, col, 0); fmt(DATA_1, col, 0);   fmt(CLOCK_1, col, 0);   fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP-1, col, 0); pt("");
+                        fmt(strip+1, col, 0); fmt(DATA_1, col, 0);   fmt(CLOCK_1, col, 0);   fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP-1, col, 0); pt("");
                         strip++;
                     #endif
                     #if STRIPS_PER_BANK  > 1
@@ -220,13 +220,34 @@ void listBanks(){
                         strip++;
                     #endif
                     #if STRIPS_PER_BANK  > 2
-                        fmt(strip+2, col, 0); fmt(DATA_1, col, 0);   fmt(CLOCK_2, col, 0);   fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP-1, col, 0); pt("");
+                        fmt(strip+1, col, 0); fmt(DATA_1, col, 0);   fmt(CLOCK_2, col, 0);   fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP-1, col, 0); pt("");
                         strip++;
                     #endif
                     #if STRIPS_PER_BANK  > 3
-                        fmt(strip+3, col, 0);  fmt(DATA_2, col, 0);   fmt(CLOCK_2, col, 0);   fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP-1, col, 0); pt("");
+                        fmt(strip+1, col, 0);  fmt(DATA_2, col, 0);   fmt(CLOCK_2, col, 0);   fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP-1, col, 0); pt("");
                         strip++;
                     #endif
+            }
+          #else         //1-wire leds
+            ptt("      strip");  ptt("  Data pin"); ptt(" StripStart"); pt("   StripEnd");
+            for (uint8_t i = 0; i < NUM_BANKS; i++) {
+                ptt("Bank =  "); pt(i);
+                #if STRIPS_PER_BANK  > 0
+                   fmt(strip + 1, col, 0); fmt(DATA_1, col, 0); fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP - 1, col, 0); pt("");
+                   strip++;
+                #endif
+                #if STRIPS_PER_BANK  > 1
+                   fmt(strip + 1, col, 0);  fmt(DATA_2, col, 0); fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP - 1, col, 0); pt("");
+                  strip++;
+                #endif
+                #if STRIPS_PER_BANK  > 2
+                  fmt(strip + 1, col, 0); fmt(DATA_3, col, 0); fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP - 1, col, 0); pt("");
+                  strip++;
+                #endif
+                #if STRIPS_PER_BANK  > 3
+                    fmt(strip + 1, col, 0);  fmt(DATA_4, col, 0); fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP - 1, col, 0); pt("");
+                 strip++;
+                #endif
             }
           #endif    
             ledCount = (strip) * LEDS_PER_STRIP;
@@ -248,16 +269,48 @@ void listExtender() {
         pt(" ");
         ptt("  Bank Enable Pins = "); ptt(BANK_PIN_0);
         if (NUM_BANKS > 1) {
+        #ifdef BANK_PIN_1
             ptt(", "); ptt(BANK_PIN_1);
+        #endif
         }
         if (NUM_BANKS > 2) {
+        #ifdef BANK_PIN_2
             ptt(", "); ptt(BANK_PIN_2);
+        #endif
         }
         if (NUM_BANKS > 3) {
+        #ifdef BANK_PIN_3
             ptt(", "); ptt(BANK_PIN_3);
+        #endif
         }
         pt("");
-        ptt("  Bank Data Pins (Data/Clock) = "); ptt(DATA_1); ptt("/"); ptt(CLOCK_1); ptt(", "); ptt(DATA_2); ptt("/"); ptt(CLOCK_2); pt(" ");
+        //must use the defined rather than the variales for these pins sins user may chang leds. to some other name
+        #if CLOCK_PIN_REQUIRED  //these apply only to 2-wire leds
+            #if defined DATA_1 && defined CLOCK_1
+                ptt("  Bank Data Pins (Data/Clock) = "); ptt(DATA_1); ptt("/"); ptt(CLOCK_1); pt(" ");
+                #if defined DATA_2 && defined CLOCK_2
+                    ptt("  Bank Data Pins (Data/Clock) = "); ptt(DATA_2); ptt("/"); ptt(CLOCK_2); pt(" ");
+                #endif
+            #endif
+        #else  //these apply only to 1-wire leds
+            ptt("  Bank Data Pins = ");
+            ptt(DATA_1); 
+            if (STRIPS_PER_BANK > 1) {
+            #ifdef DATA_2
+                ptt(", "); ptt(DATA_2);
+            #endif
+            }
+            if (STRIPS_PER_BANK > 2) {
+            #ifdef DATA_3
+                ptt(", "); ptt(DATA_3);
+            #endif
+            }
+            if (STRIPS_PER_BANK > 3) {
+            #ifdef DATA_4
+                ptt(", "); ptt(DATA_4);
+            #endif
+            }
+        #endif
         pt("");
     #endif  //HAS_EXTENDER
     #endif  //HAS_EXTENDER                     

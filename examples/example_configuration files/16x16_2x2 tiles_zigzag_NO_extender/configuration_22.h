@@ -17,8 +17,9 @@
 #define FRAMES_PER_SECOND(x) EVERY_N_MILLISECONDS(1000/x)   //useful for controlling display updating
 
 /* If XYTable_LookUp is defined below, use an external table named XYTable_LookUp.h,
-in the library folder to map the LEDs in XYTable[y][x]
-instead of calculating with mXY(x,y). The table is stored in PROGMEM.
+in the library folder to map the LEDs in XYTable[y][x] instead of 
+calculating with mXY(x,y). The table is stored in PROGMEM. For irregular led
+arrays, look at the LEDMatrix manual for details.
 */
 //#define XYTable_LookUp
 
@@ -73,7 +74,6 @@ If you are NOT using the LEDS Extender Shields, but want to use up to 4 separate
 set HAS_EXTENDER (below) to true, set the Banks = 1, and the NUM_STRIPS to your strips. 
 Be sure to assign the DATA or DATA/CLOCK  pins correctly. Teensy boards limit the useable pins for 1-wire led strips. 
 For 1-wire leds, it appears that only some Teensy pins will work at DATA lines.
-
 Usable pins: 
 Teensy LC:   1, 4, 5, 24 
 Teensy 3.2:  1, 5, 8, 10, 31   (overclock to 120 MHz for pin 8) 
@@ -85,8 +85,7 @@ Teensy 4.1:  1, 8, 14, 17, 20, 24, 29, 35, 47, 53
 More details are here: https://github.com/PaulStoffregen/WS2812Serial
 */
 
-#if CLOCK_PIN_REQUIRED
-    // 2-wire pin selection 
+#if CLOCK_PIN_REQUIRED     // 2-wire pin selection 
     //Select your DATA/CLOCK pins - if using the Extender shield pin selections are limted
                                     //depends on how Teensy is rotated on the Extender board   
     #define DATA_1          1       //Teensy with Extender only 1 or 14 
