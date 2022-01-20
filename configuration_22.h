@@ -35,8 +35,8 @@ arrays, look at the LEDMatrix manual for details.
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
-#define CHIPSET             WS2812B   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
-#define CLOCK_PIN_REQUIRED  false  //Does this LED need DATA + CLOCK??
+#define CHIPSET             APA102   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
+#define CLOCK_PIN_REQUIRED  true  //Does this LED need DATA + CLOCK??
 
 #define COLOR_ORDER GRB		//Set the color order. Most 1-wirw types like WS2812B are GRB.
 #define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
@@ -84,19 +84,28 @@ Teensy 4.0:  1, 8, 14, 17, 20, 24, 29, 39
 Teensy 4.1:  1, 8, 14, 17, 20, 24, 29, 35, 47, 53
 
 More details are here: https://github.com/PaulStoffregen/WS2812Serial
+
+For 2-wire leds, select your DATA/CLOCK pins
+If using the Extender shield pin selections are limited to these:
+         Teensy pin
+DATA_1   1    or    14**
+CLOCK_1  2    or    15**
+DATA_2   3    or    16**
+CLOCK_2  4    or    17**
+**If Teensy is rotated 180 deg on the Extender board
 */
 
 #if CLOCK_PIN_REQUIRED     // 2-wire pin selection 
     //Select your DATA/CLOCK pins - if using the Extender shield pin selections are limted
                                     //depends on how Teensy is rotated on the Extender board   
     #define DATA_1          1       //Teensy with Extender only 1 or 14 
-    #define CLOCK_1         12       //Teensy with Extender only 12 or 15
-    #define DATA_2          13       //Teensy with Extender only 13 or 16
-    #define CLOCK_2         14       //Teensy with Extender only 14 or 17
+    #define CLOCK_1         2       //Teensy with Extender only 2 or 15
+    #define DATA_2          3       //Teensy with Extender only 3 or 16
+    #define CLOCK_2         4       //Teensy with Extender only 4 or 17
 #else   //1-wire DATA only. Teensy pins are limted to just a few
         //if other MCU change as desired
-    #define DATA_1          1       //Teensy 4x 1, Teensy 3.5/3.6    1
-    #define DATA_2          8       //Teensy 4x 8, Teensy 3.5/3.6    8
+    #define DATA_1         1       //Teensy 4x 1, Teensy 3.5/3.6    1
+    #define DATA_2         8       //Teensy 4x 8, Teensy 3.5/3.6    8
     #define DATA_3         17       //Teensy 4x 17, Teensy 3.5/3.6  10
     #define DATA_4         20       //Teensy 4x 20, Teensy 3.5/3.6  26
 #endif
@@ -143,7 +152,7 @@ More details are here: https://github.com/PaulStoffregen/WS2812Serial
     - 16 strips with only 8 pins! This drametically increases the total number of addressable LEDs! 
     */
     #define NUM_BANKS           1      // 1 to 4 extender "banks"
-    #define STRIPS_PER_BANK     1       //1 or more but 4 strips per Bank is the most efficient use of the hardware
+    #define STRIPS_PER_BANK     4       //1 or more but 4 strips per Bank is the most efficient use of the hardware
 
     //total number of strips used
     #define NUM_STRIPS      STRIPS_PER_BANK * NUM_BANKS 
@@ -157,7 +166,7 @@ More details are here: https://github.com/PaulStoffregen/WS2812Serial
        Alternate pins (18-21) depend on how Teensy is rotated on the Extender board
        */
 #if CLOCK_PIN_REQUIRED  //2-wire
-    #define BANK_PIN_0          5   //6 
+    #define BANK_PIN_0          5   //5
     #define BANK_PIN_1          6   //6
     #define BANK_PIN_2          7    //7
     #define BANK_PIN_3          8    //8

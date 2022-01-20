@@ -16,7 +16,7 @@
 #define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
 #define FRAMES_PER_SECOND(x) EVERY_N_MILLISECONDS(1000/x)   //useful for controlling display updating
 
-/* If XYTable_LookUp is defined below, use an external table named XYTable_LookUp.h,
+* If XYTable_LookUp is defined below, use an external table named XYTable_LookUp.h,
 in the library folder to map the LEDs in XYTable[y][x] instead of 
 calculating with mXY(x,y). The table is stored in PROGMEM. For irregular led
 arrays, look at the LEDMatrix manual for details.
@@ -73,7 +73,6 @@ arrays, look at the LEDMatrix manual for details.
 If you are NOT using the LEDS Extender Shields, but want to use up to 4 separate led strips, 
 set HAS_EXTENDER (below) to true, set the Banks = 1, and the NUM_STRIPS to your strips. 
 Be sure to assign the DATA or DATA/CLOCK  pins correctly. Teensy boards limit the useable pins for 1-wire led strips. 
-For 1-wire leds, it appears that only some Teensy pins will work at DATA lines.
 
 For 1-wire leds, it appears that only some Teensy pins will work as DATA lines.
 Usable pins: 
@@ -85,20 +84,28 @@ Teensy 4.0:  1, 8, 14, 17, 20, 24, 29, 39
 Teensy 4.1:  1, 8, 14, 17, 20, 24, 29, 35, 47, 53
 
 More details are here: https://github.com/PaulStoffregen/WS2812Serial
+
+For 2-wire leds, select your DATA/CLOCK pins
+If using the Extender shield pin selections are limited to these:
+         Teensy pin
+DATA_1   1    or    14**
+CLOCK_1  2    or    15**
+DATA_2   3    or    16**
+CLOCK_2  4    or    17**
+**If Teensy is rotated 180 deg on the Extender board
 */
 
 #if CLOCK_PIN_REQUIRED     // 2-wire pin selection 
-						
     //Select your DATA/CLOCK pins - if using the Extender shield pin selections are limted
                                     //depends on how Teensy is rotated on the Extender board   
-    #define DATA_1          1       //Teensy with Extender only 1 or 14 
-    #define CLOCK_1         12       //Teensy with Extender only 12 or 15
-    #define DATA_2          13       //Teensy with Extender only 13 or 16
-    #define CLOCK_2         14       //Teensy with Extender only 14 or 17
+    #define DATA_1          11       //no extender use any pins
+    #define CLOCK_1         13       //no extender use any pins
+    #define DATA_2          3       //Teensy with Extender only 3 or 16
+    #define CLOCK_2         4       //Teensy with Extender only 4 or 17
 #else   //1-wire DATA only. Teensy pins are limted to just a few
         //if other MCU change as desired
-    #define DATA_1          1       //Teensy 4x 1, Teensy 3.5/3.6    1
-    #define DATA_2          8       //Teensy 4x 8, Teensy 3.5/3.6    8
+    #define DATA_1         1       //Teensy 4x 1, Teensy 3.5/3.6    1
+    #define DATA_2         8       //Teensy 4x 8, Teensy 3.5/3.6    8
     #define DATA_3         17       //Teensy 4x 17, Teensy 3.5/3.6  10
     #define DATA_4         20       //Teensy 4x 20, Teensy 3.5/3.6  26
 #endif

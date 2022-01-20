@@ -107,7 +107,7 @@ void loop() {
             break;
         case 'f':
             pt("");
-            //ppd 12/21 stepThruStrips();
+            stepThruStrips();
             pt("Done done with strips");
             value = 0;
             break;
@@ -182,8 +182,8 @@ void showBanks() {
             char b[2];
             String str = String(i);
             str.toCharArray(b, 2);
-
             leds.print(b);      //must be char array
+            leds.print("Bank");    //B for
             leds.LEDShow();
             FastLED.delay(1000);
         }
@@ -354,7 +354,7 @@ void menu() {
     pt("e.    Light up each Bank and number in sequence");
     pt("f.    Light up each strips");
     pt("g. Display this MENU");
-    ptt("Select Exercise : ");
+    ptt("Select Exercise letter in cmd field");
 }
 
 
@@ -444,14 +444,13 @@ void stepThruBanks() {
     here++;
     if (here > 2) { here = 0; }
 }
-/*    //ppd 12/21
+
 void stepThruStrips() {
 
     if (leds.hasExtender) {
         uint16_t dly = 1000;
         uint8_t color = 75;
         int16_t index = 0;
-
         leds.clear();
 
         //easiest to fill memory directly rather than by x,y conversions
@@ -471,7 +470,7 @@ void stepThruStrips() {
         pt(">>>> NO Strips enabled");
     }
 }
-*/
+
 
 
 
