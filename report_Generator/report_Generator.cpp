@@ -43,8 +43,7 @@ void mapOfLedsInTile();
 #define ptt(msg)     Serial.print(msg);    //Serial.printl MACRO
 
 void run_report() {
-   Serial.begin(25000); //(115200);
-   delay(1000);
+
     pt("====== Reporting Enabled======");
     pt("");
 

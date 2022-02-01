@@ -56,7 +56,9 @@ after all parameters are defined <<<
 void setup() {
     //if run report is defined, the report_Generator.cpp code will be included
     #ifdef RUN_REPORT
-        run_report();       //also open Serial port
+      Serial.begin(9600); //select your speed
+      delay(1000);
+      run_report();       //also open Serial port
     #endif
 
     leds.addLeds();     //no parameters required
@@ -164,6 +166,7 @@ void showBanks() {
             pt("ERROR: No Banks or Strips defined");
             return;
         }
+        char text[] = "B";
         leds.clear();
         stepThruBanks();        //add some color
 
@@ -183,7 +186,7 @@ void showBanks() {
             String str = String(i);
             str.toCharArray(b, 2);
             leds.print(b);      //must be char array
-            leds.print("Bank");    //B for
+            leds.print(text);    //B for
             leds.LEDShow();
             FastLED.delay(1000);
         }
@@ -239,7 +242,7 @@ void stepThruTiles() {
                 leds.drawBitmap(tileULx[i] + NUM_W, tileULy[i], num[i - digitLeft * 10], NUM_W, NUM_H, CRGB::Red + 100 * i);
             }
             leds.LEDShow();
-            FastLED.delay(1000);
+            FastLED.delay(8000/leds.numTiles);
         }
     }
     else {
@@ -332,6 +335,7 @@ void TringleDraw() {
 void exerciseStart() {
     leds.clear();
     matrixSpecs();      //initialize matrix panel variables for this sketch
+    printHello();    //let us know your working
     menu();          //also come back here when done
 }
 
@@ -503,8 +507,16 @@ void drawChar(int16_t x, int16_t y, unsigned char c, CRGB color, CRGB bg, uint8_
 size_t write(uint8_t);
 void print(char text[]);
 */
-
-
+//show and intro s
+void printHello() {
+    int16_t x = 0;
+    char text[] = "HELLO";
+    leds.clear();
+    leds.setTextColor(CRGB::Yellow);
+    leds.setCursor(0,0);
+    leds.print(text);
+    leds.LEDShow();
+}
 void printTest() {
     int16_t x = 0;
     char text[] = "HELLO WORLD!";

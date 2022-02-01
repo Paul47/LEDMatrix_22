@@ -12,8 +12,8 @@
 
                                                                                      
 //#define FASTLED_TEENSY3 //no teensy4 enabled for DATA_RATE_MHZ()
-#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
-#define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
+//#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
+//#define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
 #define FRAMES_PER_SECOND(x) EVERY_N_MILLISECONDS(1000/x)   //useful for controlling display updating
 
 /* If XYTable_LookUp is defined below, use an external table named XYTable_LookUp.h,
@@ -31,7 +31,7 @@ arrays, look at the LEDMatrix manual for details.
 #define ENABLE_FONTS true       //true/false
 
 //Add aliases for new led types (not included in FastLED that you find work with existing FastLED types
-#define TX18138		TM1829
+#define TX1813		TM1829
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
@@ -42,12 +42,13 @@ arrays, look at the LEDMatrix manual for details.
 #define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
 #define BRIGHTNESS  10  //CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
 
-#if CLOCK_PIN_REQUIRED  //these apply only to 2-wire leds
-    //DATA_RATE_MHZ - APA102 is up to 24Mhz predicted only - WORKS EVEN IF SPI PINS NOT USED
-    #define SPI_MHZ         8   //8 working: 6. at 8 see individual led white flashes (sparkles)
-    //set Max Refresh Rate set in setup() after size set
-    #define refresh_fps     30  //working: 10-60    //default in chip defines is 400
-#endif
+//set these optional parameters as needed or comment out
+//#define VOLTS 5
+//#define MAXIMUM_AMPS 50
+//DATA_RATE_MHZ - APA102 is up to 24Mhz predicted only - WORKS EVEN IF SPI PINS NOT USED
+//#define SPI_MHZ         240  //8 working: 6. at 8 see individual led white flashes (sparkles)
+//set Max Refresh Rate set in setup() after size set
+//#define refresh_fps     256  //working: 10-60    //default in chip defines is 400
 
 
 //============ set up physical LED arrangement in overall matrix then blocks within the matrix ============= 
@@ -97,17 +98,19 @@ CLOCK_2  4    or    17**
 
 #if CLOCK_PIN_REQUIRED     // 2-wire pin selection 
     //Select your DATA/CLOCK pins - if using the Extender shield pin selections are limted
-                                    //depends on how Teensy is rotated on the Extender board   
-    #define DATA_1          1       //Teensy with Extender only 1 or 14 
-    #define CLOCK_1         2       //Teensy with Extender only 2 or 15
-    #define DATA_2          3       //Teensy with Extender only 3 or 16
-    #define CLOCK_2         4       //Teensy with Extender only 4 or 17
+                                    //depends on how Teensy is rotated on the Extender board
+										//Teensy3/4 with Extender	ESP32(typical)	
+    #define DATA_1          2			//only 1 or 14 					2
+    #define CLOCK_1         0			//only 2 or 15					0
+    #define DATA_2          4			//only 3 or 16					4
+    #define CLOCK_2         16			//only 4 or 17					16
 #else   //1-wire DATA only. Teensy pins are limted to just a few
         //if other MCU change as desired
-    #define DATA_1         1       //Teensy 4x 1, Teensy 3.5/3.6    1
-    #define DATA_2         8       //Teensy 4x 8, Teensy 3.5/3.6    8
-    #define DATA_3         17       //Teensy 4x 17, Teensy 3.5/3.6  10
-    #define DATA_4         20       //Teensy 4x 20, Teensy 3.5/3.6  26
+									  //Teensy4x	Teensy 3.5/3.6	ESP32(typical)
+    #define DATA_1        2		      //	1     		1				2
+    #define DATA_2        0		      //	8			8				0
+    #define DATA_3        4		      //	17			10				4
+    #define DATA_4        16	      //	20			26				16
 #endif
 
 //================================= end of USER DATA for Extender Control ==============================
