@@ -10,10 +10,11 @@
 
 #pragma once
 
-//#define FASTLED_TEENSY3 //no teensy4 enabled for DATA_RATE_MHZ()
-//#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
-//#define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
+//here's a utility so we can use frames-per-second which makes more sense than every_millisecond
 #define FRAMES_PER_SECOND(x) EVERY_N_MILLISECONDS(1000/x)   //useful for controlling display updating
+
+//Add aliases for new led types (not included in FastLED that you find work with existing FastLED types
+#define TX1813		TM1829
 
 /* If XYTable_LookUp is defined below, use an external table named XYTable_LookUp.h,
 in the library folder to map the LEDs in XYTable[y][x] instead of 
@@ -29,8 +30,10 @@ arrays, look at the LEDMatrix manual for details.
 */
 #define ENABLE_FONTS true       //true/false
 
-//Add aliases for new led types (not included in FastLED that you find work with existing FastLED types
-#define TX1813		TM1829
+//====================== If Teensy - MUST define here ============================
+//#define FASTLED_TEENSY3 //no teensy4 enabled for DATA_RATE_MHZ()
+//#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
+//#define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
@@ -42,13 +45,13 @@ arrays, look at the LEDMatrix manual for details.
 #define BRIGHTNESS  60  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
 
 //set these optional parameters as needed or comment out
-//#define VOLTS 5
-//#define MAXIMUM_AMPS 50
-//DATA_RATE_MHZ - APA102 is up to 24Mhz predicted only - WORKS EVEN IF SPI PINS NOT USED
-//#define SPI_MHZ         240  //8 working: 6. at 8 see individual led white flashes (sparkles)
-//set Max Refresh Rate set in setup() after size set
-//#define refresh_fps     256  //working: 10-60    //default in chip defines is 400
+#define VOLTS 5
+#define MAXIMUM_AMPS 50
 
+/*
+Is DATA_RATE_MHZ(SPI_MHZ) used w/ 2-wire leds requires a speed defined constant - AFFECTS SPEED EVEN IF SPI PINS NOT USED 
+	Example: APA102 is up to 24Mhz (predicted only) */
+#define SPI_MHZ         24  //Too high a value causes individual led white flashes (sparkles)
 
 //============ set up physical LED arrangement in overall matrix then blocks within the matrix ============= 
 /*
