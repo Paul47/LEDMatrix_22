@@ -1,7 +1,18 @@
 //Tom Thumb Numbers as 1 color sprites
 //These are small 3x5 numbers for displaying in tiles
 
-#include <avr/pgmspace.h>
+//avr/pgmspace.h
+#ifdef __AVR__
+ #include <avr/io.h>
+ #include <avr/pgmspace.h>
+#elif defined(ESP8266) || defined(ESP32)
+ #include <pgmspace.h>
+#else
+  #ifdef PROGMEM  
+    #undef PROGMEM
+  #endif
+ #define PROGMEM
+#endif
 
 #define NUM_CHARS 10
 #define NUM_W 3 

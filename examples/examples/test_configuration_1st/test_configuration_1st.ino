@@ -38,7 +38,7 @@ LEDS_PER_BANK	        //equally split the total number of leds acro
 */
 
 #include <LEDMatrix_22.h>
-#include"TT_numbers_Progmem.h"      //Tom Thumb number set 0-9
+#include"TT_numbers.h"      //Tom Thumb number set 0-9
 
 //init all dimensions to -1 as unused
 int16_t X[5] = { -1, -1, -1, -1, -1 }; //ul,ur,ll,lr,center of matrix

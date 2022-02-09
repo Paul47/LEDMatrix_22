@@ -11,9 +11,6 @@
     <td colspan="2">
       The LEDMatrix_22 library medium weight, two-dimensional graphics library for LED matricies/arrays using FastLED. This is an update and enhancement of previous LEDMatrix libraries. In addition to drawing shapes, and text, this library expands image and animation handling to 24 bit color. Larger displays can be formed using tiles of LED strip/panels - to build one big matrix. New and enhanced feature incude:
 
-### Now works with ESP32, Teensy 3.5/3.6, Teensy 4.0/4.1 ###
-### and other 32 bit (recommended) MCUs using FastLED 3.5.0+ ###
-
 * 2-wire LEDs: APA102, Adafruit's DotStar, SK9822, HD1701, LPD8806, SM16716, WS2801, and more.
 * 1-wire LEDs: NEOPIXEL, WS2811, WS2812, WS2812B, TX1813N1 (newer 2.2mm x 2.2mm), and more.
 * 24 bit color image and basic sprite display (no edge detection).

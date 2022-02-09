@@ -1,12 +1,14 @@
 Menu driven mappin tests for LEDMatrix_22 library
 
+>>>Set serial terminal to 115200<<<
+
 This sketch allows you to test the mapping of your matrix panel. These menu functions are available through the serial terminal. The general report is printed first so you can review your settings.
 
 If your setting do not include tiling or the extender hardware, these choices will be disabled.
 
 MOST PROBLEMS ARE CAUSED BY IMPROPER SETTINGS OF THE MATRIX PANEL, TILES/BLOCKS. OR EXTENER SETTINGS
 
-Note: TT_numbers_Progmem.h is a small Tom Thumb file with only numbers to display 
+Note: TT_numbers.h is a small Tom Thumb file with only numbers to display 
 
 MENU tiling and bank sequences.
     *Sketch functionality*

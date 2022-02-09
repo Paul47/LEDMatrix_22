@@ -36,9 +36,8 @@ void loop() {
    // format: drawBitmap(2, 2, bitmap, int16_t w, int16_t h, CRGB color)
 }
 
-//#include "TT_numbers.c"
 //#include "TT_numbers_local_bits.h"      ///local memory 
-#include "TT_numbers_Progmem.h"      ///progmem memory
+#include "TT_numbers.h"      ///progmem or normal memory
 
 void numbersTest() {
     uint8_t num[NUM_CHARS][NUM_H];      //from the included file

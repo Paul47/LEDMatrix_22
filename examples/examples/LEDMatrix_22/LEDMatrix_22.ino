@@ -11,10 +11,12 @@ Configure your LED array in myConfiguration.h located in the  library folder.
 This way you can reuse your configuration file(s) across all your sketches.
 Consider renaming your configurations (and changing the #include "myConfiguration.h"
 in the library folder.
+
+Set serial terminal to 115200
 */
 
 #include <LEDMatrix_22.h>
-#include"TT_numbers_Progmem.h"      //Tom Thumb number set 0-9
+#include"TT_numbers.h"      //Tom Thumb number set 0-9
 
 //init all dimensions to -1 as unused just for this sketch
 int16_t X[5] = { -1, -1, -1, -1, -1 }; //ul,ur,ll,lr,center of matrix
@@ -56,7 +58,7 @@ after all parameters are defined <<<
 void setup() {
     //if run report is defined, the report_Generator.cpp code will be included
     #ifdef RUN_REPORT
-      Serial.begin(9600); //select your speed
+      Serial.begin(115200); //select your speed
       delay(1000);
       run_report();       //also open Serial port
     #endif

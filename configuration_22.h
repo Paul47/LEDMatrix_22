@@ -32,7 +32,7 @@ arrays, look at the LEDMatrix manual for details.
 
 //====================== If Teensy - MUST define here ============================
 //#define FASTLED_TEENSY3 //no teensy4 enabled for DATA_RATE_MHZ()
-//#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
+#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
 //#define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
 
 //======================== set up physical LED type, number ========================= 

@@ -167,7 +167,7 @@ void canvasTest(){
 //========================== Bitmaps ======================================
 
 // Draw a 1 - bit image(bitmap) at the specified(x, y) position from the
-// provided bitmap buffer (must be PROGMEM memory) using the specified
+// provided bitmap buffer using the specified
 // foreground color (unset bits are transparent).
 void drawBitmap(int16_t x, int16_t y, const uint8_t * bitmap, int16_t w, int16_t h, CRGB color) {
     int16_t i, j, byteWidth = (w + 7) / 8;
