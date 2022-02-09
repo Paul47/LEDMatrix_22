@@ -54,8 +54,6 @@ void setup() {
     waiter[i] = 10;
   whatami();//this prints out the current status of stuff
   leds.clear();
-  smile2();// make one frame of the smile 2 pattern
-  leds.LEDShow();
   delay(3000);
   //zoro();//helpful with matrix mapping and wiring
   //delay(60000);//helpful with pixel mapping
