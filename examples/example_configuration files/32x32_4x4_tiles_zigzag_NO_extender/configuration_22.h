@@ -10,11 +10,11 @@
 
 #pragma once
 
-                                                                                     
-//#define FASTLED_TEENSY3 //no teensy4 enabled for DATA_RATE_MHZ()
-#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
-#define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
+//here's a utility so we can use frames-per-second which makes more sense than every_millisecond
 #define FRAMES_PER_SECOND(x) EVERY_N_MILLISECONDS(1000/x)   //useful for controlling display updating
+
+//Add aliases for new led types (not included in FastLED that you find work with existing FastLED types
+#define TX1813		TM1829
 
 /* If XYTable_LookUp is defined below, use an external table named XYTable_LookUp.h,
 in the library folder to map the LEDs in XYTable[y][x] instead of 
@@ -30,26 +30,28 @@ arrays, look at the LEDMatrix manual for details.
 */
 #define ENABLE_FONTS true       //true/false
 
-//Add aliases for new led types (not included in FastLED that you find work with existing FastLED types
-#define TX1813		TM1829
+//====================== If Teensy - MUST define here ============================
+//#define FASTLED_TEENSY3 //no teensy4 enabled for DATA_RATE_MHZ()
+#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
+#define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
 #define CHIPSET             APA102   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
 #define CLOCK_PIN_REQUIRED  true  //Does this LED need DATA + CLOCK??
 
-#define COLOR_ORDER GRB		//Set the color order. Most 1-wirw types like WS2812B are GRB.
+
+//Is DATA_RATE_MHZ(SPI_MHZ) used w/ 2-wire leds requires a speed defined constant - AFFECTS SPEED EVEN IF SPI PINS NOT USED 
+//	Example: APA102 is up to 24Mhz (predicted only) */
+#define SPI_MHZ         24  //Too high a value causes individual led white flashes (sparkles)
+
+#define COLOR_ORDER GRB		//Set the color order. Most 1-wire types like WS2812B are GRB.
 #define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
-#define BRIGHTNESS  10  //CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
+#define BRIGHTNESS  10  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
 
 //set these optional parameters as needed or comment out
-//#define VOLTS 5
-//#define MAXIMUM_AMPS 50
-//DATA_RATE_MHZ - APA102 is up to 24Mhz predicted only - WORKS EVEN IF SPI PINS NOT USED
-//#define SPI_MHZ         240  //8 working: 6. at 8 see individual led white flashes (sparkles)
-//set Max Refresh Rate set in setup() after size set
-//#define refresh_fps     256  //working: 10-60    //default in chip defines is 400
-
+#define VOLTS 5
+#define MAXIMUM_AMPS 50
 
 //============ set up physical LED arrangement in overall matrix then blocks within the matrix ============= 
 /*
@@ -57,8 +59,8 @@ arrays, look at the LEDMatrix manual for details.
     Previous LEDMatrix versions use a negative value for reserved (right to left)
     and (bottom to top). Use HORIZ_DIR and VERT_DIR below to do this.
 */
-#define MATRIX_WIDTH    32    //former LEDMatrix use negative value for reversed (right to left)
-#define MATRIX_HEIGHT   32   //former LEDMatrix use negative value for reversed (bottom to top)
+#define MATRIX_WIDTH    32   //former LEDMatrix use negative value for reversed (right to left)
+#define MATRIX_HEIGHT   32  //former LEDMatrix use negative value for reversed (bottom to top)
 #define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 	//the total number of LEDs in your display calculated
 
 //if this is a simple matrix (no tiles/blocks), then define the flow of the led strip(s), otherwise ignore
@@ -94,23 +96,31 @@ CLOCK_1  2    or    15**
 DATA_2   3    or    16**
 CLOCK_2  4    or    17**
 **If Teensy is rotated 180 deg on the Extender board
+
+Teensy 4.1 hardware SPI - this MCU has 2 sets of SPI ports.
+These may deliver faster display rates.
+         Teensy SPI pin
+DATA_1   11
+CLOCK_1  13
+DATA_2   26
+CLOCK_2  27
 */
 
 #if CLOCK_PIN_REQUIRED     // 2-wire pin selection 
     //Select your DATA/CLOCK pins - if using the Extender shield pin selections are limted
                                     //depends on how Teensy is rotated on the Extender board
 										//Teensy3/4 with Extender	ESP32(typical)	
-    #define DATA_1          2			//only 1 or 14 					2
-    #define CLOCK_1         0			//only 2 or 15					0
-    #define DATA_2          4			//only 3 or 16					4
-    #define CLOCK_2         16			//only 4 or 17					16
+    #define DATA_1          1			//only 1 or 14 					2
+    #define CLOCK_1         2			//only 2 or 15					0
+    #define DATA_2          3			//only 3 or 16					4
+    #define CLOCK_2         4			//only 4 or 17					16
 #else   //1-wire DATA only. Teensy pins are limted to just a few
         //if other MCU change as desired
 									  //Teensy4x	Teensy 3.5/3.6	ESP32(typical)
-    #define DATA_1        2		      //	1     		1				2
-    #define DATA_2        0		      //	8			8				0
-    #define DATA_3        4		      //	17			10				4
-    #define DATA_4        16	      //	20			26				16
+    #define DATA_1        1		      //	1     		1				2
+    #define DATA_2        8		      //	8			8				0
+    #define DATA_3        10		  //	17			10				4
+    #define DATA_4        26	      //	20			26				16
 #endif
 
 //================== tiles/blocks in the matrix panel =========================
@@ -127,8 +137,8 @@ CLOCK_2  4    or    17**
 
     #define MATRIX_TILE_WIDTH   8               // width of EACH MATRIX "cell" (not total display)
     #define MATRIX_TILE_HEIGHT  8               // height of each matrix "cell" 
-    #define MATRIX_TILE_H       4               // number of matrices arranged horizontally (positive value only)
-    #define MATRIX_TILE_V       4              // number of matrices arranged vertically (positive value only)
+    #define MATRIX_TILE_H       4              // number of matrices arranged horizontally (positive value only)
+    #define MATRIX_TILE_V       4             // number of matrices arranged vertically (positive value only)
     #define LEDS_IN_TILE        HORIZONTAL_ZIGZAG_MATRIX    //LED sequence within each tile:
                                                             //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                                             //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
@@ -143,7 +153,7 @@ CLOCK_2  4    or    17**
 #endif
     //================================= end of Tiles/Blocks ==============================
 
-/
+
 //================================= end of USER DATA for Extender Control ==============================
 
 //house keeping if no Extender present - set all to 1 with no Bank pins.
