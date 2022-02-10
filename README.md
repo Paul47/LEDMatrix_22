@@ -6,6 +6,9 @@
 
 > A fork of ([LEDMatrix](https://jorgen-vikinggod.github.io/LEDMatrix) by [Jürgen Skrotzky](https://github.com/Jorgen-VikingGod))
 
+<img src="https://github.com/Paul47/LEDMatrix_22/blob/main/wiki_images/Star_burst.png" width = "400" align = "RIGHT">
+
+
 <table>
   <tr>
     <td colspan="2">
@@ -32,7 +35,7 @@
     * SmartMatrix has transitioned into a software + hardware solution for HUB75 LED panels. 
        LEDMatrix_22 currently does not support SmartMatrix or HUB75 hardware.
 
-<img src="https://github.com/Paul47/LEDMatrix_22/blob/main/wiki_images/Star_burst.png" width = "400" align = "RIGHT">
+
 
 
 ###The LEDMatrix_22 manual can be accessed with the wiki button above
