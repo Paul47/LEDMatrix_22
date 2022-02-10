@@ -43,7 +43,7 @@ cLEDMatrix<MATRIX_WIDTH_DIR, MATRIX_HEIGHT_DIR, MATRIX_TYPE> leds;  // create ou
 void setup() {
     //if run report is defined, the report_Generator.cpp code will be included
 #ifdef RUN_REPORT
-    Serial.begin(9600); //select your speed
+    Serial.begin(115200); //select your speed
     delay(1000);
     run_report();       //also open Serial port
 #endif
