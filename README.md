@@ -6,7 +6,7 @@
 
 > A fork of ([LEDMatrix](https://jorgen-vikinggod.github.io/LEDMatrix) by [Jürgen Skrotzky](https://github.com/Jorgen-VikingGod))
 
-<img src="https://github.com/Paul47/LEDMatrix_22/blob/main/wiki_images/Star_burst.png" width = "400" align = "RIGHT">
+<img src="https://github.com/Paul47/LEDMatrix_22/blob/main/wiki_images/Star_burst.png" width = "800" align = "CENTER">
 
 
 <table>
