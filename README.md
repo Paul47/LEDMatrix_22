@@ -8,6 +8,7 @@
 
 <img src="https://github.com/Paul47/LEDMatrix_22/blob/main/wiki_images/Star_burst.png" width = "800" align = "CENTER">
 
+**Panel of 3096 leds of 48 8x8 tiles**
 
 <table>
   <tr>
