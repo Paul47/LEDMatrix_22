@@ -185,13 +185,19 @@ public:
     const uint8_t tileLedVertDir = 0;
 #endif  //if true
 
-
+#if HAS_EXTENDER
     boolean hasExtender = HAS_EXTENDER;     //otherwise leave these a defalut of zero
     const uint8_t numBanks = NUM_BANKS;
     const uint8_t stripsPerBank = STRIPS_PER_BANK;
     const int16_t ledsPerBank = LEDS_PER_BANK;
     const int16_t ledsPerStrip = LEDS_PER_STRIP;
-
+#else
+    boolean hasExtender = 0;     //otherwise leave these a defalut of zero
+    const uint8_t numBanks = 0;
+    const uint8_t stripsPerBank = 0;
+    const int16_t ledsPerBank = 0;
+    const int16_t ledsPerStrip = 0;
+#endif
 
   public:
     cLEDMatrixBase();
