@@ -201,7 +201,9 @@ public:
 
   public:
     cLEDMatrixBase();
-    virtual uint32_t mXY(uint16_t x, uint16_t y)=0;
+
+    virtual int16_t mXY(int16_t x, int16_t y)=0;    //ppd99  was uint32, uint16, uint16
+
     void SetLEDArray(struct CRGB *pLED);	// Only used with externally defined LED arrays
 
     struct CRGB *operator[](int n);
@@ -352,7 +354,10 @@ template<int16_t tMWidth, int16_t tMHeight, MatrixType_t tMType, int8_t tBWidth 
       p_LED = pLED;
       m_LED = pLED;
     }
-    virtual uint32_t mXY(uint16_t x, uint16_t y)
+
+    //int16 for arrays > 256 x 256 in the future. 
+    //Also must allow for negative number or get rediculous results like 65534 or other erroneus indexes
+    virtual int16_t mXY(int16_t x, int16_t y)   //ppd99 was uint32, uint16, uint16
     {
       #ifdef XYTable_LookUp         //keeping it simple, leave the rest of the code
         return XYTable[y][x];      //x,y indexes are always result in y,x arrays //ppd
