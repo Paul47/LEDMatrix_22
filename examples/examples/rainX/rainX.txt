@@ -1,0 +1,25 @@
+rainX.ino
+
+This example causes "rain" to stream down the screen. It runs through a number of combinations. 
+
+There are a number of variables that change colors, and even the entire pattern
+	boolean oneColor = true;    //if true set myHue next for color, else mulit-random colors
+	uint8_t  myHue = 200;       //changes color
+	uint8_t saturation = 150;   //100 - 200 works well
+	const uint8_t dripSpeed = 100;    //speed down panel - cannot chAge once set
+	const uint8_t changePattern = 30; // - cannot chAge once set
+	uint8_t order = 2;  //how orderly are the pixels? - 2 =streams, 255 = chaotic
+	uint8_t dripLen = 40;  //5 - 80 seem to work
+	uint8_t dropBlur = 1;  //1 - 80 needs larger array for higher values
+
+It also uses 2 FastLED fundtions contained in colorutils.cpp 
+  fadeToBlackBy()
+  blurRows()
+
+Note: 
+The XY() routine is required by FastLED colorutils.cpp functions.
+When using some functions in FastLED's colorutils.cpp file. You need to add the function XY() to parse the coordinates. For LEDMatrix_22 add the following to your sketch:
+
+int16_t XY(uint8_t x, uint8_t y) {
+    return leds.mXY(x, y);
+}

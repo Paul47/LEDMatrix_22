@@ -38,6 +38,7 @@ cLEDMatrix<MATRIX_WIDTH_DIR, MATRIX_HEIGHT_DIR, MATRIX_TYPE> leds;  // create ou
 #ifdef RUN_REPORT
     #include <.\report_Generator\report_Generator.cpp>
 #endif
+CRGB* pleds = leds.m_LED;   //pointer to your leds[] array to access directly
 
 //------------------------ Setup and loop ------------------------
 void setup() {

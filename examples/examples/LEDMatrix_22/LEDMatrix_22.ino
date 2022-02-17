@@ -43,10 +43,11 @@ after all parameters are defined <<<
 //------------------- create the total matrix panel array -------------------
 #if HAS_EXTENDER || HAS_BLOCKS 
     // leds in block/tile width, height      led flow IN THE TILE      # tiles in the matrix h, v    How tiles flow in the matrix
-        cLEDMatrix<MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, LEDS_IN_TILE, MATRIX_TILE_H_DIR, MATRIX_TILE_V_DIR, TILES_IN_MATRIX> leds;      //leds array configured
-    #else
-        cLEDMatrix<MATRIX_WIDTH_DIR, MATRIX_HEIGHT_DIR, MATRIX_TYPE> leds;  // create our matrix based on matrix definition only
-    #endif
+    cLEDMatrix<MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, LEDS_IN_TILE, MATRIX_TILE_H_DIR, MATRIX_TILE_V_DIR, TILES_IN_MATRIX> leds;      //leds array configured
+#else
+    cLEDMatrix<MATRIX_WIDTH_DIR, MATRIX_HEIGHT_DIR, MATRIX_TYPE> leds;  // create our matrix based on matrix definition only
+#endif
+CRGB* pleds = leds.m_LED;   //pointer to your leds[] array to access directly
 
 //if run report is defined, the report_Generator.cpp code will be included
 //>>>> the code MUST BE INCLUDED HERE after all parameters are defined

@@ -27,6 +27,7 @@ cLEDMatrix<MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, LEDS_IN_TILE, MATRIX_TILE_H_DI
 #else
 cLEDMatrix<MATRIX_WIDTH_DIR, MATRIX_HEIGHT_DIR, MATRIX_TYPE> leds;  // create our matrix based on matrix definition only
 #endif
+CRGB* pleds = leds.m_LED;   //pointer to your leds[] array to access directly
 
 //------------------------ Setup and loop ------------------------
 void setup() {

@@ -74,6 +74,7 @@ after all parameters are defined <<<
 #else
     cLEDMatrix<MATRIX_WIDTH_DIR, MATRIX_HEIGHT_DIR, MATRIX_TYPE> leds;  // create our matrix based on matrix definition only
 #endif
+CRGB* pleds = leds.m_LED;   //pointer to your leds[] array to access directly
 
 //if run report is defined, the report_Generator.cpp code will be included
 //>>>> the code MUST BE INCLUDED HERE after all parameters are defined
