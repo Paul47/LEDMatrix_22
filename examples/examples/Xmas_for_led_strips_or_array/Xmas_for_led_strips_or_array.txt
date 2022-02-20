@@ -1,0 +1,11 @@
+ * This example has a series of fun patterns for use with LED
+ * strips set up as a Christmas lighting display. 
+
+It's designed for led strips but looks nice on led arrays also.
+
+ * You can optionally connect a switch between pin A0 and 5v
+ * to control if the Arduino automatically cycles through the
+ * different patterns. 
+
+ * You can also optionally connect a button A1 and 5v
+ * ground that displays the next pattern in the series

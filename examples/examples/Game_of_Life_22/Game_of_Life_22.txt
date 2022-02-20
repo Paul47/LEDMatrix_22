@@ -1,0 +1,31 @@
+
+This version of the Game of Life uoffers several seeding functions and writes directly to the leds array.
+
+
+
+void loop()
+  writeGameStateToLeds();
+ 	void writeGameStateToLeds()						Loop through entire array
+		void writeCellToLed	...						Use current cell status/state...
+				...array index =(cellState(x, y)) 	...converting x,y to array index
+			leds.m_LED[ledIndex].r,g,b 				...To choose led color for each pixel in the array
+		leds.LEDShow()								Now display state of the game to the LED panel
+		
+		
+		
+		
+	updateGameState();					for entire array update the cell status/state array for all neighbors
+		array index = cellState(x, y)	return array index w/ or w/o wrapping as x or y = 255
+
+
+
+void setup
+  // By default, we use a random game state.  You can comment out
+  // the call to setupRandom() and uncomment one of the other
+  // calls if you want to see a different pattern used as the
+  // initial state.
+
+  //setupGlider(4, 3);
+  //setupLightweightSpaceship(4, 3);
+  //setupFromXBM();
+  setupRandom();
