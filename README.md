@@ -26,7 +26,7 @@
     * The lookup table option allows for irregularly shaped LED physical layouts. 
 * A report generator to comfirm proper LED array mapping configuration.
 * Method names now use Adafruit_GFX naming (for similar methods).
-* Along with a soon-to-be-release LEDExtender shield, 1-wire and 2-wire LEDs can be multiplexed in multiple Banks to total reduce LED strip length or control 16 seperate strings. The extender: 
+* Along with a soon-to-be-release LED Extender shields (https://github.com/Paul47/FastLED_Extender_boards), 1-wire and 2-wire LEDs can be multiplexed in multiple Banks to total reduce LED strip length or control 16 seperate strings. The extender: 
     * Eliminates LED "sparkle" and flashing (a frustrating problem with 2-wire LED types) by reducing the number of LEDS needed in series.
     * With proper power supplies, and wiring, the Extender can support up to 256 LEDs per strip. That's 4,096 LEDs! A 32 bit MCU such as the Teensy 4.0/4.1 is required.
     * Multiplexes controller wiring, reducing pin count. Up to 16 LED strips/panels with only 8 wires! (4 for 2 DATA + 2 CLOCK pins, and up to 4 more "enable" pins to switch between Banks of LED strips.
@@ -42,7 +42,7 @@
 ###The LEDMatrix_22 manual can be accessed with the wiki button above
 
 ### Using multiple LED Strips together but not as a matrix or panel? 
-This library is designed to use up to 4 seperate led strips (1-wire or 2-wire). With optional LEDExtender shields control up to 16 LED strips with 8 controller pins. 
+This library is designed to use up to 4 seperate led strips (1-wire or 2-wire). With optional LED Extender shields control up to 16 LED strips with 8 controller pins (https://github.com/Paul47/FastLED_Extender_boards). 
 
 ## Single Matrix 
 In this arrangement, one long led strip is cut into multiple rows to create an x,y array. As with previous LEDMatrix versions, the strips can be arranged into rows a zigzag, or left-2-right/right-2-left patterns. In this configuration you are limited to the length of the strip before sparkles/breakup occurs. SPI pins can be used to meet the demand of refreshing long data strings. This approach uses one FastLED Controller. 
@@ -53,7 +53,7 @@ Tiling (also called blocks) breaks the one long LED strip into smaller tiles. Po
 ## Multiplexing with Multiple-controllers (_new_) 
 LEDMatrix_22 supports a small shield PCB and FastLED's multiple Controllers to drive shorter strips or tiles rather than one long strip. For example, to drive a 32x32 matrix of 1024 LEDs with one long string, data send rates, brightness, and frames-per-second (fps) to avoid color breakdown as to be unusable.
 
-Now, using the LEDExtender we can break up the 32x32 matrix and insert a second DATA/CLOCK line for LEDs 512-1024. No more sparkle even with higher data/brightness/fps rates. Additing additional data lines for 256, 128, or 64 LED segments allows even high data rates. 
+Now, using the LED Extender shields we can break up the 32x32 matrix and insert a second DATA/CLOCK line for LEDs 512-1024. No more sparkle even with higher data/brightness/fps rates. Additing additional data lines for 256, 128, or 64 LED segments allows even high data rates. 
 
 ## Available Methods
 ```c
