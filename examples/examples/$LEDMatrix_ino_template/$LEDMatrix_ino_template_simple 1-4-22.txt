@@ -1,4 +1,7 @@
-//stepThruBasicFunctions for LEDMatrix_22
+
+//template example for LEDMatrix_22
+
+//NOTE: This example will run on any size matrix panel
 
 //useful for debugging
 #define pt(msg)     Serial.println(msg);    //Serial.println MACRO
@@ -21,41 +24,13 @@ the Class "leds" can be changed to whatever you choose. Example: "myLeds" and al
 cLEDMatrix leds;
 
 //------------------------ Setup and loop ------------------------
-void setup() {
+  void setup() {
 
-    leds.addLeds();     //no parameters required
+      leds.addLeds();       //initiate LEDMatrix
 
 }
-
-
 
 void loop() {
-    leds.clear();
-    FastLED.delay(500);
-
-    stepThruBasicFunctions();
-}
 
 
-/*
-stepT hru Basic Functions
-uses leds.setBrightness() - global BRIGHTNESS does not work with Controllers
-leds.fillScreen(), leds.clear(), leds.showColor() - these replace FastLED calls
-*/
-void stepThruBasicFunctions() {
-    leds.setBrightness(BRIGHTNESS);
-    leds.fillScreen(CRGB::Green);
-    leds.LEDShow();
-    FastLED.delay(1000);
-    leds.clear();          //no show cmd needed.
-    FastLED.delay(1000);
-    leds.showColor(CRGB::DarkCyan);   //no show cmd needed.
-    FastLED.delay(1000);
-    //test set brightness
-    for (uint8_t i = 10; i < 100; i = i + 25) {
-        leds.setBrightness(i);
-        leds.showColor(CRGB::Yellow);   //no show cmd needed.
-        FastLED.delay(1000);
-    }
-    leds.setBrightness(BRIGHTNESS);
 }

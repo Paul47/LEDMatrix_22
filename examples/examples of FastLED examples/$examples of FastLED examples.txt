@@ -1,0 +1,8 @@
+examples of FastLED examples
+
+Here are a number of examples taken from FastLED examples folder. 
+These are examples of some of the more advanced capabilities of the FastLED library.
+They are updated to work with LEDMatrix_22.
+These are led strip sketches but can be intersting on LED arrays that LEDMatrix supports.
+
+Minimal changes were made so the code is pretty much the same as the originals.
