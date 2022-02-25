@@ -7,6 +7,8 @@
 
 #pragma once
 
+
+
 enum MatrixType_t { HORIZONTAL_MATRIX,
                     VERTICAL_MATRIX,
                     HORIZONTAL_ZIGZAG_MATRIX,
@@ -19,6 +21,7 @@ enum BlockType_t	{	HORIZONTAL_BLOCKS,
 
 #define FASTLED_INTERNAL        // Suppress build banner
 #include <FastLED.h>
+
 #include "configuration_22.h"
 
 /*If ENABLE_FONTS is defined in Configuration_22.h, use this default font.
@@ -321,9 +324,30 @@ private:
     uint16_t e_stripStart[16];
 };
 
-template<int16_t tMWidth, int16_t tMHeight, MatrixType_t tMType, int8_t tBWidth = 1, int8_t tBHeight = 1, BlockType_t tBType = HORIZONTAL_BLOCKS> class cLEDMatrix : public cLEDMatrixBase
+
+
+
+class cLEDMatrix : public cLEDMatrixBase
+
 {
+
   private:
+    #if HAS_BLOCKS 
+      static const int16_t tMWidth = MATRIX_TILE_WIDTH;     //lets use the defined valuesa reather than have the sketch have to re-enter them
+      static const int16_t tMHeight = MATRIX_TILE_HEIGHT;
+      static const MatrixType_t tMType = LEDS_IN_TILE;
+      static const int8_t tBWidth = MATRIX_TILE_H_DIR;
+      static const int8_t tBHeight = MATRIX_TILE_V_DIR;
+      static const BlockType_t tBType = TILES_IN_MATRIX;
+#else
+      static const int16_t tMWidth = MATRIX_WIDTH_DIR;      //these are just the defaults listed in the template
+      static const int16_t tMHeight = MATRIX_HEIGHT_DIR;
+      static const MatrixType_t tMType = MATRIX_TYPE;
+      static const int8_t tBWidth = 1;
+      static const int8_t tBHeight = 1;
+      static const BlockType_t tBType = HORIZONTAL_BLOCKS;
+#endif
+
     static const int16_t m_absMWidth = (tMWidth * ((tMWidth < 0) * -1 + (tMWidth > 0)));
     static const int16_t m_absMHeight = (tMHeight * ((tMHeight < 0) * -1 + (tMHeight > 0)));
     static const int16_t m_absBWidth = (tBWidth * ((tBWidth < 0) * -1 + (tBWidth > 0)));

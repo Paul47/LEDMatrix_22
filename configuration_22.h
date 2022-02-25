@@ -32,7 +32,7 @@ arrays, look at the LEDMatrix manual for details.
 
 //====================== If Teensy - MUST define here ============================
 //#define FASTLED_TEENSY3 //no teensy4 enabled for DATA_RATE_MHZ()
-#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
+//#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
 //#define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
 
 //======================== set up physical LED type, number ========================= 
@@ -40,18 +40,18 @@ arrays, look at the LEDMatrix manual for details.
 #define CHIPSET             APA102   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
 #define CLOCK_PIN_REQUIRED  true  //Does this LED need DATA + CLOCK??
 
-#define COLOR_ORDER BGR		//Set the color order. Most 1-wirw types like WS2812B are GRB.
+
+//Is DATA_RATE_MHZ(SPI_MHZ) used w/ 2-wire leds requires a speed defined constant - AFFECTS SPEED EVEN IF SPI PINS NOT USED 
+//	Example: APA102 is up to 24Mhz (predicted only) */
+#define SPI_MHZ         8  //Too high a value causes individual led white flashes (sparkles)
+
+#define COLOR_ORDER BGR		//Set the color order. Most 1-wire types like WS2812B are GRB.
 #define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
-#define BRIGHTNESS  60  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
+#define BRIGHTNESS  20  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
 
 //set these optional parameters as needed or comment out
 #define VOLTS 5
 #define MAXIMUM_AMPS 50
-
-/*
-Is DATA_RATE_MHZ(SPI_MHZ) used w/ 2-wire leds requires a speed defined constant - AFFECTS SPEED EVEN IF SPI PINS NOT USED 
-	Example: APA102 is up to 24Mhz (predicted only) */
-#define SPI_MHZ         24  //Too high a value causes individual led white flashes (sparkles)
 
 //============ set up physical LED arrangement in overall matrix then blocks within the matrix ============= 
 /*
@@ -59,8 +59,8 @@ Is DATA_RATE_MHZ(SPI_MHZ) used w/ 2-wire leds requires a speed defined constant 
     Previous LEDMatrix versions use a negative value for reserved (right to left)
     and (bottom to top). Use HORIZ_DIR and VERT_DIR below to do this.
 */
-#define MATRIX_WIDTH    8 * 4 * 3   //former LEDMatrix use negative value for reversed (right to left)
-#define MATRIX_HEIGHT   8 * 4 * 1  //former LEDMatrix use negative value for reversed (bottom to top)
+#define MATRIX_WIDTH    8 * 2   //former LEDMatrix use negative value for reversed (right to left)
+#define MATRIX_HEIGHT   8 * 2  //former LEDMatrix use negative value for reversed (bottom to top)
 #define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 	//the total number of LEDs in your display calculated
 
 //if this is a simple matrix (no tiles/blocks), then define the flow of the led strip(s), otherwise ignore
@@ -96,23 +96,31 @@ CLOCK_1  2    or    15**
 DATA_2   3    or    16**
 CLOCK_2  4    or    17**
 **If Teensy is rotated 180 deg on the Extender board
+
+Teensy 4.1 hardware SPI - this MCU has 2 sets of SPI ports.
+These may deliver faster display rates.
+         Teensy SPI pin
+DATA_1   11
+CLOCK_1  13
+DATA_2   26
+CLOCK_2  27
 */
 
 #if CLOCK_PIN_REQUIRED     // 2-wire pin selection 
     //Select your DATA/CLOCK pins - if using the Extender shield pin selections are limted
                                     //depends on how Teensy is rotated on the Extender board
 										//Teensy3/4 with Extender	ESP32(typical)	
-    #define DATA_1          2			//only 1 or 14 					2
-    #define CLOCK_1         0			//only 2 or 15					0
-    #define DATA_2          4			//only 3 or 16					4
-    #define CLOCK_2         16			//only 4 or 17					16
+    #define DATA_1          1			//only 1 or 14 					2
+    #define CLOCK_1         2			//only 2 or 15					0
+    #define DATA_2          3			//only 3 or 16					4
+    #define CLOCK_2         4			//only 4 or 17					16
 #else   //1-wire DATA only. Teensy pins are limted to just a few
         //if other MCU change as desired
 									  //Teensy4x	Teensy 3.5/3.6	ESP32(typical)
-    #define DATA_1        2		      //	1     		1				2
-    #define DATA_2        0		      //	8			8				0
-    #define DATA_3        4		      //	17			10				4
-    #define DATA_4        16	      //	20			26				16
+    #define DATA_1        1		      //	1     		1				2
+    #define DATA_2        8		      //	8			8				0
+    #define DATA_3        17		  //	17			10				4
+    #define DATA_4        20    //20	      //	20			26				16
 #endif
 
 //================== tiles/blocks in the matrix panel =========================
@@ -129,8 +137,8 @@ CLOCK_2  4    or    17**
 
     #define MATRIX_TILE_WIDTH   8               // width of EACH MATRIX "cell" (not total display)
     #define MATRIX_TILE_HEIGHT  8               // height of each matrix "cell" 
-    #define MATRIX_TILE_H       4 * 3              // number of matrices arranged horizontally (positive value only)
-    #define MATRIX_TILE_V       4 * 1             // number of matrices arranged vertically (positive value only)
+    #define MATRIX_TILE_H       2              // number of matrices arranged horizontally (positive value only)
+    #define MATRIX_TILE_V       2             // number of matrices arranged vertically (positive value only)
     #define LEDS_IN_TILE        HORIZONTAL_ZIGZAG_MATRIX    //LED sequence within each tile:
                                                             //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                                             //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
@@ -156,7 +164,7 @@ CLOCK_2  4    or    17**
     be address with the SAME 4 PINS, plus 1 "enable" pin for each of the 4 extender boards 
     - 16 strips with only 8 pins! This drametically increases the total number of addressable LEDs! 
     */
-    #define NUM_BANKS           3      // 1 to 4 extender "banks"
+    #define NUM_BANKS           1      // 1 to 4 extender "banks"
     #define STRIPS_PER_BANK     4       //1 or more but 4 strips per Bank is the most efficient use of the hardware
 
     //total number of strips used
@@ -171,15 +179,15 @@ CLOCK_2  4    or    17**
        Alternate pins (18-21) depend on how Teensy is rotated on the Extender board
        */
 #if CLOCK_PIN_REQUIRED  //2-wire		Teensy	ESP32(typical)	
-    #define BANK_PIN_0          17   //	5	17
-    #define BANK_PIN_1          5    //	6	5
-    #define BANK_PIN_2          18   //	7	18
-    #define BANK_PIN_3          19   //	8	19
+    #define BANK_PIN_0          5       //	5	17
+    #define BANK_PIN_1          6       //	6	5
+    #define BANK_PIN_2          7       //	7	18
+    #define BANK_PIN_3          8       //	8	19
 #else                   //1-wire		Teensy	ESP32(typical)
-    #define BANK_PIN_0          17	//	3   	17
-    #define BANK_PIN_1          4   //	4		4
-    #define BANK_PIN_2          5   //	5		5
-    #define BANK_PIN_3          6   //	6		6
+    #define BANK_PIN_0          3  	    //	3   	17
+    #define BANK_PIN_1          4       //	4		4
+    #define BANK_PIN_2          5       //	5		5
+    #define BANK_PIN_3          6       //	6		6
 #endif
     
     /*-----------------choose DATA and CLOCK pins in the bank (all banks use the same pins)
