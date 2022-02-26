@@ -406,11 +406,11 @@ void memoryTest() {
     }
 
     pt("Step 2");
-    pt("read back from m_LED[]");
+    pt("read back from cLED[]");
     for (int16_t i = 0; i < 20; i++) {
-        ptt(leds.m_LED[i].r); ptt("\t");
-        ptt(leds.m_LED[i].g); ptt("\t");
-        ptt(leds.m_LED[i].b); pt("");
+        ptt(leds.cLED[i].r); ptt("\t");
+        ptt(leds.cLED[i].g); ptt("\t");
+        ptt(leds.cLED[i].b); pt("");
     }
 
     pt("Step 3");

@@ -8,7 +8,7 @@ void loop()
  	void writeGameStateToLeds()						Loop through entire array
 		void writeCellToLed	...						Use current cell status/state...
 				...array index =(cellState(x, y)) 	...converting x,y to array index
-			leds.m_LED[ledIndex].r,g,b 				...To choose led color for each pixel in the array
+			leds.cLED[ledIndex].r,g,b 				...To choose led color for each pixel in the array
 		leds.LEDShow()								Now display state of the game to the LED panel
 		
 		

@@ -95,8 +95,8 @@ void loop () {
 
 
 void twinkle() {
-   if (random8() < twinkrate) leds.m_LED[random16(NUM_LEDS)] += ColorFromPalette(currentPalette, (randhue ? random8() : thishue), 255, currentBlending);
-   fadeToBlackBy(leds.m_LED, NUM_LEDS, thisfade);
+   if (random8() < twinkrate) leds.cLED[random16(NUM_LEDS)] += ColorFromPalette(currentPalette, (randhue ? random8() : thishue), 255, currentBlending);
+   fadeToBlackBy(leds.cLED, NUM_LEDS, thisfade);
   
 } // twinkle()
 

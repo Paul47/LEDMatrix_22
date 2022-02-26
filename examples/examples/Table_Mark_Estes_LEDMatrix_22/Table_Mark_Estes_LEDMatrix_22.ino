@@ -2,6 +2,7 @@
 //Tabletop.ino for LEDMJatrix_22 
 //This version modiefied from code by Mark Estes who modified it from MarcMerlin
 //this version has audio input turned off unless you are specific matrix size
+//The minimum changes were made to make this work with LEDMatrix_22 as an example
 
 //useful for debugging
 #define pt(msg)     Serial.println(msg);    //Serial.println MACRO
@@ -25,12 +26,15 @@ the Class "leds" can be changed to whatever you choose. Example: "myLeds" and al
 
 cLEDMatrix leds;
 
+//lets simply the code a bit with these substitutions
+CRGB* cleds = leds.cLED;   //pointer to your leds[] array to access directly
+#define XY(x, y) leds.mXY(x, y) //this sketch adresses all leds directly
+
 //------------------------ Setup and loop ------------------------
 void setup() {
 
     Serial.begin(115200);
     delay(1000);
-
 
     leds.addLeds();       //initiate LEDMatrix
 
@@ -52,9 +56,6 @@ void setup() {
   whatami();//this prints out the current status of stuff
   leds.clear();
   delay(3000);
-  //zoro();//helpful with matrix mapping and wiring
-  //delay(60000);//helpful with pixel mapping
-
 }
 
 char readchar;
@@ -1720,7 +1721,7 @@ void drip() {
     if (random8() < 48)
       for (yy = 0; yy < leds.matrixHeight - 1; yy++)
       {
-          leds.m_LED[leds.mXY(xx, yy)] = leds.m_LED[leds.mXY(xx, yy + 1)];
+          cleds[XY(xx, yy)] = cleds[XY(xx, yy + 1)];
       }
     if (random8() > 128)
       leds.drawPixel(xx, leds.matrixHeight - 1,  CHSV(xslope[xx], 255, 255));
@@ -1732,7 +1733,7 @@ void drip() {
 void mirror() {
   for (xx = 0; xx < leds.matrixWidth; xx++)
     for (yy = 0; yy < MIDLY; yy++)
-        leds.m_LED[leds.mXY(xx, yy)] =  leds.m_LED[leds.mXY(xx, leds.matrixHeight - yy - 1)];
+        cleds[XY(xx, yy)] =  cleds[XY(xx, leds.matrixHeight - yy - 1)];
 
 }
 
@@ -1804,13 +1805,13 @@ void confetti3() {
 }
 
 void confetti4() {
-    leds.m_LED[leds.mXY(random(leds.matrixWidth), random(leds.matrixHeight))] += CHSV(random8(), 255, 255);
-    leds.m_LED[leds.mXY(random(leds.matrixWidth), random(leds.matrixHeight))] += CHSV(random8(), 255, 255);
+    cleds[XY(random(leds.matrixWidth), random(leds.matrixHeight))] += CHSV(random8(), 255, 255);
+    cleds[XY(random(leds.matrixWidth), random(leds.matrixHeight))] += CHSV(random8(), 255, 255);
 }
 
 void confetti2() {
   if (random8() > blender)
-      leds.m_LED[leds.mXY(random(leds.matrixWidth), random(leds.matrixHeight))] += CHSV(h + random(32) + 128, 255, 255);
+      cleds[XY(random(leds.matrixWidth), random(leds.matrixHeight))] += CHSV(h + random(32) + 128, 255, 255);
   else
     leds.drawFilledCircle(random(leds.matrixWidth), random(leds.matrixHeight), random(1, 9), CHSV(h + random(32) + 128 , 255, 255));
 }
@@ -2296,7 +2297,7 @@ void lfado(int16_t bbc)
 {
   for ( uint16_t hhh = 0; hhh < leds.matrixWidth ; hhh++)
     for (uint16_t jjj = 0; jjj < leds.matrixHeight ; jjj++)
-     leds.m_LED[leds.mXY(hhh, jjj)].fadeToBlackBy(bbc);//% = bbc/255
+     cleds[XY(hhh, jjj)].fadeToBlackBy(bbc);//% = bbc/255
 }  
 
 
@@ -2305,27 +2306,27 @@ void redfado(int16_t bbc) {
   for ( uint16_t hhh = 0; hhh < leds.matrixWidth ; hhh++)
     for (uint16_t jjj = 0; jjj < leds.matrixHeight ; jjj++)
       if (flip2)
-        leds.m_LED[leds.mXY(hhh, jjj)] -= CRGB(random(bbc / 2), random(bbc), random(bbc));
+        cleds[XY(hhh, jjj)] -= CRGB(random(bbc / 2), random(bbc), random(bbc));
       else
-        leds.m_LED[leds.mXY(hhh, jjj)] -= CRGB(random(bbc / 2), random(bbc / 2), random(bbc));
+        cleds[XY(hhh, jjj)] -= CRGB(random(bbc / 2), random(bbc / 2), random(bbc));
 }
 
 void greenfado(int16_t bbc) {
   for ( uint16_t hhh = 0; hhh < leds.matrixWidth ; hhh++)
     for (uint16_t jjj = 0; jjj < leds.matrixHeight ; jjj++)
       if (!flip3)
-        leds.m_LED[leds.mXY(hhh, jjj)] -= CRGB(random(bbc ), random(bbc / 2), random(bbc));
+        cleds[XY(hhh, jjj)] -= CRGB(random(bbc ), random(bbc / 2), random(bbc));
       else
-        leds.m_LED[leds.mXY(hhh, jjj)] -= CRGB(random(bbc ), random(bbc / 2), random(bbc / 2));
+        cleds[XY(hhh, jjj)] -= CRGB(random(bbc ), random(bbc / 2), random(bbc / 2));
 }
 
 void bluefado(int16_t bbc) {
   for ( uint16_t hhh = 0; hhh < leds.matrixWidth ; hhh++)
     for (uint16_t jjj = 0; jjj < leds.matrixHeight ; jjj++)
       if (flip2)
-        leds.m_LED[leds.mXY(hhh, jjj)] -= CRGB(random(bbc ), random(bbc), random(bbc / 2));
+        cleds[XY(hhh, jjj)] -= CRGB(random(bbc ), random(bbc), random(bbc / 2));
       else
-        leds.m_LED[leds.mXY(hhh, jjj)] -= CRGB(random(bbc / 2 ), random(bbc), random(bbc / 2));
+        cleds[XY(hhh, jjj)] -= CRGB(random(bbc / 2 ), random(bbc), random(bbc / 2));
 
 }
 
@@ -2827,9 +2828,9 @@ void seasick4()
   for (int jj = 0; jj < leds.matrixWidth; jj++)
   {
     for ( int u = 0; u < 5; u++) {
-        leds.m_LED[leds.mXY(jj, (MIDLY >> 1) * (sin8(-3 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 0.70 + u - 2)] += CHSV(h + jj + 128, 255, 255);
-        leds.m_LED[leds.mXY(jj, (MIDLY >> 1) * (sin8(2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 1.3 + u - 2)] += CHSV(h + jj + 64 , 255, 255);
-        leds.m_LED[leds.mXY(jj , (MIDLY >> 1) * (sin8(h + jj * sinewidth) - 128) / 128.0 + MIDLY  + u - 2)] += CHSV(h + jj  - 64, 255, 255);
+        cleds[XY(jj, (MIDLY >> 1) * (sin8(-3 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 0.70 + u - 2)] += CHSV(h + jj + 128, 255, 255);
+        cleds[XY(jj, (MIDLY >> 1) * (sin8(2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 1.3 + u - 2)] += CHSV(h + jj + 64 , 255, 255);
+        cleds[XY(jj , (MIDLY >> 1) * (sin8(h + jj * sinewidth) - 128) / 128.0 + MIDLY  + u - 2)] += CHSV(h + jj  - 64, 255, 255);
     }
   }
 
@@ -2853,18 +2854,18 @@ void seasick5()
   if (counter == 0) sinewidth = random(5, 10);
   for (int jj = 0; jj < leds.matrixWidth; jj++)
   {
-    leds.m_LED[leds.mXY(jj, (MIDLY >> 1) * (sin8(-2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 0.80 + 2)] += CHSV(h + jj - 64, 255, 255);
-    leds.m_LED[leds.mXY(jj, (MIDLY >> 1) * (sin8(2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 1.2 + 2)] += CHSV(h + jj + 64, 255, 255);
-    leds.m_LED[leds.mXY(jj , (MIDLY >> 1) * (sin8(-2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 0.80 + 1)] += CHSV(h + jj - 64, 255, 255);
-    leds.m_LED[leds.mXY(jj , (MIDLY >> 1) * (sin8(2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 1.2 + 1)] += CHSV(h + jj + 64 , 255, 255);
-    leds.m_LED[leds.mXY(jj , (MIDLY >> 1) * (sin8(-2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 0.80)] += CHSV(h + jj - 64, 255, 255);
-    leds.m_LED[leds.mXY(jj , (MIDLY >> 1) * (sin8(2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 1.2)] += CHSV(h + jj + 64, 255, 255);
-    leds.m_LED[leds.mXY(jj , (MIDLY >> 1) * (sin8(-2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 0.80 - 1)] += CHSV(h + jj - 64, 255, 255);
-    leds.m_LED[leds.mXY(jj , (MIDLY >> 1) * (sin8(2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 1.2 - 1)] += CHSV(h + jj + 64, 255, 255);
+    cleds[XY(jj, (MIDLY >> 1) * (sin8(-2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 0.80 + 2)] += CHSV(h + jj - 64, 255, 255);
+    cleds[XY(jj, (MIDLY >> 1) * (sin8(2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 1.2 + 2)] += CHSV(h + jj + 64, 255, 255);
+    cleds[XY(jj , (MIDLY >> 1) * (sin8(-2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 0.80 + 1)] += CHSV(h + jj - 64, 255, 255);
+    cleds[XY(jj , (MIDLY >> 1) * (sin8(2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 1.2 + 1)] += CHSV(h + jj + 64 , 255, 255);
+    cleds[XY(jj , (MIDLY >> 1) * (sin8(-2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 0.80)] += CHSV(h + jj - 64, 255, 255);
+    cleds[XY(jj , (MIDLY >> 1) * (sin8(2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 1.2)] += CHSV(h + jj + 64, 255, 255);
+    cleds[XY(jj , (MIDLY >> 1) * (sin8(-2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 0.80 - 1)] += CHSV(h + jj - 64, 255, 255);
+    cleds[XY(jj , (MIDLY >> 1) * (sin8(2 * h + jj * sinewidth) - 128) / 128.0 + MIDLY * 1.2 - 1)] += CHSV(h + jj + 64, 255, 255);
     /*
-        leds.m_LED[leds.mXY(jj , (MIDLY >> 1) * (sin8(h + jj * sinewidth) - 128) / 128.0 + MIDLY  + 2)] += CHSV(h + jj  - 64, 255, 255);
-        leds.m_LED[leds.mXY(jj , (MIDLY >> 1) * (sin8(h + jj * sinewidth) - 128) / 128.0 + MIDLY  + 1)] += CHSV(h  - 64, 255, 255);
-        leds.m_LED[leds.mXY(jj , (MIDLY >> 1) * (sin8(h + jj * sinewidth) - 128) / 128.0 + MIDLY )] += CHSV(h + jj - 64, 255, 255);
+        cleds[XY(jj , (MIDLY >> 1) * (sin8(h + jj * sinewidth) - 128) / 128.0 + MIDLY  + 2)] += CHSV(h + jj  - 64, 255, 255);
+        cleds[XY(jj , (MIDLY >> 1) * (sin8(h + jj * sinewidth) - 128) / 128.0 + MIDLY  + 1)] += CHSV(h  - 64, 255, 255);
+        cleds[XY(jj , (MIDLY >> 1) * (sin8(h + jj * sinewidth) - 128) / 128.0 + MIDLY )] += CHSV(h + jj - 64, 255, 255);
     */
   }
 }

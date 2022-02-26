@@ -35,7 +35,7 @@ cLEDMatrix leds;                                      // Number of LED's.
 uint8_t max_bright = 128;                                     // Overall brightness definition. It can be changed on the fly.
 
 // have 3 independent CRGBs - 2 for the sources and one for the output
-//CRGB leds[NUM_LEDS];  //1st  is leds.m_LED[NUM_LEDS]
+//CRGB leds[NUM_LEDS];  //1st  is leds.cLED[NUM_LEDS]
 CRGB leds2[NUM_LEDS];
 CRGB leds3[NUM_LEDS];
 
@@ -64,7 +64,7 @@ void loop() {
   uint8_t ratio = beatsin8(2);                                // Alternate between 0 and 255 every minute
   
   for (int i = 0; i < NUM_LEDS; i++) {                        // mix the 2 arrays together
-    leds.m_LED[i] = blend( leds2[i], leds3[i], ratio );
+    leds.cLED[i] = blend( leds2[i], leds3[i], ratio );
   }
 
   leds.LEDShow();

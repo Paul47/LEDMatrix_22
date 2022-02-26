@@ -36,7 +36,7 @@ cLEDMatrix leds;
 #ifdef RUN_REPORT
     #include <.\report_Generator\report_Generator.cpp>
 #endif
-CRGB* pleds = leds.m_LED;   //pointer to your leds[] array to access directly
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 //------------------------ Setup and loop ------------------------
 void setup() {
@@ -59,7 +59,7 @@ void loop() {
 	// First slide the led in one direction
 	for(int i = 0; i < NUM_LEDS; i++) {
 		// Set the i'th led to red 
-		leds.m_LED[i] = CHSV(hue++, 255, 255);
+		leds.cLED[i] = CHSV(hue++, 255, 255);
 		// Show the leds
 		 leds.LEDShow();   //for Extender - replace FastLED.show() 
 		// now that we've shown the leds, reset the i'th led to black
@@ -73,7 +73,7 @@ void loop() {
 	// Now go in the other direction.  
 	for(int i = (NUM_LEDS)-1; i >= 0; i--) {
 		// Set the i'th led to red 
-		leds.m_LED[i] = CHSV(hue++, 255, 255);
+		leds.cLED[i] = CHSV(hue++, 255, 255);
 		// Show the leds
 		 leds.LEDShow();   //for Extender - replace FastLED.show()
 		// now that we've shown the leds, reset the i'th led to black

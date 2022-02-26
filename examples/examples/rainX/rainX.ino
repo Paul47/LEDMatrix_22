@@ -25,7 +25,7 @@ the Class "leds" can be changed to whatever you choose. Example: "myLeds" and al
 
 cLEDMatrix leds;
 
-CRGB* pleds = leds.m_LED;   //pointer to your leds[] array to access directly
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 //----------rain variations------------------
 
@@ -162,9 +162,9 @@ void rain_updaterain() {
         }
     }
     step ++;
-    //array pointyer CRGB* required - use either pleds or leds.m_LED or leds[0]
+    //array pointyer CRGB* required - use either pleds or leds.cLED or leds[0]
      fadeToBlackBy(pleds, NUM_LEDS, dripLen);    // leds[0]
-     blurRows(leds.m_LED, leds.matrixWidth, leds.matrixHeight, dropBlur); 
+     blurRows(leds.cLED, leds.matrixWidth, leds.matrixHeight, dropBlur); 
 } //rain_updaterain
 
 //XY() required by FastLED colorutils.cpp functions

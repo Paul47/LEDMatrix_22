@@ -70,6 +70,6 @@ void rainbow_march(uint8_t thisdelay, uint8_t deltahue) {     // The fill_rainbo
 // thishue = beat8(50);                                       // This uses a FastLED sawtooth generator. Again, the '50' should not change on the fly.
 // thishue = beatsin8(50,0,255);                              // This can change speeds on the fly. You can also add these to each other.
   
-  fill_rainbow(leds.m_LED, NUM_LEDS, thishue, deltahue);            // Use FastLED's fill_rainbow routine.
+  fill_rainbow(leds.cLED, NUM_LEDS, thishue, deltahue);            // Use FastLED's fill_rainbow routine.
 
 } // rainbow_march()

@@ -352,44 +352,44 @@ void randomColorWalk(unsigned char initializeColors, unsigned char dimOnly)
     {
       // randomly walk existing colors of every seventh LED
       // (neighboring LEDs to these will be dimmer versions of the same color)
-      randomWalk(&leds.m_LED[i].r, maxBrightness, changeAmount, dimOnly ? 1 : 3);
-      randomWalk(&leds.m_LED[i].g, maxBrightness, changeAmount, dimOnly ? 1 : 3);
-      randomWalk(&leds.m_LED[i].b, maxBrightness, changeAmount, dimOnly ? 1 : 3);
+      randomWalk(&leds.cLED[i].r, maxBrightness, changeAmount, dimOnly ? 1 : 3);
+      randomWalk(&leds.cLED[i].g, maxBrightness, changeAmount, dimOnly ? 1 : 3);
+      randomWalk(&leds.cLED[i].b, maxBrightness, changeAmount, dimOnly ? 1 : 3);
     }
     else if (initializeColors == 1)
     {
       // initialize LEDs to alternating red and green
       if (i % 2)
       {
-        leds.m_LED[i] = CRGB(maxBrightness, 0, 0);
+        leds.cLED[i] = CRGB(maxBrightness, 0, 0);
       }
       else
       {
-        leds.m_LED[i] = CRGB(0, maxBrightness, 0);
+        leds.cLED[i] = CRGB(0, maxBrightness, 0);
       }
     }
     else
     {
       // initialize LEDs to a string of random colors
-      leds.m_LED[i] = CRGB(random(maxBrightness), random(maxBrightness), random(maxBrightness));
+      leds.cLED[i] = CRGB(random(maxBrightness), random(maxBrightness), random(maxBrightness));
     }
 
     // set neighboring LEDs to be progressively dimmer versions of the color we just set
     if (i >= 1)
     {
-      leds.m_LED[i-1] = CRGB(leds.m_LED[i].r >> 2, leds.m_LED[i].g >> 2, leds.m_LED[i].b >> 2);
+      leds.cLED[i-1] = CRGB(leds.cLED[i].r >> 2, leds.cLED[i].g >> 2, leds.cLED[i].b >> 2);
     }
     if (i >= 2)
     {
-      leds.m_LED[i-2] = CRGB(leds.m_LED[i].r >> 3, leds.m_LED[i].g >> 3, leds.m_LED[i].b >> 3);
+      leds.cLED[i-2] = CRGB(leds.cLED[i].r >> 3, leds.cLED[i].g >> 3, leds.cLED[i].b >> 3);
     }
     if (i + 1 < LED_COUNT)
     {
-      leds.m_LED[i+1] = leds.m_LED[i-1];
+      leds.cLED[i+1] = leds.cLED[i-1];
     }
     if (i + 2 < LED_COUNT)
     {
-      leds.m_LED[i+2] = leds.m_LED[i-2];
+      leds.cLED[i+2] = leds.cLED[i-2];
     }
   }
 }
@@ -437,38 +437,38 @@ void traditionalColors()
         switch ((i/4)%5)
         {
            case 0:  // red
-             leds.m_LED[idx].r = 200 * brightness/brighteningCycles;
-             leds.m_LED[idx].g = 10 * brightness/brighteningCycles;
-             leds.m_LED[idx].b = 10 * brightness/brighteningCycles;
+             leds.cLED[idx].r = 200 * brightness/brighteningCycles;
+             leds.cLED[idx].g = 10 * brightness/brighteningCycles;
+             leds.cLED[idx].b = 10 * brightness/brighteningCycles;
              break;
            case 1:  // green
-             leds.m_LED[idx].r = 10 * brightness/brighteningCycles;
-             leds.m_LED[idx].g = 200 * brightness/brighteningCycles;
-             leds.m_LED[idx].b = 10 * brightness/brighteningCycles;
+             leds.cLED[idx].r = 10 * brightness/brighteningCycles;
+             leds.cLED[idx].g = 200 * brightness/brighteningCycles;
+             leds.cLED[idx].b = 10 * brightness/brighteningCycles;
              break;
            case 2:  // orange
-             leds.m_LED[idx].r = 200 * brightness/brighteningCycles;
-             leds.m_LED[idx].g = 120 * brightness/brighteningCycles;
-             leds.m_LED[idx].b = 0 * brightness/brighteningCycles;
+             leds.cLED[idx].r = 200 * brightness/brighteningCycles;
+             leds.cLED[idx].g = 120 * brightness/brighteningCycles;
+             leds.cLED[idx].b = 0 * brightness/brighteningCycles;
              break;
            case 3:  // blue
-             leds.m_LED[idx].r = 10 * brightness/brighteningCycles;
-             leds.m_LED[idx].g = 10 * brightness/brighteningCycles;
-             leds.m_LED[idx].b = 200 * brightness/brighteningCycles;
+             leds.cLED[idx].r = 10 * brightness/brighteningCycles;
+             leds.cLED[idx].g = 10 * brightness/brighteningCycles;
+             leds.cLED[idx].b = 200 * brightness/brighteningCycles;
              break;
            case 4:  // magenta
-             leds.m_LED[idx].r = 200 * brightness/brighteningCycles;
-             leds.m_LED[idx].g = 64 * brightness/brighteningCycles;
-             leds.m_LED[idx].b = 145 * brightness/brighteningCycles;
+             leds.cLED[idx].r = 200 * brightness/brighteningCycles;
+             leds.cLED[idx].g = 64 * brightness/brighteningCycles;
+             leds.cLED[idx].b = 145 * brightness/brighteningCycles;
              break;
         }
       }
       else
       {
         // fade the 3/4 of LEDs that we are not currently brightening
-        fade(&leds.m_LED[idx].r, 3);
-        fade(&leds.m_LED[idx].g, 3);
-        fade(&leds.m_LED[idx].b, 3);
+        fade(&leds.cLED[idx].r, 3);
+        fade(&leds.cLED[idx].g, 3);
+        fade(&leds.cLED[idx].b, 3);
       }
     }
   }
@@ -545,22 +545,22 @@ void colorExplosionColorAdjust(unsigned char *color, unsigned char propChance,
 void colorExplosion(unsigned char noNewBursts)
 {
   // adjust the colors of the first LED
-  colorExplosionColorAdjust(&leds.m_LED[0].r, 9, (unsigned char*)0, &leds.m_LED[1].r);
-  colorExplosionColorAdjust(&leds.m_LED[0].g, 9, (unsigned char*)0, &leds.m_LED[1].g);
-  colorExplosionColorAdjust(&leds.m_LED[0].b, 9, (unsigned char*)0, &leds.m_LED[1].b);
+  colorExplosionColorAdjust(&leds.cLED[0].r, 9, (unsigned char*)0, &leds.cLED[1].r);
+  colorExplosionColorAdjust(&leds.cLED[0].g, 9, (unsigned char*)0, &leds.cLED[1].g);
+  colorExplosionColorAdjust(&leds.cLED[0].b, 9, (unsigned char*)0, &leds.cLED[1].b);
 
   for (int i = 1; i < LED_COUNT - 1; i++)
   {
     // adjust the colors of second through second-to-last LEDs
-    colorExplosionColorAdjust(&leds.m_LED[i].r, 9, &leds.m_LED[i-1].r, &leds.m_LED[i+1].r);
-    colorExplosionColorAdjust(&leds.m_LED[i].g, 9, &leds.m_LED[i-1].g, &leds.m_LED[i+1].g);
-    colorExplosionColorAdjust(&leds.m_LED[i].b, 9, &leds.m_LED[i-1].b, &leds.m_LED[i+1].b);
+    colorExplosionColorAdjust(&leds.cLED[i].r, 9, &leds.cLED[i-1].r, &leds.cLED[i+1].r);
+    colorExplosionColorAdjust(&leds.cLED[i].g, 9, &leds.cLED[i-1].g, &leds.cLED[i+1].g);
+    colorExplosionColorAdjust(&leds.cLED[i].b, 9, &leds.cLED[i-1].b, &leds.cLED[i+1].b);
   }
 
   // adjust the colors of the last LED
-  colorExplosionColorAdjust(&leds.m_LED[LED_COUNT-1].r, 9, &leds.m_LED[LED_COUNT-2].r, (unsigned char*)0);
-  colorExplosionColorAdjust(&leds.m_LED[LED_COUNT-1].g, 9, &leds.m_LED[LED_COUNT-2].g, (unsigned char*)0);
-  colorExplosionColorAdjust(&leds.m_LED[LED_COUNT-1].b, 9, &leds.m_LED[LED_COUNT-2].b, (unsigned char*)0);
+  colorExplosionColorAdjust(&leds.cLED[LED_COUNT-1].r, 9, &leds.cLED[LED_COUNT-2].r, (unsigned char*)0);
+  colorExplosionColorAdjust(&leds.cLED[LED_COUNT-1].g, 9, &leds.cLED[LED_COUNT-2].g, (unsigned char*)0);
+  colorExplosionColorAdjust(&leds.cLED[LED_COUNT-1].b, 9, &leds.cLED[LED_COUNT-2].b, (unsigned char*)0);
 
   if (!noNewBursts)
   {
@@ -575,35 +575,35 @@ void colorExplosion(unsigned char noNewBursts)
         // 2/7 chance we will spawn a red burst here (if LED has no red component)
         case 0:
         case 1:
-          if (leds.m_LED[j].r == 0)
+          if (leds.cLED[j].r == 0)
           {
-            leds.m_LED[j].r = 1;
+            leds.cLED[j].r = 1;
           }
           break;
 
         // 2/7 chance we will spawn a green burst here (if LED has no green component)
         case 2:
         case 3:
-          if (leds.m_LED[j].g == 0)
+          if (leds.cLED[j].g == 0)
           {
-            leds.m_LED[j].g = 1;
+            leds.cLED[j].g = 1;
           }
           break;
 
         // 2/7 chance we will spawn a white burst here (if LED is all off)
         case 4:
         case 5:
-          if ((leds.m_LED[j].r == 0) && (leds.m_LED[j].g == 0) && (leds.m_LED[j].b == 0))
+          if ((leds.cLED[j].r == 0) && (leds.cLED[j].g == 0) && (leds.cLED[j].b == 0))
           {
-            leds.m_LED[j] = CRGB(1, 1, 1);
+            leds.cLED[j] = CRGB(1, 1, 1);
           }
           break;
 
         // 1/7 chance we will spawn a blue burst here (if LED has no blue component)
         case 6:
-          if (leds.m_LED[j].b == 0)
+          if (leds.cLED[j].b == 0)
           {
-            leds.m_LED[j].b = 1;
+            leds.cLED[j].b = 1;
           }
           break;
 
@@ -633,14 +633,14 @@ void gradient()
     for (int i = 0; i < 8; i++)
     {
       if (j >= LED_COUNT){ break; }
-      leds.m_LED[(loopCount/2 + j + LED_COUNT)%LED_COUNT] = CRGB(160 - 20*i, 20*i, (160 - 20*i)*20*i/160);
+      leds.cLED[(loopCount/2 + j + LED_COUNT)%LED_COUNT] = CRGB(160 - 20*i, 20*i, (160 - 20*i)*20*i/160);
       j++;
     }
     // transition from green to red over 8 LEDs
     for (int i = 0; i < 8; i++)
     {
       if (j >= LED_COUNT){ break; }
-      leds.m_LED[(loopCount/2 + j + LED_COUNT)%LED_COUNT] = CRGB(20*i, 160 - 20*i, (160 - 20*i)*20*i/160);
+      leds.cLED[(loopCount/2 + j + LED_COUNT)%LED_COUNT] = CRGB(20*i, 160 - 20*i, (160 - 20*i)*20*i/160);
       j++;
     }
   }
@@ -670,9 +670,9 @@ void gradient()
       if (j++ >= extendedLEDCount){ return; }
       if (idx >= LED_COUNT){ continue; }
 
-      leds.m_LED[idx].r >>= i;
-      leds.m_LED[idx].g >>= i;
-      leds.m_LED[idx].b >>= i;
+      leds.cLED[idx].r >>= i;
+      leds.cLED[idx].g >>= i;
+      leds.cLED[idx].b >>= i;
     }
 
     // turn off these LEDs
@@ -682,9 +682,9 @@ void gradient()
       if (j++ >= extendedLEDCount){ return; }
       if (idx >= LED_COUNT){ continue; }
 
-      leds.m_LED[idx].r = 0;
-      leds.m_LED[idx].g = 0;
-      leds.m_LED[idx].b = 0;
+      leds.cLED[idx].r = 0;
+      leds.cLED[idx].g = 0;
+      leds.cLED[idx].b = 0;
     }
 
     // progressively bring these LEDs back
@@ -694,9 +694,9 @@ void gradient()
       if (j++ >= extendedLEDCount){ return; }
       if (idx >= LED_COUNT){ continue; }
 
-      leds.m_LED[idx].r >>= (7 - i);
-      leds.m_LED[idx].g >>= (7 - i);
-      leds.m_LED[idx].b >>= (7 - i);
+      leds.cLED[idx].r >>= (7 - i);
+      leds.cLED[idx].g >>= (7 - i);
+      leds.cLED[idx].b >>= (7 - i);
     }
 
     // skip over these LEDs to leave them at full brightness
@@ -732,9 +732,9 @@ void brightTwinkle(unsigned char minColor, unsigned char numColors, unsigned cha
   //   (the fade process always keeps the color even).
   for (int i = 0; i < LED_COUNT; i++)
   {
-    brightTwinkleColorAdjust(&leds.m_LED[i].r);
-    brightTwinkleColorAdjust(&leds.m_LED[i].g);
-    brightTwinkleColorAdjust(&leds.m_LED[i].b);
+    brightTwinkleColorAdjust(&leds.cLED[i].r);
+    brightTwinkleColorAdjust(&leds.cLED[i].g);
+    brightTwinkleColorAdjust(&leds.cLED[i].b);
   }
 
   if (!noNewBursts)
@@ -744,7 +744,7 @@ void brightTwinkle(unsigned char minColor, unsigned char numColors, unsigned cha
     for (int i = 0; i < 4; i++)
     {
       int j = random(LED_COUNT);
-      if (leds.m_LED[j].r == 0 && leds.m_LED[j].g == 0 && leds.m_LED[j].b == 0)
+      if (leds.cLED[j].r == 0 && leds.cLED[j].g == 0 && leds.cLED[j].b == 0)
       {
         // if the LED we picked is not already lit, pick a random
         // color for it and seed it so that it will start getting
@@ -752,28 +752,28 @@ void brightTwinkle(unsigned char minColor, unsigned char numColors, unsigned cha
         switch (random(numColors) + minColor)
         {
           case 0:
-            leds.m_LED[j] = CRGB(1, 1, 1);  // white
+            leds.cLED[j] = CRGB(1, 1, 1);  // white
             break;
           case 1:
-            leds.m_LED[j] = CRGB(1, 0, 0);  // red
+            leds.cLED[j] = CRGB(1, 0, 0);  // red
             break;
           case 2:
-            leds.m_LED[j] = CRGB(0, 1, 0);  // green
+            leds.cLED[j] = CRGB(0, 1, 0);  // green
             break;
           case 3:
-            leds.m_LED[j] = CRGB(0, 0, 1);  // blue
+            leds.cLED[j] = CRGB(0, 0, 1);  // blue
             break;
           case 4:
-            leds.m_LED[j] = CRGB(1, 1, 0);  // yellow
+            leds.cLED[j] = CRGB(1, 1, 0);  // yellow
             break;
           case 5:
-            leds.m_LED[j] = CRGB(0, 1, 1);  // cyan
+            leds.cLED[j] = CRGB(0, 1, 1);  // cyan
             break;
           case 6:
-            leds.m_LED[j] = CRGB(1, 0, 1);  // magenta
+            leds.cLED[j] = CRGB(1, 0, 1);  // magenta
             break;
           default:
-            leds.m_LED[j] = CRGB(1, 1, 1);  // white
+            leds.cLED[j] = CRGB(1, 1, 1);  // white
         }
       }
     }
@@ -806,27 +806,27 @@ unsigned char collision()
     switch (state/3)
     {
       case 0:  // first collision: red streams
-        leds.m_LED[0] = CRGB(maxBrightness, 0, 0);
+        leds.cLED[0] = CRGB(maxBrightness, 0, 0);
         break;
       case 1:  // second collision: green streams
-        leds.m_LED[0] = CRGB(0, maxBrightness, 0);
+        leds.cLED[0] = CRGB(0, maxBrightness, 0);
         break;
       case 2:  // third collision: blue streams
-        leds.m_LED[0] = CRGB(0, 0, maxBrightness);
+        leds.cLED[0] = CRGB(0, 0, maxBrightness);
         break;
       case 3:  // fourth collision: warm white streams
-        leds.m_LED[0] = CRGB(maxBrightness, maxBrightness*4/5, maxBrightness>>3);
+        leds.cLED[0] = CRGB(maxBrightness, maxBrightness*4/5, maxBrightness>>3);
         break;
       default:  // fifth collision and beyond: random-color streams
-        leds.m_LED[0] = CRGB(random(maxBrightness), random(maxBrightness), random(maxBrightness));
+        leds.cLED[0] = CRGB(random(maxBrightness), random(maxBrightness), random(maxBrightness));
     }
 
     // stream is led by two full-white LEDs
-    leds.m_LED[1] = leds.m_LED[2] = CRGB(255, 255, 255);
+    leds.cLED[1] = leds.cLED[2] = CRGB(255, 255, 255);
     // make other side of the strip a mirror image of this side
-    leds.m_LED[LED_COUNT - 1] = leds.m_LED[0];
-    leds.m_LED[LED_COUNT - 2] = leds.m_LED[1];
-    leds.m_LED[LED_COUNT - 3] = leds.m_LED[2];
+    leds.cLED[LED_COUNT - 1] = leds.cLED[0];
+    leds.cLED[LED_COUNT - 2] = leds.cLED[1];
+    leds.cLED[LED_COUNT - 3] = leds.cLED[2];
 
     state++;  // advance to next state
     count = 8;  // pick the first value of count that results in a startIdx of 1 (see below)
@@ -845,12 +845,12 @@ unsigned char collision()
       for (unsigned int i = 0; i < startIdx-1; i++)
       {
         // start fading previously generated parts of the stream
-        fade(&leds.m_LED[i].r, 5);
-        fade(&leds.m_LED[i].g, 5);
-        fade(&leds.m_LED[i].b, 5);
-        fade(&leds.m_LED[LED_COUNT - i - 1].r, 5);
-        fade(&leds.m_LED[LED_COUNT - i - 1].g, 5);
-        fade(&leds.m_LED[LED_COUNT - i - 1].b, 5);
+        fade(&leds.cLED[i].r, 5);
+        fade(&leds.cLED[i].g, 5);
+        fade(&leds.cLED[i].b, 5);
+        fade(&leds.cLED[LED_COUNT - i - 1].r, 5);
+        fade(&leds.cLED[LED_COUNT - i - 1].g, 5);
+        fade(&leds.cLED[LED_COUNT - i - 1].b, 5);
       }
       for (unsigned int i = startIdx; i <= stopIdx; i++)
       {
@@ -858,20 +858,20 @@ unsigned char collision()
         if (i >= (LED_COUNT + 1) / 2)
         {
           // anything past the halfway point is white
-          leds.m_LED[i] = CRGB(255, 255, 255);
+          leds.cLED[i] = CRGB(255, 255, 255);
         }
         else
         {
-          leds.m_LED[i] = leds.m_LED[i-1];
+          leds.cLED[i] = leds.cLED[i-1];
         }
         // make other side of the strip a mirror image of this side
-        leds.m_LED[LED_COUNT - i - 1] = leds.m_LED[i];
+        leds.cLED[LED_COUNT - i - 1] = leds.cLED[i];
       }
       // stream is led by two full-white LEDs
-      leds.m_LED[stopIdx + 1] = leds.m_LED[stopIdx + 2] = CRGB(255, 255, 255);
+      leds.cLED[stopIdx + 1] = leds.cLED[stopIdx + 2] = CRGB(255, 255, 255);
       // make other side of the strip a mirror image of this side
-      leds.m_LED[LED_COUNT - stopIdx - 2] = leds.m_LED[stopIdx + 1];
-      leds.m_LED[LED_COUNT - stopIdx - 3] = leds.m_LED[stopIdx + 2];
+      leds.cLED[LED_COUNT - stopIdx - 2] = leds.cLED[stopIdx + 1];
+      leds.cLED[LED_COUNT - stopIdx - 3] = leds.cLED[stopIdx + 2];
     }
     else
     {
@@ -879,7 +879,7 @@ unsigned char collision()
       // flash the entire strip full-brightness white (ignores maxBrightness limits)
       for (int i = 0; i < LED_COUNT; i++)
       {
-        leds.m_LED[i] = CRGB(255, 255, 255);
+        leds.cLED[i] = CRGB(255, 255, 255);
       }
       state++;  // advance to next state
     }
@@ -889,7 +889,7 @@ unsigned char collision()
   if (state % 3 == 2)
   {
     // fade state
-    if (leds.m_LED[0].r == 0 && leds.m_LED[0].g == 0 && leds.m_LED[0].b == 0)
+    if (leds.cLED[0].r == 0 && leds.cLED[0].g == 0 && leds.cLED[0].b == 0)
     {
       // if first LED is fully off, advance to next state
       state++;
@@ -904,29 +904,29 @@ unsigned char collision()
       switch (state/3)
       {
         case 0:  // fade through green
-          fade(&leds.m_LED[i].r, 3);
-          fade(&leds.m_LED[i].g, 4);
-          fade(&leds.m_LED[i].b, 2);
+          fade(&leds.cLED[i].r, 3);
+          fade(&leds.cLED[i].g, 4);
+          fade(&leds.cLED[i].b, 2);
           break;
         case 1:  // fade through red
-          fade(&leds.m_LED[i].r, 4);
-          fade(&leds.m_LED[i].g, 3);
-          fade(&leds.m_LED[i].b, 2);
+          fade(&leds.cLED[i].r, 4);
+          fade(&leds.cLED[i].g, 3);
+          fade(&leds.cLED[i].b, 2);
           break;
         case 2:  // fade through yellow
-          fade(&leds.m_LED[i].r, 4);
-          fade(&leds.m_LED[i].g, 4);
-          fade(&leds.m_LED[i].b, 3);
+          fade(&leds.cLED[i].r, 4);
+          fade(&leds.cLED[i].g, 4);
+          fade(&leds.cLED[i].b, 3);
           break;
         case 3:  // fade through blue
-          fade(&leds.m_LED[i].r, 3);
-          fade(&leds.m_LED[i].g, 2);
-          fade(&leds.m_LED[i].b, 4);
+          fade(&leds.cLED[i].r, 3);
+          fade(&leds.cLED[i].g, 2);
+          fade(&leds.cLED[i].b, 4);
           break;
         default:  // stay white through entire fade
-          fade(&leds.m_LED[i].r, 4);
-          fade(&leds.m_LED[i].g, 4);
-          fade(&leds.m_LED[i].b, 4);
+          fade(&leds.cLED[i].r, 4);
+          fade(&leds.cLED[i].g, 4);
+          fade(&leds.cLED[i].b, 4);
       }
     }
   }
@@ -952,16 +952,16 @@ void warmWhiteShimmer(unsigned char dimOnly)
         const uint8_t changeAmount = 3;  // size of random walk step
 
         // randomly walk the brightness of every even LED
-        randomWalk(&leds.m_LED[i].r, maxBrightness, changeAmount, dimOnly ? 1 : 2);
+        randomWalk(&leds.cLED[i].r, maxBrightness, changeAmount, dimOnly ? 1 : 2);
 
          // warm white: red = x, green = 0.8x, blue = 0.125x
-        leds.m_LED[i].g = leds.m_LED[i].r * 4 / 5;  // green = 80% of red
-        leds.m_LED[i].b = leds.m_LED[i].r >> 3;  // blue = red/8
+        leds.cLED[i].g = leds.cLED[i].r * 4 / 5;  // green = 80% of red
+        leds.cLED[i].b = leds.cLED[i].r >> 3;  // blue = red/8
 
         // every odd LED gets set to a quarter the brighness of the preceding even LED
         if (i + 1 < LED_COUNT)
         {
-            leds.m_LED[i + 1] = CRGB(leds.m_LED[i].r >> 2, leds.m_LED[i].g >> 2, leds.m_LED[i].b >> 2);
+            leds.cLED[i + 1] = CRGB(leds.cLED[i].r >> 2, leds.cLED[i].g >> 2, leds.cLED[i].b >> 2);
         }
     }
 }

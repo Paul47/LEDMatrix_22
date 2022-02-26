@@ -101,8 +101,8 @@ void one_sine_pal(uint8_t colorIndex) {                                         
   
    for (int k=0; k<NUM_LEDS; k++) {                                          // For each of the LED's in the strand, set a brightness based on a wave as follows:
     int thisbright = qsuba(cubicwave8((k*allfreq)+thisphase), thiscutoff);    // qsub sets a minimum value called thiscutoff. If < thiscutoff, then bright = 0. Otherwise, bright = 128 (as defined in qsub)..
-    leds.m_LED[k] = CHSV(bgclr, 255, bgbright);                                     // First set a background colour, but fully saturated.
-    leds.m_LED[k] += ColorFromPalette(currentPalette, colorIndex + k, thisbright, currentBlending);
+    leds.cLED[k] = CHSV(bgclr, 255, bgbright);                                     // First set a background colour, but fully saturated.
+    leds.cLED[k] += ColorFromPalette(currentPalette, colorIndex + k, thisbright, currentBlending);
     colorIndex += thisrot;
   }
 

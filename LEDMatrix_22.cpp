@@ -60,13 +60,13 @@ cLEDMatrixBase::cLEDMatrixBase()
 
 struct CRGB* cLEDMatrixBase::operator[](int n)
 {
-  return(&m_LED[n]);
+  return(&cLED[n]);
 }
 
 struct CRGB& cLEDMatrixBase::operator()(int16_t x, int16_t y)
 {
   if ( (x >= 0) && (x < m_Width) && (y >= 0) && (y < m_Height))
-    return(m_LED[mXY(x, y)]);
+    return(cLED[mXY(x, y)]);
   else
     return(m_OutOfBounds);
 }
@@ -74,7 +74,7 @@ struct CRGB& cLEDMatrixBase::operator()(int16_t x, int16_t y)
 struct CRGB& cLEDMatrixBase::operator()(int16_t i)
 {
   if ((i >=0) && (i < (m_Width * m_Height)))
-    return(m_LED[i]);
+    return(cLED[i]);
   else
     return(m_OutOfBounds);
 }
@@ -90,7 +90,7 @@ void cLEDMatrixBase::HorizontalMirror(bool FullHeight)
   for (y=ty; y>=0; --y)
   {
     for (x=(m_Width/2)-1,xx=((m_Width+1)/2); x>=0; --x,++xx)
-      m_LED[mXY(xx, y)] = m_LED[mXY(x, y)];
+      cLED[mXY(xx, y)] = cLED[mXY(x, y)];
   }
 }
 
@@ -102,7 +102,7 @@ void cLEDMatrixBase::VerticalMirror()
   for (y=(m_Height/2)-1,yy=((m_Height+1)/2); y>=0; --y,++yy)
   {
     for (x=m_Width-1; x>=0; --x)
-      m_LED[mXY(x, yy)] = m_LED[mXY(x, y)];
+      cLED[mXY(x, yy)] = cLED[mXY(x, y)];
   }
 }
 
@@ -129,9 +129,9 @@ void cLEDMatrixBase::QuadrantRotateMirror()
     for (y=MidXY-(MaxXY%2); y>=0; --y)
     {
       src = mXY(x, y);
-      m_LED[mXY(MidXY + y, MidXY - (MaxXY % 2) - x)] = m_LED[src];
-      m_LED[mXY(MaxXY - x, MaxXY - y)] = m_LED[src];
-      m_LED[mXY(MidXY - (MaxXY % 2) - y, MidXY + x)] = m_LED[src];
+      cLED[mXY(MidXY + y, MidXY - (MaxXY % 2) - x)] = cLED[src];
+      cLED[mXY(MaxXY - x, MaxXY - y)] = cLED[src];
+      cLED[mXY(MidXY - (MaxXY % 2) - y, MidXY + x)] = cLED[src];
     }
   }
 }
@@ -150,7 +150,7 @@ void cLEDMatrixBase::TriangleTopMirror(bool FullHeight)
   for (y=1; y<=MaxXY; ++y)
   {
     for (x=0; x<y; ++x)
-      m_LED[mXY(y,x)] = m_LED[mXY(x,y)];
+      cLED[mXY(y,x)] = cLED[mXY(x,y)];
   }
 }
 
@@ -168,7 +168,7 @@ void cLEDMatrixBase::TriangleBottomMirror(bool FullHeight)
   for (y=0,xx=MaxXY; y<MaxXY; y++,xx--)
   {
     for (x=MaxXY-y-1,yy=y+1; x>=0; --x,++yy)
-      m_LED[mXY(xx, yy)] = m_LED[mXY(x, y)];
+      cLED[mXY(xx, yy)] = cLED[mXY(x, y)];
   }
 }
 
@@ -312,13 +312,13 @@ void cLEDMatrixBase::showColor(CRGB color){
 void cLEDMatrixBase::fadeAll(uint16_t value) {
 
   for (int i = 0; i < m_Width * m_Height; i++) { 
-    m_LED[i].nscale8(value);
+    cLED[i].nscale8(value);
   } 
 } 
 
 void cLEDMatrixBase::fillScreen(CRGB color) {
   uint16_t i, pixels = m_Width * m_Height;
-  for(i=0; i<pixels; i++) m_LED[i] = color;
+  for(i=0; i<pixels; i++) cLED[i] = color;
 }
 
 /*
@@ -350,8 +350,8 @@ void cLEDMatrixBase::drawPixel(int16_t x, int16_t y, CRGB color) {
     y = m_Height - 1 - t;
     break;
   }
-  m_LED[mXY(x, y)] = color; 
-  //m_LED[M_XY(x, y)] = color;  //future trigger test only														  
+  cLED[mXY(x, y)] = color; 
+  //cLED[M_XY(x, y)] = color;  //future trigger test only														  
 }
 
 //from FastLED_GFX - if rotated still get correct color
@@ -375,7 +375,7 @@ CRGB cLEDMatrixBase::getPixel(int16_t x, int16_t y) {
     y = m_Height - 1 - t;
     break;
   }
-  return m_LED[mXY(x, y)];
+  return cLED[mXY(x, y)];
 }
 
 
@@ -990,14 +990,14 @@ void cLEDMatrixBase::write(char c) {
 void cLEDMatrixBase::invertDisplay() 
 {
    for (uint16_t i = 0; i < m_Height * m_Width; i++) {
-        m_LED[i] = -m_LED[i];               //FastLED math
+        cLED[i] = -cLED[i];               //FastLED math
     }
 }
 
 void cLEDMatrixBase::invertSquare(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
     for (int16_t y = y0; y < y1; y++) {
         for (int16_t x = x0; x < x1; x++) {
-            m_LED[mXY(x, y)] = -m_LED[mXY(x, y)];   //FastLED math
+            cLED[mXY(x, y)] = -cLED[mXY(x, y)];   //FastLED math
         }
     }
 
@@ -1259,7 +1259,7 @@ void cLEDMatrixBase::LEDShow(uint8_t gBrightness) {
         digitalWrite(e_enableBank[Bank], HIGH);
         for (uint8_t i = 0; i < e_stripsPerBank; i++) {
             uint8_t index = i + (Bank * e_stripsPerBank);
-            memcpy(&e_LED[0], &m_LED[e_stripStart[index]], e_ledsPerStrip * sizeof(CRGB));
+            memcpy(&e_LED[0], &cLED[e_stripStart[index]], e_ledsPerStrip * sizeof(CRGB));
             controllers[i]->showLeds(gBrightness); 
         }
         digitalWrite(e_enableBank[Bank], LOW);
@@ -1278,7 +1278,7 @@ void cLEDMatrixBase::LEDShow(uint8_t Bank, uint8_t gBrightness) {
     digitalWrite(e_enableBank[Bank], HIGH);
     for (uint8_t i = 0; i < e_stripsPerBank; i++) {
         uint8_t index = i + (Bank * e_stripsPerBank);
-        memcpy(&e_LED[0], &m_LED[e_stripStart[index]], e_ledsPerStrip * sizeof(CRGB));
+        memcpy(&e_LED[0], &cLED[e_stripStart[index]], e_ledsPerStrip * sizeof(CRGB));
         controllers[i]->showLeds(gBrightness); 
     }
     digitalWrite(e_enableBank[Bank], LOW);

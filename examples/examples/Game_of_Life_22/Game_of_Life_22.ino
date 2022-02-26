@@ -251,40 +251,40 @@ void writeCellToLed(uint8_t cellState, uint8_t x2, uint8_t y2)        //ADDED x,
     if (age == 0 || !showAge)
     {
      // ledStrip.sendColor(0x00, 0x00, 0xFF, brightness); 
-      leds.m_LED[ledIndex].r = 0x00;
-      leds.m_LED[ledIndex].g = 0x00;
-      leds.m_LED[ledIndex].b = 0xFF;
+      leds.cLED[ledIndex].r = 0x00;
+      leds.cLED[ledIndex].g = 0x00;
+      leds.cLED[ledIndex].b = 0xFF;
 
     }
     else if (age == 1)
     {
       //ledStrip.sendColor(0x40, 0x00, 0xFF, brightness);
-      leds.m_LED[ledIndex].r = 0x40;
-      leds.m_LED[ledIndex].g = 0x00;
-      leds.m_LED[ledIndex].b = 0xFF;
+      leds.cLED[ledIndex].r = 0x40;
+      leds.cLED[ledIndex].g = 0x00;
+      leds.cLED[ledIndex].b = 0xFF;
     }
     else if (age == 2)
     {
      // ledStrip.sendColor(0xFF, 0x00, 0xFF, brightness);
-      leds.m_LED[ledIndex].r = 0xFF;
-      leds.m_LED[ledIndex].g = 0x00;
-      leds.m_LED[ledIndex].b = 0xFF;
+      leds.cLED[ledIndex].r = 0xFF;
+      leds.cLED[ledIndex].g = 0x00;
+      leds.cLED[ledIndex].b = 0xFF;
     }
     else if (age == 3)
     {
      // ledStrip.sendColor(0xFF, 0x00, 0x40, brightness);
-      leds.m_LED[ledIndex].r = 0xFF;
-      leds.m_LED[ledIndex].g = 0x00;
-      leds.m_LED[ledIndex].b = 0x40;
+      leds.cLED[ledIndex].r = 0xFF;
+      leds.cLED[ledIndex].g = 0x00;
+      leds.cLED[ledIndex].b = 0x40;
     }
     else
     {
       // Fade from red to green as age goes from 4 to 63.
       uint8_t phase = (age - 4) * 255 / (63 - 4);
      // ledStrip.sendColor(0xFF - phase, phase, 0x00, brightness);  
-      leds.m_LED[ledIndex].r = 0xFF - phase;
-      leds.m_LED[ledIndex].g = phase;
-      leds.m_LED[ledIndex].b = 0x00;
+      leds.cLED[ledIndex].r = 0xFF - phase;
+      leds.cLED[ledIndex].g = phase;
+      leds.cLED[ledIndex].b = 0x00;
       
     }
   }
@@ -292,9 +292,9 @@ void writeCellToLed(uint8_t cellState, uint8_t x2, uint8_t y2)        //ADDED x,
   {
     // The cell is dead.
     //ledStrip.sendColor(0, 0, 0, brightness);
-    leds.m_LED[ledIndex].r = 0;
-    leds.m_LED[ledIndex].g = 0;
-    leds.m_LED[ledIndex].b = 0;
+    leds.cLED[ledIndex].r = 0;
+    leds.cLED[ledIndex].g = 0;
+    leds.cLED[ledIndex].b = 0;
   }
 }
 
@@ -408,7 +408,7 @@ void loop()
  	void writeGameStateToLeds()						Loop through entire array
 		void writeCellToLed	...						Use current cell status/state...
 		  array = (cellState(x, y),x ,y) 	...converting x,y to array index
-			leds.m_LED[leds.mXY(x, y)].r,g,b 				...To choose led color for each pixel in the array
+			leds.cLED[leds.mXY(x, y)].r,g,b 				...To choose led color for each pixel in the array
 		leds.LEDShow()								Now display state of the game to the LED panel
 		
 	updateGameState();					for entire array update the cell status/state array for all neighbors

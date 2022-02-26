@@ -47,7 +47,7 @@ the Class "leds" can be changed to whatever you choose. Example: "myLeds" and al
 
 cLEDMatrix leds;
 
-CRGB* pleds = leds.m_LED;   //pointer to your leds[] array to access directly
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 //if run report is defined, the report_Generator.cpp code will be included
 //>>>> the code MUST BE INCLUDED HERE after all parameters are defined
@@ -390,11 +390,11 @@ void memoryTest() {
     }
 
     pt("Step 2");
-    pt("read back from m_LED[]");
+    pt("read back from cLED[]");
     for (int16_t i = 0; i < 20; i++) {
-        ptt(leds.m_LED[i].r); ptt("\t");
-        ptt(leds.m_LED[i].g); ptt("\t");
-        ptt(leds.m_LED[i].b); pt("");
+        ptt(leds.cLED[i].r); ptt("\t");
+        ptt(leds.cLED[i].g); ptt("\t");
+        ptt(leds.cLED[i].b); pt("");
     }
 
     pt("Step 3");
@@ -465,7 +465,7 @@ void stepThruStrips() {
             for (uint8_t k = 0; k < leds.stripsPerBank; k++) {
                 for (int16_t m = 0; m < leds.ledsPerStrip; m++) {
                     index = j * leds.ledsPerBank + k * leds.ledsPerStrip + m;
-                    leds.m_LED[index] = CHSV(color,255,255);
+                    leds.cLED[index] = CHSV(color,255,255);
                 }
                 color = (color + 40) % 255;
                 leds.LEDShow();

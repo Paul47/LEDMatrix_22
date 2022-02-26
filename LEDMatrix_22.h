@@ -80,7 +80,7 @@ class cLEDMatrixBase
   friend class cSprite;
 
 public:
- struct CRGB *m_LED;         //LEDMatrix_22 moved to public from protected
+ struct CRGB *cLED;         //LEDMatrix_22 moved to public from protected
  struct CRGB* e_LED;                      //move to public //ppd
 
  typedef struct SPRITES {
@@ -106,7 +106,7 @@ BLOCKS block[48];   //48 max
 
   protected:
     int16_t m_Width, m_Height, m_WH;
-    //struct CRGB *m_LED;         //LEDMatrix moved to publicc from protected
+    //struct CRGB *cLED;         //LEDMatrix moved to publicc from protected
     struct CRGB m_OutOfBounds;
 
     int16_t
@@ -363,7 +363,7 @@ class cLEDMatrix : public cLEDMatrixBase
       if (doMalloc) {
 	  // On ESP32, there is more memory available via malloc than static global arrays
           p_LED = (struct CRGB *) malloc(((m_absMWidth * m_absBWidth * m_absMHeight * m_absBHeight) + TRIGGER_LED) * sizeof(CRGB));   //ppd  added trigger led
-          m_LED = p_LED;
+          cLED = p_LED;
 	  if (! p_LED) {
 	     Serial.begin(115200);
 	     Serial.println("Malloc LEDMatrix Failed");
@@ -376,7 +376,7 @@ class cLEDMatrix : public cLEDMatrixBase
     void SetLEDArray(struct CRGB *pLED)
     {
       p_LED = pLED;
-      m_LED = pLED;
+      cLED = pLED;
     }
 
     //int16 for arrays > 256 x 256 in the future. 
@@ -479,10 +479,10 @@ class cLEDMatrix : public cLEDMatrixBase
 		    for (int16_t x=1; x<m_Width; ++x)
   			{
 				  for (int16_t y=0; y<m_Height; ++y)
-      			m_LED[mXY(x - 1, y)] = m_LED[mXY(x, y)];
+      			cLED[mXY(x - 1, y)] = cLED[mXY(x, y)];
 			  }
 			  for (int16_t y=0; y<m_Height; ++y)
-     			m_LED[mXY(m_Width - 1, y)] = CRGB(0, 0, 0);
+     			cLED[mXY(m_Width - 1, y)] = CRGB(0, 0, 0);
      	}
      	else
       {
@@ -525,10 +525,10 @@ class cLEDMatrix : public cLEDMatrixBase
 		    for (int16_t x=m_Width-1; x>=1; --x)
   			{
 				  for (int16_t y=0; y<m_Height; ++y)
-      			m_LED[mXY(x, y)] = m_LED[mXY(x - 1, y)];
+      			cLED[mXY(x, y)] = cLED[mXY(x - 1, y)];
 			  }
 			  for (int16_t y=0; y<m_Height; ++y)
-     			m_LED[mXY(0, y)] = CRGB(0, 0, 0);
+     			cLED[mXY(0, y)] = CRGB(0, 0, 0);
      	}
      	else
       {
@@ -571,10 +571,10 @@ class cLEDMatrix : public cLEDMatrixBase
 			  for (int16_t y=1; y<m_Height; ++y)
   			{
 			    for (int16_t x=0; x<m_Width; ++x)
-      			m_LED[mXY(x, y - 1)] = m_LED[mXY(x, y)];
+      			cLED[mXY(x, y - 1)] = cLED[mXY(x, y)];
 			  }
 		    for (int16_t x=0; x<m_Width; ++x)
-     			m_LED[mXY(x, m_Height - 1)] = CRGB(0, 0, 0);
+     			cLED[mXY(x, m_Height - 1)] = CRGB(0, 0, 0);
      	}
      	else
       {
@@ -617,10 +617,10 @@ class cLEDMatrix : public cLEDMatrixBase
 			  for (int16_t y=m_Height-1; y>=1; --y)
   			{
 			    for (int16_t x=0; x<m_Width; ++x)
-      			m_LED[mXY(x, y)] = m_LED[mXY(x, y - 1)];
+      			cLED[mXY(x, y)] = cLED[mXY(x, y - 1)];
 			  }
 		    for (int16_t x=0; x<m_Width; ++x)
-     			m_LED[mXY(x, 0)] = CRGB(0, 0, 0);
+     			cLED[mXY(x, 0)] = CRGB(0, 0, 0);
      	}
      	else
       {
