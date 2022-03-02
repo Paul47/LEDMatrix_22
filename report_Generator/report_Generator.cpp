@@ -169,12 +169,12 @@ void listBlocks() {
         ptt("HAS_BLOCKS = ");
         if (HAS_BLOCKS == true) { pt("true"); }
         else { pt("false"); }
-        ptt("   LEDS_IN_TILE = "); ptt(ledsInTile()); pt(" (flow of LEDs inside each tile/block)");
-        ptt("   MATRIX_TILE_WIDTH = "); ptt(MATRIX_TILE_WIDTH); pt(" (Number of LEDs horizontally inside each tile/block)");
-        ptt("   MATRIX_TILE_HEIGHT = "); ptt(MATRIX_TILE_HEIGHT); pt(" (Number of LEDs vertically inside each tile/block)")
-        ptt("   MATRIX_TILE_H = "); ptt(MATRIX_TILE_H); pt(" (Number of tiles across the matrix panel)");
-        ptt("   MATRIX_TILE_V = "); ptt(MATRIX_TILE_V);  pt(" (Number of tiles up/down the matrix panel)");
-        ptt("   TILES_IN_MATRIX = "); ptt(tilesInMatrix()); pt(" (flow of tiles/blocks thru the matrix panel)");
+        ptt("   LEDS_IN_TILE = "); ptt(ledsInTile()); pt(" (direction of flow of LEDs INSIDE each tile/block)");
+        ptt("   MATRIX_TILE_WIDTH = "); ptt(MATRIX_TILE_WIDTH); pt(" (Number of LED columns horizontally inside each tile/block)");
+        ptt("   MATRIX_TILE_HEIGHT = "); ptt(MATRIX_TILE_HEIGHT); pt(" (Number of LED rows vertically inside each tile/block)")
+        ptt("   MATRIX_TILE_H = "); ptt(MATRIX_TILE_H); pt(" (Number of tiles across the entire matrix panel)");
+        ptt("   MATRIX_TILE_V = "); ptt(MATRIX_TILE_V);  pt(" (Number of tiles or strips up/down the entire matrix panel)");
+        ptt("   TILES_IN_MATRIX = "); ptt(tilesInMatrix()); pt(" (direction of flow of tiles/blocks thru the matrix panel)");
         #endif
         pt("");
     #endif
@@ -207,7 +207,8 @@ void listBanks(){
                     index--;
             }
         #if CLOCK_PIN_REQUIRED  //2-wire leds
-            ptt("      strip");  ptt("  Data pin"); ptt("  Clock pin"); ptt(" StripStart"); pt("   StripEnd");
+            ptt("      strip");  ptt(" | Data pin"); ptt(" | Clock pin"); ptt(" | StripStart"); pt(" |  StripEnd");
+            pt("       ----------------------------------------");
             for (uint8_t i = 0; i < NUM_BANKS; i++) {
                 ptt("Bank =  "); pt(i);
                     #if STRIPS_PER_BANK  > 0
@@ -228,9 +229,20 @@ void listBanks(){
                     #endif
             }
           #else         //1-wire leds
-            ptt("      strip");  ptt("  Data pin"); ptt(" StripStart"); pt("   StripEnd");
+            ptt("      strip");  ptt(" | Data pin"); ptt(" | StripStart"); pt(" |  StripEnd");
+            pt("      ----------------------------------------");
             for (uint8_t i = 0; i < NUM_BANKS; i++) {
-                ptt("Bank =  "); pt(i);
+                ptt("Bank =  "); pt(i); ptt(" Enable Pin = "); 
+                if (i == 0){                  //again forced to cluge because of defines
+                    pt(BANK_PIN_0);
+                } else if (i == 1){
+                    pt(BANK_PIN_1);
+                } else if (i == 2){
+                    pt(BANK_PIN_2);
+                } else if (i == 3){
+                    pt(BANK_PIN_3);
+                }
+                
                 #if STRIPS_PER_BANK  > 0
                    fmt(strip + 1, col, 0); fmt(DATA_1, col, 0); fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP - 1, col, 0); pt("");
                    strip++;
