@@ -162,6 +162,7 @@ public:
     const uint8_t matrixHeight = MATRIX_HEIGHT;
     const uint8_t ledHrorizDir = HORIZ_DIR;	         //0 = LEFT_2_RIGHT, 1 = RIGHT_2_LEFT
     const uint8_t ledVertDir = VERT_DIR;	            //0 = BOTTOM_UP, 1 = TOP_DOWN
+    const int16_t numLeds = NUM_LEDS;
 
     //capture block & extender info as integers rather than #defines so we don't get undefined errors.
     //default is 0 if define = 0 or not defined
@@ -194,12 +195,14 @@ public:
     const uint8_t stripsPerBank = STRIPS_PER_BANK;
     const int16_t ledsPerBank = LEDS_PER_BANK;
     const int16_t ledsPerStrip = LEDS_PER_STRIP;
+    const int16_t numStrips = NUM_STRIPS;
 #else
     boolean hasExtender = 0;     //otherwise leave these a defalut of zero
     const uint8_t numBanks = 0;
     const uint8_t stripsPerBank = 0;
     const int16_t ledsPerBank = 0;
     const int16_t ledsPerStrip = 0;
+    const int16_t numStrips = 0;
 #endif
 
   public:
@@ -310,27 +313,31 @@ public:
     void defineBanks();
 
 private:
-    uint16_t e_numLeds;
-    uint8_t e_numStrips;
-    uint8_t e_numBanks;
-    uint8_t  e_stripsPerBank;
-    uint16_t e_ledsPerStrip;
-    uint8_t  e_brightness;
+
+    void BankPin0(uint8_t pin);    //link bank to enable pin
+    void BankPin1(uint8_t pin);
+    void BankPin2(uint8_t pin);
+    void BankPin3(uint8_t pin);
+
+    boolean e_hasExtender = HAS_EXTENDER;     //otherwise leave these a defalut of zero
+    const int16_t e_numLeds = NUM_LEDS;
+    const uint8_t e_numBanks = NUM_BANKS;
+    const uint8_t e_stripsPerBank = STRIPS_PER_BANK;
+    const int16_t e_ledsPerBank = LEDS_PER_BANK;
+    const int16_t e_ledsPerStrip = LEDS_PER_STRIP;
+    const int16_t e_numStrips = NUM_STRIPS;
+    uint8_t  e_brightness = BRIGHTNESS;
 
     //arrays
     //CRGB* e_LED;                      //moved to public
     CLEDController* controllers[4];
-    uint8_t e_enableBank[4];
+    int8_t e_enableBank[4];         //allow -1
     uint16_t e_stripStart[16];
 };
-
-
-
 
 class cLEDMatrix : public cLEDMatrixBase
 
 {
-
   private:
     #if HAS_BLOCKS 
       static const int16_t tMWidth = MATRIX_TILE_WIDTH;     //lets use the defined valuesa reather than have the sketch have to re-enter them

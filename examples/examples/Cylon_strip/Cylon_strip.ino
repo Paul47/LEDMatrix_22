@@ -1,4 +1,22 @@
 //Cylon_strip.ino
+// light up strip 1 down and back along (x), then strip 2, through each strip (y)
+
+/*************************************
+Strips and configursation.h
+
+For 1 strip set x = striplengrh, y = 1.
+
+For up to 16 strips in parallel use the LED Extender (see the LEDMatrix_22 wiki)
+For example with 4 led strips, set:
+  Banks = 1
+  Strips per Bank = 4
+  MATRIX_WIDTH (x) = leds per strip
+  MATRIX_HEIGHT (y) = 4
+  Now code strip 1 as x,1. Strip 2 as x,2 and so on.
+
+  The other configuration parameters will also need to be set.
+************************************/
+
 //useful for debugging
 #define pt(msg)     Serial.println(msg);    //Serial.println MACRO
 #define ptt(msg)     Serial.print(msg);    //Serial.printl MACRO
@@ -11,8 +29,6 @@ in the library folder.
 */
 
 #include <LEDMatrix_22.h> 
-#include <gfxfont.h>
-#include <glcdfont.c>
 
 /* DEBUGGING REPORT - sent to the serial terminal
 To run report define RUN_REPORT, the Report Generator code will be included
@@ -46,40 +62,40 @@ void setup() {
     delay(1000);
     run_report();       //also open Serial port
 #endif
-    //use only if hardware extender is configured anf active
-    //leds.ExtInit(NUM_LEDS, NUM_BANKS, NUM_STRIPS, BRIGHTNESS);      //Extender - init params for Extender functions
+	leds.addLeds();
 }
 
 
-
+// light up strip 1 down and back along (x), then strip 2, through each strip (y)
 void loop() { 
-	static uint8_t hue = 0;
-  int16_t value = 3000;  //default 250 ..8(xx) higher = more fade
-	Serial.print("x");
-	// First slide the led in one direction
-	for(int i = 0; i < NUM_LEDS; i++) {
-		// Set the i'th led to red 
-		leds.cLED[i] = CHSV(hue++, 255, 255);
-		// Show the leds
-		 leds.LEDShow();   //for Extender - replace FastLED.show() 
-		// now that we've shown the leds, reset the i'th led to black
-		// leds[i] = CRGB::Black;
-		leds.fadeAll(value);
-		// Wait a little bit before we loop around and do it again
-		delay(10);
-	}
-	Serial.print("x");
 
-	// Now go in the other direction.  
-	for(int i = (NUM_LEDS)-1; i >= 0; i--) {
-		// Set the i'th led to red 
-		leds.cLED[i] = CHSV(hue++, 255, 255);
-		// Show the leds
-		 leds.LEDShow();   //for Extender - replace FastLED.show()
-		// now that we've shown the leds, reset the i'th led to black
-		// leds[i] = CRGB::Black;
-		leds.fadeAll(value);
-		// Wait a little bit before we loop around and do it again
-		delay(10);
+	for (int y = 0; y < MATRIX_HEIGHT; y++){
+		static uint8_t hue = 0;
+		int16_t value = 3000;  //default 250 ..8(xx) higher = more fade
+		// First slide the led in one direction
+		for(int x = 0; x < MATRIX_WIDTH; x++) {
+			// Set the i'th led to red 
+			leds.drawPixel(x ,y, CHSV(hue++, 255, 255));
+			// Show the leds
+			leds.LEDShow();   //for Extender - replace FastLED.show() 
+			// now that we've shown the leds, reset the i'th led to black
+			// leds[i] = CRGB::Black;
+			leds.fadeAll(value);
+			// Wait a little bit before we loop around and do it again
+			FastLED.delay(50);
+		}
+
+		// Now go in the other direction.  
+		for(int x = (MATRIX_WIDTH)-1; x >= 0; x--) {
+			// Set the i'th led to red 
+			leds.drawPixel(x ,y, CHSV(hue++, 255, 255));
+			// Show the leds
+			leds.LEDShow();   //for Extender - replace FastLED.show()
+			// now that we've shown the leds, reset the i'th led to black
+			// leds[i] = CRGB::Black;
+			leds.fadeAll(value);
+			// Wait a little bit before we loop around and do it again
+			FastLED.delay(50);
+		}
 	}
 }

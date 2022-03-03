@@ -37,7 +37,7 @@ arrays, look at the LEDMatrix manual for details.
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
-#define CHIPSET             WS2812   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
+#define CHIPSET             WS2812   //TX1813	//WS2812, APA102 //see FastLED docs or examples for list
 #define CLOCK_PIN_REQUIRED  false  //Does this LED need DATA + CLOCK??
 
 

@@ -210,7 +210,8 @@ void listBanks(){
             ptt("      strip");  ptt(" | Data pin"); ptt(" | Clock pin"); ptt(" | StripStart"); pt(" |  StripEnd");
             pt("       ----------------------------------------");
             for (uint8_t i = 0; i < NUM_BANKS; i++) {
-                ptt("Bank =  "); pt(i);
+                ptt("Bank =  "); pt(i); ptt(" Enable Pin = ");
+                numberBank();
                     #if STRIPS_PER_BANK  > 0
                         fmt(strip+1, col, 0); fmt(DATA_1, col, 0);   fmt(CLOCK_1, col, 0);   fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP-1, col, 0); pt("");
                         strip++;
@@ -233,16 +234,7 @@ void listBanks(){
             pt("      ----------------------------------------");
             for (uint8_t i = 0; i < NUM_BANKS; i++) {
                 ptt("Bank =  "); pt(i); ptt(" Enable Pin = "); 
-                if (i == 0){                  //again forced to cluge because of defines
-                    pt(BANK_PIN_0);
-                } else if (i == 1){
-                    pt(BANK_PIN_1);
-                } else if (i == 2){
-                    pt(BANK_PIN_2);
-                } else if (i == 3){
-                    pt(BANK_PIN_3);
-                }
-                
+                numberBank();
                 #if STRIPS_PER_BANK  > 0
                    fmt(strip + 1, col, 0); fmt(DATA_1, col, 0); fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP - 1, col, 0); pt("");
                    strip++;
@@ -456,5 +448,40 @@ void mapOfLedsInTile() {
     #endif
     #endif          
 }
-
-
+//quick clug to list bank numbers in reverse order
+void numberBank(){
+    if (NUM_BANKS = 1) {
+        pt(BANK_PIN_0);
+    else if (NUM_BANKS = 2) {
+        if (i == 0) {                  //again forced to cluge because of defines
+            pt(BANK_PIN_1);
+        }
+        else if (i == 1) {
+            pt(BANK_PIN_0);
+        }
+    }
+    else if (NUM_BANKS = 3) {
+        if (i == 0) {                  //again forced to cluge because of defines
+            pt(BANK_PIN_2);
+        }
+        else if (i == 1) {
+            pt(BANK_PIN_1);
+        }
+        else {
+            pt(BANK_PIN_0);
+        }
+    }
+    else if (NUM_BANKS = 4) {
+        if (i == 0) {                  //again forced to cluge because of defines
+            pt(BANK_PIN_3);
+        }
+        else if (i == 2) {
+            pt(BANK_PIN_2);
+        }
+        else if (i == 2)
+            pt(BANK_PIN_1);
+    }
+    else {
+        pt(BANK_PIN_0);
+    }
+}

@@ -1,0 +1,17 @@
+//example for extracting individual functions from the 113 
+//Mark E. table top sketch. Please give credit to MArk in your sketchs using his code.
+//Start with the table.h header, add the function and add setup() amd loop().
+//you may need to add additional routines as needed like fakenoise() in this sketch.
+
+#include <LEDMatrix_22.h>
+#include "Table.h"
+
+/*------------------- create the total matrix panel array -------------------
+If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
+*/
+
+cLEDMatrix leds;
+
+//you may need this if any routines use FastLED "utilities."
+#define XY(x, y) leds.mXY(x, y) //this sketch adresses all leds directly

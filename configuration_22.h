@@ -32,22 +32,22 @@ arrays, look at the LEDMatrix manual for details.
 
 //====================== If Teensy - MUST define here ============================
 //#define FASTLED_TEENSY3 //no teensy4 enabled for DATA_RATE_MHZ()
-//#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
-//#define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
+#define FASTLED_TEENSY4 //defined for DATA_RATE_MHZ() and FAST_SPI in fastSPI_ARM_MXRT1062.h
+#define TEENSY_TRANS    //This enables SPI Tansactions if using SPI pins for output DATA and CLOCK
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
-#define CHIPSET             APA102   //TX18138	//WS2812, APA102 //see FastLED docs or examples for list
-#define CLOCK_PIN_REQUIRED  true  //Does this LED need DATA + CLOCK??
+#define CHIPSET             TX1813   //TX1813	//WS2812, APA102 //see FastLED docs or examples for list
+#define CLOCK_PIN_REQUIRED  false  //Does this LED need DATA + CLOCK??
 
 
 //Is DATA_RATE_MHZ(SPI_MHZ) used w/ 2-wire leds requires a speed defined constant - AFFECTS SPEED EVEN IF SPI PINS NOT USED 
 //	Example: APA102 is up to 24Mhz (predicted only) */
 #define SPI_MHZ         8  //Too high a value causes individual led white flashes (sparkles)
 
-#define COLOR_ORDER BGR		//Set the color order. Most 1-wire types like WS2812B are GRB.
+#define COLOR_ORDER GRB //BGR		//Set the color order. Most 1-wire types like WS2812B are GRB.
 #define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
-#define BRIGHTNESS  20  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
+#define BRIGHTNESS  50  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
 
 //set these optional parameters as needed or comment out
 #define VOLTS 5
@@ -59,8 +59,8 @@ arrays, look at the LEDMatrix manual for details.
     Previous LEDMatrix versions use a negative value for reserved (right to left)
     and (bottom to top). Use HORIZ_DIR and VERT_DIR below to do this.
 */
-#define MATRIX_WIDTH    8 * 2   //former LEDMatrix use negative value for reversed (right to left)
-#define MATRIX_HEIGHT   8 * 2  //former LEDMatrix use negative value for reversed (bottom to top)
+#define MATRIX_WIDTH    8*4 //ppdx 4   //former LEDMatrix use negative value for reversed (right to left)
+#define MATRIX_HEIGHT   8*8 //ppd 4  //former LEDMatrix use negative value for reversed (bottom to top)
 #define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 	//the total number of LEDs in your display calculated
 
 //if this is a simple matrix (no tiles/blocks), then define the flow of the led strip(s), otherwise ignore
@@ -120,7 +120,7 @@ CLOCK_2  27
     #define DATA_1        1		      //	1     		1				2
     #define DATA_2        8		      //	8			8				0
     #define DATA_3        17		  //	17			10				4
-    #define DATA_4        20    //20	      //	20			26				16
+    #define DATA_4        20          //	20			26				16
 #endif
 
 //================== tiles/blocks in the matrix panel =========================
@@ -137,12 +137,12 @@ CLOCK_2  27
 
     #define MATRIX_TILE_WIDTH   8               // width of EACH MATRIX "cell" (not total display)
     #define MATRIX_TILE_HEIGHT  8               // height of each matrix "cell" 
-    #define MATRIX_TILE_H       2              // number of matrices arranged horizontally (positive value only)
-    #define MATRIX_TILE_V       2             // number of matrices arranged vertically (positive value only)
-    #define LEDS_IN_TILE        HORIZONTAL_ZIGZAG_MATRIX    //LED sequence within each tile:
+    #define MATRIX_TILE_H       4  //ppdx 4              // number of matrices arranged horizontally (positive value only)
+    #define MATRIX_TILE_V       8 //PPD 4             // number of matrices arranged vertically (positive value only)
+    #define LEDS_IN_TILE        HORIZONTAL_MATRIX    //LED sequence within each tile:
                                                             //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                                             //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
-    #define TILES_IN_MATRIX     HORIZONTAL_BLOCKS   //sequence of tiles in the entire panel
+    #define TILES_IN_MATRIX     HORIZONTAL_BLOCKS           //sequence of tiles in the entire panel
                                                             //HORIZONTAL_BLOCKS, VERTICAL_BLOCKS,
                                                             //HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
     /*
@@ -164,7 +164,7 @@ CLOCK_2  27
     be address with the SAME 4 PINS, plus 1 "enable" pin for each of the 4 extender boards 
     - 16 strips with only 8 pins! This drametically increases the total number of addressable LEDs! 
     */
-    #define NUM_BANKS           1      // 1 to 4 extender "banks"
+    #define NUM_BANKS           2 //PPD 1      // 1 to 4 extender "banks"
     #define STRIPS_PER_BANK     4       //1 or more but 4 strips per Bank is the most efficient use of the hardware
 
     //total number of strips used
@@ -218,11 +218,11 @@ CLOCK_2  27
 
 //house keeping if no Extender present - set all to 1 with no Bank pins.
 #if ! HAS_EXTENDER
-    #define NUM_BANKS           1
-    #define STRIPS_PER_BANK     1
-    #define NUM_STRIPS          1
-    #define LEDS_PER_BANK       NUM_LEDS/NUM_BANKS
-    #define LEDS_PER_STRIP      LEDS_PER_BANK / STRIPS_PER_BANK 
+    #define NUM_BANKS           0
+    #define STRIPS_PER_BANK     0
+    #define NUM_STRIPS          0
+    #define LEDS_PER_BANK       0   //NUM_LEDS/NUM_BANKS
+    #define LEDS_PER_STRIP      0   //LEDS_PER_BANK / STRIPS_PER_BANK 
     #define BANK_PIN_0          -1
     #define BANK_PIN_1          -1
     #define BANK_PIN_2          -1
