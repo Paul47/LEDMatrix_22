@@ -59,8 +59,8 @@ arrays, look at the LEDMatrix manual for details.
     Previous LEDMatrix versions use a negative value for reserved (right to left)
     and (bottom to top). Use HORIZ_DIR and VERT_DIR below to do this.
 */
-#define MATRIX_WIDTH    8*4 //ppdx 4   //former LEDMatrix use negative value for reversed (right to left)
-#define MATRIX_HEIGHT   8*8 //ppd 4  //former LEDMatrix use negative value for reversed (bottom to top)
+#define MATRIX_WIDTH    8*4    //former LEDMatrix use negative value for reversed (right to left)
+#define MATRIX_HEIGHT   8*8  //former LEDMatrix use negative value for reversed (bottom to top)
 #define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 	//the total number of LEDs in your display calculated
 
 //if this is a simple matrix (no tiles/blocks), then define the flow of the led strip(s), otherwise ignore
@@ -137,8 +137,8 @@ CLOCK_2  27
 
     #define MATRIX_TILE_WIDTH   8               // width of EACH MATRIX "cell" (not total display)
     #define MATRIX_TILE_HEIGHT  8               // height of each matrix "cell" 
-    #define MATRIX_TILE_H       4  //ppdx 4              // number of matrices arranged horizontally (positive value only)
-    #define MATRIX_TILE_V       8 //PPD 4             // number of matrices arranged vertically (positive value only)
+    #define MATRIX_TILE_H       4               // number of matrices arranged horizontally (positive value only)
+    #define MATRIX_TILE_V       8               // number of matrices arranged vertically (positive value only)
     #define LEDS_IN_TILE        HORIZONTAL_MATRIX    //LED sequence within each tile:
                                                             //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                                             //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
@@ -164,7 +164,7 @@ CLOCK_2  27
     be address with the SAME 4 PINS, plus 1 "enable" pin for each of the 4 extender boards 
     - 16 strips with only 8 pins! This drametically increases the total number of addressable LEDs! 
     */
-    #define NUM_BANKS           2 //PPD 1      // 1 to 4 extender "banks"
+    #define NUM_BANKS           2       // 1 to 4 extender "banks"
     #define STRIPS_PER_BANK     4       //1 or more but 4 strips per Bank is the most efficient use of the hardware
 
     //total number of strips used

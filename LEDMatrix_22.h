@@ -81,7 +81,7 @@ class cLEDMatrixBase
 
 public:
  struct CRGB *cLED;         //LEDMatrix_22 moved to public from protected
- struct CRGB* e_LED;                      //move to public //ppd
+ struct CRGB* e_LED;        //moved to public 
 
  typedef struct SPRITES {
     const long* bitmap;
@@ -208,7 +208,7 @@ public:
   public:
     cLEDMatrixBase();
 
-    virtual int16_t mXY(int16_t x, int16_t y)=0;    //ppd99  was uint32, uint16, uint16
+    virtual int16_t mXY(int16_t x, int16_t y)=0;
 
     void SetLEDArray(struct CRGB *pLED);	// Only used with externally defined LED arrays
 
@@ -369,7 +369,7 @@ class cLEDMatrix : public cLEDMatrixBase
       m_WH =  m_Width * m_Height;
       if (doMalloc) {
 	  // On ESP32, there is more memory available via malloc than static global arrays
-          p_LED = (struct CRGB *) malloc(((m_absMWidth * m_absBWidth * m_absMHeight * m_absBHeight) + TRIGGER_LED) * sizeof(CRGB));   //ppd  added trigger led
+          p_LED = (struct CRGB *) malloc(((m_absMWidth * m_absBWidth * m_absMHeight * m_absBHeight) + TRIGGER_LED) * sizeof(CRGB));
           cLED = p_LED;
 	  if (! p_LED) {
 	     Serial.begin(115200);
@@ -391,7 +391,7 @@ class cLEDMatrix : public cLEDMatrixBase
     virtual int16_t mXY(int16_t x, int16_t y)   //ppd99 was uint32, uint16, uint16
     {
       #ifdef XYTable_LookUp         //keeping it simple, leave the rest of the code
-        return XYTable[y][x];      //x,y indexes are always result in y,x arrays //ppd
+        return XYTable[y][x];      //x,y indexes are always result in y,x arrays
       #endif
 
 		if ((tBWidth == 1) && (tBHeight == 1))
