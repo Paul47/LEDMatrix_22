@@ -42,6 +42,8 @@ void mapOfLedsInTile();
 #define pt(msg)     Serial.println(msg);    //Serial.println MACRO
 #define ptt(msg)     Serial.print(msg);    //Serial.printl MACRO
 
+void numberBank(uint8_t i); //used by report gen
+
 void run_report() {
 
     pt("====== Reporting Enabled======");
@@ -211,7 +213,7 @@ void listBanks(){
             pt("       ----------------------------------------");
             for (uint8_t i = 0; i < NUM_BANKS; i++) {
                 ptt("Bank =  "); pt(i); ptt(" Enable Pin = ");
-                numberBank();
+                numberBank(i);
                     #if STRIPS_PER_BANK  > 0
                         fmt(strip+1, col, 0); fmt(DATA_1, col, 0);   fmt(CLOCK_1, col, 0);   fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP-1, col, 0); pt("");
                         strip++;
@@ -234,7 +236,7 @@ void listBanks(){
             pt("      ----------------------------------------");
             for (uint8_t i = 0; i < NUM_BANKS; i++) {
                 ptt("Bank =  "); pt(i); ptt(" Enable Pin = "); 
-                numberBank();
+                numberBank(i);
                 #if STRIPS_PER_BANK  > 0
                    fmt(strip + 1, col, 0); fmt(DATA_1, col, 0); fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP - 1, col, 0); pt("");
                    strip++;
@@ -449,10 +451,11 @@ void mapOfLedsInTile() {
     #endif          
 }
 //quick clug to list bank numbers in reverse order
-void numberBank(){
-    if (NUM_BANKS = 1) {
-        pt(BANK_PIN_0);
-    else if (NUM_BANKS = 2) {
+void numberBank(uint8_t i){
+    if (NUM_BANKS == 1) {
+        pt(BANK_PIN_0)
+    }
+    else if (NUM_BANKS == 2) {
         if (i == 0) {                  //again forced to cluge because of defines
             pt(BANK_PIN_1);
         }
@@ -460,7 +463,7 @@ void numberBank(){
             pt(BANK_PIN_0);
         }
     }
-    else if (NUM_BANKS = 3) {
+    else if (NUM_BANKS == 3) {
         if (i == 0) {                  //again forced to cluge because of defines
             pt(BANK_PIN_2);
         }
@@ -471,7 +474,7 @@ void numberBank(){
             pt(BANK_PIN_0);
         }
     }
-    else if (NUM_BANKS = 4) {
+    else if (NUM_BANKS == 4) {
         if (i == 0) {                  //again forced to cluge because of defines
             pt(BANK_PIN_3);
         }

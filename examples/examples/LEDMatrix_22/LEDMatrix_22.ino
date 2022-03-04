@@ -520,7 +520,7 @@ void printHello() {
     leds.LEDShow();
 }
 void printTest() {
-    int16_t x = 0;
+
     char text[] = "HELLO WORLD!";
 
     leds.clear();
