@@ -25,19 +25,20 @@ then run_report(); will execute at then end of setup.
 after all parameters are defined <<<
 */
 //#define RUN_REPORT      //will open Serial.pprint when started in setup
-
-//												 
+											 
 /*------------------- create the total matrix panel array -------------------
 If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
-cLEDMatrix leds
+cLEDMatrix leds;
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 //if run report is defined, the report_Generator.cpp code will be included
 //>>>> the code MUST BE INCLUDED HERE after all parameters are defined
 #ifdef RUN_REPORT
-#include ".\report_Generator\report_Generator.cpp"
+  #include ".\report_Generator\report_Generator.cpp"
+#endif
 
 //------------------------ Setup and loop ------------------------
   void setup() {

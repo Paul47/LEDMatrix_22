@@ -22,6 +22,7 @@ the Class "leds" can be changed to whatever you choose. Example: "myLeds" and al
 */
 
 cLEDMatrix leds;
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 //------------------------ Setup and loop ------------------------
   void setup() {

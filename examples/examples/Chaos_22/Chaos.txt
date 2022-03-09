@@ -1,0 +1,18 @@
+
+Chaos_22.ino
+Constantly changing wavy lines and palletes. Very colorful and unpredictable with a number of random initializations.
+
+
+
+Started with ColorWavesWithPalettes.ino
+//https://gist.githubusercontent.com/kriegsman/8281905786e8b2632aeb/raw/f2d1d5ea625c99c69fe03fc7d2ac70c41bd5cd5e/ColorWavesWithPalettes.ino
+
+ ColorWavesWithPalettes
+ Animated shifting color waves, with several cross-fading color palettes.
+ by Mark Kriegsman, August 2015
+
+ Color palettes courtesy of cpt-city and its contributors:
+   http://soliton.vm.bytemark.co.uk/pub/cpt-city/
+
+ Color palettes converted for FastLED using "PaletteKnife" v1:
+   http://fastled.io/tools/paletteknife/
