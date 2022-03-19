@@ -6,7 +6,7 @@ This sketch allows you to test the mapping of your matrix panel. These menu func
 
 If your setting do not include tiling or the extender hardware, these choices will be disabled.
 
-MOST PROBLEMS ARE CAUSED BY IMPROPER SETTINGS OF THE MATRIX PANEL, TILES/BLOCKS. OR EXTENER SETTINGS
+MOST PROBLEMS ARE CAUSED BY IMPROPER SETTINGS OF THE MATRIX PANEL, TILES. OR EXTENER SETTINGS
 
 Note: TT_numbers.h is a small Tom Thumb file with only numbers to display 
 
@@ -14,14 +14,14 @@ MENU tiling and bank sequences.
     *Sketch functionality*
     Locate and exercise your matrix panel, Extender Banks and Strips.
     This is an interactive menu on serial monitor to select functions:
-        If no blocks, menu stops after 'd' 
+        If no tiles, menu stops after 'd' 
         If no Extender, menu stops after 'e' 
     
     a. We will report your configuration.
     b. Draw triangles in starting corner and each corner of matrix
-    IF HAS_BLOCKS
+    IF HAS_TILES
     c.    Draw arrows in starting corners and centers of tiles
-    d.    Light up each block/tile AND print the number of the Block in
+    d.    Light up each tile AND print the number of the tile in
           sequence
     IF HAS_EXTENDER
     e.    Light up each Bank and number in sequence

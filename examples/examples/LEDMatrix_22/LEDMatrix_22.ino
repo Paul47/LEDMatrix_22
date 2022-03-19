@@ -11,8 +11,6 @@ Configure your LED array in myConfiguration.h located in the  library folder.
 This way you can reuse your configuration file(s) across all your sketches.
 Consider renaming your configurations (and changing the #include "myConfiguration.h"
 in the library folder.
-
-Set serial terminal to 115200
 */
 
 #include <LEDMatrix_22.h>
@@ -41,13 +39,12 @@ after all parameters are defined <<<
 #define RUN_REPORT      //will open Serial.pprint when started in setup
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILESS and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
 cLEDMatrix leds;
 
-CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 //if run report is defined, the report_Generator.cpp code will be included
 //>>>> the code MUST BE INCLUDED HERE after all parameters are defined
@@ -59,7 +56,7 @@ CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 void setup() {
     //if run report is defined, the report_Generator.cpp code will be included
     #ifdef RUN_REPORT
-      Serial.begin(115200); //select your speed
+      Serial.begin(9600); //select your speed
       delay(1000);
       run_report();       //also open Serial port
     #endif
@@ -190,7 +187,7 @@ void showBanks() {
             str.toCharArray(b, 2);
             leds.print(b);      //must be char array
             leds.print(text);    //B for
-            leds.LEDShow();
+            leds.show();
             FastLED.delay(1000);
         }
     }
@@ -201,7 +198,7 @@ void showBanks() {
 
 
 void stepThruTiles() {
-    if (leds.hasBlocks) {            //is it true?
+    if (leds.hasTiles) {            //is it true?
         if (leds.tileWidth < 0 || leds.tileHeight < 0) {
             pt("ERROR: No tile sizes defined");
             return;
@@ -244,19 +241,19 @@ void stepThruTiles() {
                 leds.drawBitmap(tileULx[i], tileULy[i], num[digitLeft], NUM_W, NUM_H, CRGB::Red + 100 * i);     //#1 + digit
                 leds.drawBitmap(tileULx[i] + NUM_W, tileULy[i], num[i - digitLeft * 10], NUM_W, NUM_H, CRGB::Red + 100 * i);
             }
-            leds.LEDShow();
+            leds.show();
             FastLED.delay(8000/leds.numTiles);
         }
     }
     else {
-        pt(">>>> NO Blocks defined");
-    }   //HAS_BLOCKS
+        pt(">>>> NO Tiles defined");
+    }   //HAS_TILES
 }
 
 
 
 void drawTileDot() {       //display x,y in upper left corner of each tile
-    if (leds.hasBlocks) {            //is it true?
+    if (leds.hasTiles) {            //is it true?
         if (leds.tileWidth == 0 || leds.tileHeight == 0) {
             pt("ERROR: No tile sizes defined");
             return;
@@ -268,12 +265,12 @@ void drawTileDot() {       //display x,y in upper left corner of each tile
             leds.drawTriangle(tileULx[c], tileULy[c], tileULx[c] + 1, tileULy[c], tileULx[c], tileULy[c] + 1, color);
             leds.drawPixel(tileCentrx[c], tileCentry[c], CRGB::Pink);
         }
-        leds.LEDShow();
+        leds.show();
         FastLED.delay(2000);
     }
     else {
-        pt(">>>> NO Blocks defined");
-    } //HAS_BLOCKS
+        pt(">>>> NO Tiless defined");
+    } //HAS_TILES
 }
 
 
@@ -294,7 +291,7 @@ void TringleDraw() {
     leds.drawRectangle(0, 0, leds.matrixWidth - 1, leds.matrixHeight - 1, CRGB::White); //Draw white frame
     //upper left
     leds.drawTriangle(x0, y0, x1, y1, x2, y2, color);
-    leds.LEDShow();
+    leds.show();
 
     color = CRGB::Blue;
     x0 = X[1];
@@ -305,7 +302,7 @@ void TringleDraw() {
     y2 = Y[1] + 2;
     //upper right
     leds.drawTriangle(x0, y0, x1, y1, x2, y2, color);
-    leds.LEDShow();
+    leds.show();
 
     color = CRGB::Green;
     x0 = X[2];
@@ -316,7 +313,7 @@ void TringleDraw() {
     y2 = Y[2] - 2;
     //lower left
     leds.drawTriangle(x0, y0, x1, y1, x2, y2, color);
-    leds.LEDShow();
+    leds.show();
 
     color = CRGB::Yellow;
     x0 = X[3];
@@ -328,7 +325,7 @@ void TringleDraw() {
     //lower right
     leds.drawTriangle(x0, y0, x1, y1, x2, y2, color);
 
-    leds.LEDShow();
+    leds.show();
     FastLED.delay(2000);
 }
 
@@ -344,19 +341,19 @@ void exerciseStart() {
 
 void menu() {
     //  leds.clear();   //clear matrix of last exercise
-    //  leds.LEDShow();
+    //  leds.show();
 
     pt("*Sketh functionality*");
     pt("Locate and exercise your matrix panel, Extender Banks and Strips.");
     pt("This is an interactive menu on serial monitor to select functions:");
-    pt("    If no blocks, menu stops after 'd' ");
+    pt("    If no tiless, menu stops after 'd' ");
     pt("    If no Extender, menu stops after 'e' ");
     pt("");
     pt("a. We will report your configuration.");
     pt("b. Draw triangles in starting corner and each corner of matrix");
-    pt("IF HAS_BLOCKS");
+    pt("IF HAS_TILESS");
     pt("c.    Draw arrows in starting corners and centers of tiles");
-    pt("d.    Light up each block/tile AND print the number of the Block in sequence");
+    pt("d.    Light up each tile AND print the number of the Tile in sequence");
     pt("IF HAS_EXTENDER");
     pt("e.    Light up each Bank and number in sequence");
     pt("f.    Light up each strips");
@@ -402,7 +399,7 @@ void memoryTest() {
         pt("Exetnder option is false. No Extender memory");
         return;
     }
-    leds.LEDShow();                     //LOLAD e_LED array
+    leds.show();                     //LOLAD e_LED array
     pt("read back from e_LED[]");
     for (int16_t i = 0; i < 20; i++) {
         ptt(leds.e_LED[i].r); ptt("\t");
@@ -420,33 +417,33 @@ void stepThruBanks() {
         for (int16_t x = 0; x < leds.matrixWidth; x++) {
             leds.drawPixel(x, y, CRGB::Green);
         }
-        if (here == 1) { leds.LEDShow(); FastLED.delay(500); }
+        if (here == 1) { leds.show(); FastLED.delay(500); }
     }
-    if (here == 0) { leds.LEDShow(); FastLED.delay(1000); }
+    if (here == 0) { leds.show(); FastLED.delay(1000); }
 
     for (int16_t y = leds.tileHeight; y < 2 * leds.tileHeight; y++) {
         for (int16_t x = 0; x < leds.matrixWidth; x++) {
             leds.drawPixel(x, y, CRGB::Blue);
         }
-        if (here == 1) { leds.LEDShow(); FastLED.delay(500); }
+        if (here == 1) { leds.show(); FastLED.delay(500); }
     }
-    if (here == 0) { leds.LEDShow(); FastLED.delay(1000); }
+    if (here == 0) { leds.show(); FastLED.delay(1000); }
 
     for (int16_t y = 2 * leds.tileHeight; y < 3 * leds.tileHeight; y++) {
         for (int16_t x = 0; x < leds.matrixWidth; x++) {
             leds.drawPixel(x, y, CRGB::Red);
         }
-        if (here == 1) { leds.LEDShow(); FastLED.delay(500); }
+        if (here == 1) { leds.show(); FastLED.delay(500); }
     }
-    if (here == 0) { leds.LEDShow(); FastLED.delay(1000); }
+    if (here == 0) { leds.show(); FastLED.delay(1000); }
 
     for (int16_t y = 3 * leds.tileHeight; y < 4 * leds.tileHeight; y++) {
         for (int16_t x = 0; x < leds.matrixWidth; x++) {
             leds.drawPixel(x, y, CRGB::Yellow);
         }
-        if (here == 1) { leds.LEDShow(); FastLED.delay(500); }
+        if (here == 1) { leds.show(); FastLED.delay(500); }
     }
-    if (here == 0) { leds.LEDShow(); FastLED.delay(1000); }
+    if (here == 0) { leds.show(); FastLED.delay(1000); }
 
     here++;
     if (here > 2) { here = 0; }
@@ -468,7 +465,7 @@ void stepThruStrips() {
                     leds.cLED[index] = CHSV(color,255,255);
                 }
                 color = (color + 40) % 255;
-                leds.LEDShow();
+                leds.show();
                 FastLED.delay(dly);
             }
         }
@@ -517,14 +514,14 @@ void printHello() {
     leds.setTextColor(CRGB::Yellow);
     leds.setCursor(0,0);
     leds.print(text);
-    leds.LEDShow();
+    leds.show();
 }
 void printTest() {
-
+    int16_t x = 0;
     char text[] = "HELLO WORLD!";
 
     leds.clear();
-    leds.LEDShow();
+    leds.show();
     leds.setTextWrap(0);
     for (x = leds.matrixWidth; x > -55; x--) {
         leds.setTextColor(CRGB::OrangeRed);
@@ -538,7 +535,7 @@ void printTest() {
     }
     char text1[] = "Wrapping";
     leds.clear();
-    leds.LEDShow();
+    leds.show();
     leds.setTextWrap(1);
     for (x = -55; x < leds.matrixWidth; x++) {
         leds.setTextColor(CRGB::Blue);

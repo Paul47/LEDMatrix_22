@@ -322,7 +322,7 @@ void writeGameStateToLeds()
       }
     }
   }
-  leds.LEDShow();               //display ALL
+  leds.show();               //display ALL
 //  ledStrip.endFrame(cellCount);
 }
 
@@ -409,7 +409,7 @@ void loop()
 		void writeCellToLed	...						Use current cell status/state...
 		  array = (cellState(x, y),x ,y) 	...converting x,y to array index
 			leds.cLED[leds.mXY(x, y)].r,g,b 				...To choose led color for each pixel in the array
-		leds.LEDShow()								Now display state of the game to the LED panel
+		leds.show()								Now display state of the game to the LED panel
 		
 	updateGameState();					for entire array update the cell status/state array for all neighbors
 		array index = cellState(x, y)	return array index w/ or w/o wrapping as x or y = 255

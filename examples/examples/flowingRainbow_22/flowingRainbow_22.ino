@@ -16,7 +16,7 @@ in the library folder.
 #include <LEDMatrix_22.h>
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -43,7 +43,7 @@ NOTE: function has been modified to work with Banks. It also works with
 standard LEDMatrix layouts.
 FastLED controllers do not use global BRIGHTNESS, so this routine is
 modified by capturing brightness changes in gBrightness, then passing
-this value to the LEDShow() function.
+this value to the show() function.
 */
 void flowingRainbow_22() {
     uint8_t gBrightness;
@@ -59,7 +59,7 @@ void flowingRainbow_22() {
         else {
             gBrightness = BRIGHTNESS;
         }
-        leds.LEDShow(gBrightness);
+        leds.show(gBrightness);
     }
 }
 

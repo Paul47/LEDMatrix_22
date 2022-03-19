@@ -40,7 +40,7 @@ after all parameters are defined <<<
 //#define RUN_REPORT      //will open Serial.pprint when started in setup
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -100,7 +100,7 @@ void loop()
   
   colorwaves( pleds, NUM_LEDS, gCurrentPalette);    //ppd change leds to pleds
 
-  leds.LEDShow();       // FastLED.show();
+  leds.show();       // leds.show();
   FastLED.delay(SPEED);
 }
 

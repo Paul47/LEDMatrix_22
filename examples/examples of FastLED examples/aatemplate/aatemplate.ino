@@ -6,9 +6,9 @@
  *
  * Date: July, 2015
  *
- * This is a simple non-blocking FastLED display sequence template.
+ * This is a simple non-tileing FastLED display sequence template.
  *
- * "non-blocking" means code can execute during pauses caused by delay();
+ * "non-tileing" means code can execute during pauses caused by delay();
  * Use  EVERY_N_MILLISECONDS() {} for desplay timing even is code needs rearranged.
  */
 
@@ -23,7 +23,7 @@
 
 
  /*------------------- create the total matrix panel array -------------------
- If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+ If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
  the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
  */
 
@@ -77,7 +77,7 @@ void loop () {
     nblendPaletteTowardPalette(currentPalette, targetPalette, maxChanges);   // AWESOME palette blending capability.
   }
 
-  EVERY_N_MILLISECONDS(thisdelay) {                           // FastLED based non-blocking delay to update/display the sequence.
+  EVERY_N_MILLISECONDS(thisdelay) {                           // FastLED based non-tileing delay to update/display the sequence.
     twinkle();
   }
 
@@ -86,7 +86,7 @@ void loop () {
     targetPalette = CRGBPalette16(CHSV(random8(), 255, random8(128,255)), CHSV(random8(), 255, random8(128,255)), CHSV(random8(), 192, random8(128,255)), CHSV(random8(), 255, random8(128,255)));
   }
 
-  leds.LEDShow();
+  leds.show();
   
   Serial.println(LEDS.getFPS());                              // Display frames per second on the serial monitor.
   

@@ -4,11 +4,11 @@
 **Intro**
 This Arduino sketch will create an x,y lookup table for LED projects instead of writing and using mapping code. It uses LEDMatrix definitions (ex: HORIZONTAL_ZIGZAG_MATRIX) to define the LED mapping. 
 
-The LED mapping apps I have found all have shortcoming on the size or layout of the matrix. Especially for blocks or cells within the matrix like the popular 8x8 blocks. This sketch includes:
+The LED mapping apps I have found all have shortcoming on the size or layout of the matrix. Especially for tiles within the matrix like the popular 8x8 tiles. This sketch includes:
 
 Up to 32k LEDs
 Small to very large matrices – laid out in any direction with or w/o zigzag
-Matrix can be made of blocks (cells) of any size that of any size– laid out in any direction with or w/o zigzag in the block and block layout within the matrix.
+Matrix can be made of tiles of any size that of any size– laid out in any direction with or w/o zigzag in the tile and tile layout within the matrix.
 Produces a report on the Serial Terminal of the specified configuration and the resulting mapping array.
  Simple cut and paste into your header file.
 Arduino code in small single purpose functions that are easy to modify
@@ -30,7 +30,7 @@ FastLED XY Map Generator:  https:macetech.github.io/FastLED-XY-Map-Generator
     NOTE: make the array simple, left to right and top to bottom, no zigzag.
     We will make all these changes here.
 
-WHEN DESIGNING BLOCKS IN A MATRIX, COMBINATIONS CAN GIVE SURPRISING RESULTS.
+WHEN DESIGNING TILES IN A MATRIX, COMBINATIONS CAN GIVE SURPRISING RESULTS.
 IF THE RESULT IS NOT WHAT YOU EXPECTS, REVIEW EACH STEP'S SETTINGS AGAIN!
 
 **STEPS**
@@ -54,52 +54,52 @@ LEDMatrix uses a NEGATIVE value for reserved (right to left) and (bottom to top)
     #define MATRIX_WIDTH 	 32    //use negative value for reversed (right to left)
     #define MATRIX_HEIGHT 	32     //use negative value for reversed (bottom to top)
 
-3.	How are the LEDs in the total matrix organized? (Regardless of and blocks or cells making up the matrix).
+3.	How are the LEDs in the total matrix organized? (Regardless of and tiles making up the matrix).
 
->>>>> If using BLOCKs/cell to make up your matrix, this is n/a. See steps 6 and 7
+>>>>> If using TILEs to make up your matrix, this is n/a. See steps 6 and 7
 
     MatrixType_t matrix_type = HORIZONTAL_MATRIX; 
     Options: HORIZONTAL_MATRIX, VERTICAL_MATRIX, HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
 
 
-**================= BLOCKS options =================**
+**================= TILES options =================**
 
-4.	 LEDs make a BLOCK (cell), BLOCKS make up a MATRIX (panel). if you have one long LED string in your display set HAS_BLOCK false and ignore these BLOCK values
+4.	 LEDs make a TILE, TILES make up a MATRIX (panel). if you have one long LED string in your display set HAS_TILE false and ignore these TILE values
 
-    #define HAS_BLOCKS  true    		 Is this matrix made up of block/cells of LEDs?
-    #define MATRIX_TILE_WIDTH  8  		width of each matrix BLOCK/CELL  (not total display)
-    #define MATRIX_TILE_HEIGHT  8 		height of each matrix BLOCK/CELL 
+    #define HAS_TILES  true    		 Is this matrix made up of tiles of LEDs?
+    #define MATRIX_TILE_WIDTH  8  		width of each matrix TILE  (not total display)
+    #define MATRIX_TILE_HEIGHT  8 		height of each matrix TILE 
 
     #define MATRIX_TILE_H    4  	 the number of tiles arranged horizontally
     #define MATRIX_TILE_V    4   	the number of tiles arranged vertically
 
-5.	 How are the LEDs organized inside the block/cell?
+5.	 How are the LEDs organized inside the tile?
 
-    BlockType_t blockOrg = HORIZONTAL_BLOCKS;  
-    Options: HORIZONTAL_BLOCKS, VERTICAL_BLOCKS, HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
+    TileType_t tileOrg = HORIZONTAL_TILES;  
+    Options: HORIZONTAL_TILES, VERTICAL_TILES, HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
 
-6.	 How are the block/cells organized in the matrix?
+6.	 How are the tiles organized in the matrix?
 
-    BlockType_t blocksInMatrix = HORIZONTAL_BLOCKS;  
-    Options:  HORIZONTAL_BLOCKS, VERTICAL_BLOCKS, HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
+    TileType_t tilesInMatrix = HORIZONTAL_TILES;  
+    Options:  HORIZONTAL_TILES, VERTICAL_TILES, HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
 
 7.	NEW OPTION NOT AVAILABLE IN LEDMatrix ONLY IF USING THIS TABLE LOOKUP METHOD
-    These 2 flip the order of the tiles/BLOCKS in the matrix
-    The LED order inside the blocks stay the same
-    To flip everything in the matrix panel including the LEDs inside the blocks see step 3.
+    These 2 flip the order of the tiles/TILES in the matrix
+    The LED order inside the tiles stay the same
+    To flip everything in the matrix panel including the LEDs inside the tiles see step 3.
 | Parameter    | Description                                   |
 | ------------ |-----------------------------------------------|
-| H_blockDir   | horizontal direction of led flow in the tile  |
-| V_blockDir   | vertical direction of led flow in the tile    |
+| H_tileDir   | horizontal direction of led flow in the tile  |
+| V_tileDir   | vertical direction of led flow in the tile    |
 
-    MatrixOrder_horizDir H_blockDir = LEFT_2_RIGHT;       Options: LEFT_2_RIGHT, RIGHT_2_LEFT
-    MatrixOrder_vertDir V_blockDir = TOP_DOWN;             Options: TOP_DOWN, BOTTOM_UP
+    MatrixOrder_horizDir H_tileDir = LEFT_2_RIGHT;       Options: LEFT_2_RIGHT, RIGHT_2_LEFT
+    MatrixOrder_vertDir V_tileDir = TOP_DOWN;             Options: TOP_DOWN, BOTTOM_UP
 
-8.	DEBUGGING: Add h and v hash marks between blocks for easier viewing you can delete in an editor after copying.
+8.	DEBUGGING: Add h and v hash marks between tiles for easier viewing you can delete in an editor after copying.
 
     #define TABLE_DIVIDERS true 		Options: true, false
 
 
-**================= End BLOCKS =================**
+**================= End TILES =================**
 
 **9.	DONE - compile and run**

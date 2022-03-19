@@ -14,10 +14,10 @@ enum MatrixType_t { HORIZONTAL_MATRIX,
                     HORIZONTAL_ZIGZAG_MATRIX,
                     VERTICAL_ZIGZAG_MATRIX };
 
-enum BlockType_t	{	HORIZONTAL_BLOCKS,
-						VERTICAL_BLOCKS,
-						HORIZONTAL_ZIGZAG_BLOCKS,
-						VERTICAL_ZIGZAG_BLOCKS };
+enum TileType_t	{	HORIZONTAL_TILES,
+						VERTICAL_TILES,
+						HORIZONTAL_ZIGZAG_TILES,
+						VERTICAL_ZIGZAG_TILES };
 
 #define FASTLED_INTERNAL        // Suppress build banner
 #include <FastLED.h>
@@ -93,20 +93,19 @@ public:
 SPRITES sprite[48];   //48 max
 
 
- typedef struct BLOCKS {
+ typedef struct TILES {
     int16_t xpos;
     int16_t ypos;
     CRGB* b_ptr;         ///ptr to memory block
     uint8_t w;
     uint8_t h;
     boolean progMem;        //future use?
-} BLOCKS;
-BLOCKS block[48];   //48 max
+} TILES;
+TILES block[48];   //48 max
 
 
   protected:
     int16_t m_Width, m_Height, m_WH;
-    //struct CRGB *cLED;         //LEDMatrix moved to publicc from protected
     struct CRGB m_OutOfBounds;
 
     int16_t
@@ -136,19 +135,17 @@ BLOCKS block[48];   //48 max
         c.matrixType        MATRIX_TYPE	        //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                             //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_M
                     **what direction does the FIRST row of LEDs flow?
-    c.ledHrorizDir      HORIZ_DIR	            //LEFT_2_RIGHT, RIGHT_2_LEFT
+    c.ledHorizDir      HORIZ_DIR	            //LEFT_2_RIGHT, RIGHT_2_LEFT
     c.ledVertDir        VERT_DIR	            //BOTTOc.UP, TOP_DOWN
-    **Tiles/Blocks**
-    c.tileWidth        MATRIX_TILE_WIDTH	    // width of EACH MATRIX "cell" (not total dis
-    c.tileHeight       MATRIX_TILE_HEIGHT	    // height of each matrix "cell"
+    **Tiles/Tiles**
+    c.tileWidth        MATRIX_TILE_WIDTH	    // width of EACH MATRIX "tile" (not total matrix display)
+    c.tileHeight       MATRIX_TILE_HEIGHT	    // height of each matrix "tile"
     c.tilesPerRow      MATRIX_TILE_H	        // number of matrices arranged horizontally (
     c.tilesPerCol      MATRIX_TILE_V 	        // number of matrices arranged vertically (po
     c.tileLedsFlow     LEDS_IN_TILE	        //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                             //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
-    c.tileFlow         TILES_IN_MATRIX	        //HORIZONTAL_BLOCKS, VERTICAL_BLOCKS,
-                                            //HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
-    c.tileLedHorizDir  LEDS_HORIZ_DIR	        //LEFT_2_RIGHT, RIGHT_2_LEFT
-    c.tileLedVertDir   LEDS_VERT_DIR     	    //BOTTOM_UP, TOP_DOWN
+    c.tileFlow         TILES_IN_MATRIX	        //HORIZONTAL_TILES, VERTICAL_TILES,
+                                            //HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
     **Extender**
     c.numBanks         NUM_BANKS 	            // 1 to 4 extender "banks"
     c.stripsPerBank    STRIPS_PER_BANK	        //1 or more but 4 strips per Bank is the most
@@ -156,54 +153,6 @@ BLOCKS block[48];   //48 max
     c.ledsPerStrip     LEDS_PER_STRIP 
     */
 
-public:
-    //global declarations for definition replacements with constant variables
-    const uint8_t matrixWidth = MATRIX_WIDTH;
-    const uint8_t matrixHeight = MATRIX_HEIGHT;
-    const uint8_t ledHrorizDir = HORIZ_DIR;	         //0 = LEFT_2_RIGHT, 1 = RIGHT_2_LEFT
-    const uint8_t ledVertDir = VERT_DIR;	            //0 = BOTTOM_UP, 1 = TOP_DOWN
-    const int16_t numLeds = NUM_LEDS;
-
-    //capture block & extender info as integers rather than #defines so we don't get undefined errors.
-    //default is 0 if define = 0 or not defined
-#if HAS_BLOCKS
-    const uint8_t hasBlocks = HAS_BLOCKS;                  //otherwise leave these a defalut of zero
-    const uint8_t numTiles = MATRIX_TILE_H * MATRIX_TILE_V;
-    const uint8_t tilesPerRow = MATRIX_TILE_H;
-    const uint8_t tilesPerCol = MATRIX_TILE_V;
-    const uint8_t tileWidth = MATRIX_TILE_WIDTH;      //leds in a tile's row
-    const uint8_t tileHeight = MATRIX_TILE_HEIGHT;    //leds in a tile's column
-    const uint8_t tileLedsFlow = LEDS_IN_TILE;        //0 = HORIZONTAL_MATRIX, 1 = VERTICAL_MATRIX, 2 = HORIZONTAL_ZIGZAG_MATRIX, 3 = VERTICAL_ZIGZAG_MATRIX
-    const uint8_t tileFlow = TILES_IN_MATRIX;        //0 = HORIZONTAL_BLOCKS, 1 = VERTICAL_BLOCKS, 2 = HORIZONTAL_ZIGZAG_BLOCKS, 3 = VERTICAL_ZIGZAG_BLOCKS
-    const uint8_t tileLedHorizDir = LEDS_HORIZ_DIR;	//0 = LEFT_2_RIGHT, 1 = RIGHT_2_LEFT
-    const uint8_t tileLedVertDir = LEDS_VERT_DIR;    //0 = BOTTOM_UP, 1 = TOP_DOWN
-#else
-    const uint8_t hasBlocks = 0;
-    const uint8_t numTiles = 0;
-    const uint8_t tilesPerRow = 0;
-    const uint8_t tilesPerCol = 0;
-    const uint8_t tileWidth = 0;
-    const uint8_t tileHeight = 0;
-    const uint8_t tileLedsFlow = 0;
-    const uint8_t tileFlow = 0;
-    const uint8_t tileLedVertDir = 0;
-#endif  //if true
-
-#if HAS_EXTENDER
-    boolean hasExtender = HAS_EXTENDER;     //otherwise leave these a defalut of zero
-    const uint8_t numBanks = NUM_BANKS;
-    const uint8_t stripsPerBank = STRIPS_PER_BANK;
-    const int16_t ledsPerBank = LEDS_PER_BANK;
-    const int16_t ledsPerStrip = LEDS_PER_STRIP;
-    const int16_t numStrips = NUM_STRIPS;
-#else
-    boolean hasExtender = 0;     //otherwise leave these a defalut of zero
-    const uint8_t numBanks = 0;
-    const uint8_t stripsPerBank = 0;
-    const int16_t ledsPerBank = 0;
-    const int16_t ledsPerStrip = 0;
-    const int16_t numStrips = 0;
-#endif
 
   public:
     cLEDMatrixBase();
@@ -238,6 +187,7 @@ public:
     
     //================LEDMatrix_22 additions ============================
     CRGB getPixel(int16_t x, int16_t y);
+    int16_t getPixelIndex(int16_t x, int16_t y);
     void fadeAll(uint16_t value);
     void fillScreen(CRGB color);
     void drawTriangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, CRGB color);
@@ -296,21 +246,26 @@ public:
     void drawSprite(uint8_t spriteNum, int16_t x, int16_t y, CRGB bg);
     void eraseSprite(uint8_t spriteNum, int16_t x1, int16_t y1, CRGB bg);
 
-    //================LEDMatrix_22  aditions - 24 bit full color screen block save-restore ============================   
-    boolean blockInit(uint8_t blockNum, uint8_t w, uint8_t h);
-    boolean blockStore(uint8_t blockNum, int16_t x1, int16_t y1);
-    void blockRestore(uint8_t blockNum, int16_t x1, int16_t y1);
-    void blockRestore(uint8_t blockNum);
-    void freeBlock(uint8_t blockNum);
+    //================LEDMatrix_22  aditions - 24 bit full color screen tile save-restore ============================   
+    boolean blockInit(uint8_t tileNum, uint8_t w, uint8_t h);
+    boolean blockStore(uint8_t tileNum, int16_t x1, int16_t y1);
+    void blockRestore(uint8_t tileNum, int16_t x1, int16_t y1);
+    void blockRestore(uint8_t tileNum);
+    void freeBlock(uint8_t tileNum);
 
     //=====================LEDMatrix_22  EXTENDER hardware ===============================
-    void LEDShow();
-    void LEDShow(uint8_t gBrightness);
-    void LEDShow(uint8_t Bank, uint8_t gBrightness);
-    void LEDShow(uint8_t Bank1, uint8_t Bank2, uint8_t gBrightness);
-    void LEDShow(uint8_t Bank1, uint8_t Bank2, uint8_t Bank3, uint8_t gBrightness);
+    void show();
+    void show(uint8_t gBrightness);
+    void show(uint8_t Bank, uint8_t gBrightness);
+    void show(uint8_t Bank1, uint8_t Bank2, uint8_t gBrightness);
+    void show(uint8_t Bank1, uint8_t Bank2, uint8_t Bank3, uint8_t gBrightness);
     void addLeds();
     void defineBanks();
+    void setControllerA(uint8_t index);      //initialize up to 4 controllers
+    void setControllerB(uint8_t index);
+    void setControllerC(uint8_t index);
+    void setControllerD(uint8_t index);
+
 
 private:
 
@@ -339,27 +294,97 @@ class cLEDMatrix : public cLEDMatrixBase
 
 {
   private:
-    #if HAS_BLOCKS 
-      static const int16_t tMWidth = MATRIX_TILE_WIDTH;     //lets use the defined valuesa reather than have the sketch have to re-enter them
-      static const int16_t tMHeight = MATRIX_TILE_HEIGHT;
-      static const MatrixType_t tMType = LEDS_IN_TILE;
+    #if HAS_TILES 
+      //NEW
+//     static const int16_t tMWidth = MATRIX_WIDTH_DIR;     //NEW
+     //OLD
+      static const int16_t tMWidth = MATRIX_TILE_WIDTH;     //OLD
+
+      //NEW
+//      static const int16_t tMHeight = MATRIX_HEIGHT_DIR;     //NEW
+      //OLD
+      static const int16_t tMHeight = MATRIX_TILE_HEIGHT;     //OLD
+      static const MatrixType_t tMType = LEDS_IN_TILE; 
       static const int8_t tBWidth = MATRIX_TILE_H_DIR;
       static const int8_t tBHeight = MATRIX_TILE_V_DIR;
-      static const BlockType_t tBType = TILES_IN_MATRIX;
-#else
+      static const TileType_t tBType = TILES_IN_MATRIX;
+    #else
       static const int16_t tMWidth = MATRIX_WIDTH_DIR;      //these are just the defaults listed in the template
       static const int16_t tMHeight = MATRIX_HEIGHT_DIR;
       static const MatrixType_t tMType = MATRIX_TYPE;
       static const int8_t tBWidth = 1;
       static const int8_t tBHeight = 1;
-      static const BlockType_t tBType = HORIZONTAL_BLOCKS;
-#endif
+      static const TileType_t tBType = HORIZONTAL_TILES;
+    #endif
 
     static const int16_t m_absMWidth = (tMWidth * ((tMWidth < 0) * -1 + (tMWidth > 0)));
     static const int16_t m_absMHeight = (tMHeight * ((tMHeight < 0) * -1 + (tMHeight > 0)));
     static const int16_t m_absBWidth = (tBWidth * ((tBWidth < 0) * -1 + (tBWidth > 0)));
     static const int16_t m_absBHeight = (tBHeight * ((tBHeight < 0) * -1 + (tBHeight > 0)));
     struct CRGB *p_LED;
+
+public:
+    //>>>>>>>>>>>>>>>>>orientation test variables <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#if(0)
+    static const int16_t tmw = tMWidth;
+    static const int16_t tmh = tMHeight;
+    static const int16_t tbw = tBWidth;
+    static const int16_t tbh = tBHeight;
+    static const int16_t m_amw = m_absMWidth;
+    static const int16_t m_amh = m_absMHeight;
+    static const int16_t m_abw = m_absBWidth;
+    static const int16_t m_ah = m_absBHeight;
+    static const MatrixType_t tMt = tMType;
+    static const TileType_t tBt = tBType;
+#endif  //test variables  
+
+   //global declarations for definition replacements with constant variables
+    const uint8_t matrixWidth = MATRIX_WIDTH;
+    const uint8_t matrixHeight = MATRIX_HEIGHT;
+    static const uint8_t ledHorizDir = HORIZ_DIR;	         //0 = LEFT_2_RIGHT, 1 = RIGHT_2_LEFT
+    const uint8_t ledVertDir = VERT_DIR;	            //0 = BOTTOM_UP, 1 = TOP_DOWN
+    const int16_t numLeds = NUM_LEDS;
+
+
+
+    //capture tile & extender info as integers rather than #defines so we don't get undefined errors.
+    //default is 0 if define = 0 or not defined
+#if HAS_TILES
+    const uint8_t hasTiles = HAS_TILES;                  //otherwise leave these a defalut of zero
+    const uint8_t numTiles = MATRIX_TILE_H * MATRIX_TILE_V;
+    const uint8_t tilesPerRow = MATRIX_TILE_H;
+    const uint8_t tilesPerCol = MATRIX_TILE_V;
+    const uint8_t tileWidth = MATRIX_TILE_WIDTH;      //leds in a tile's row
+    const uint8_t tileHeight = MATRIX_TILE_HEIGHT;    //leds in a tile's column
+    const uint8_t tileLedsFlow = LEDS_IN_TILE;        //0 = HORIZONTAL_MATRIX, 1 = VERTICAL_MATRIX, 2 = HORIZONTAL_ZIGZAG_MATRIX, 3 = VERTICAL_ZIGZAG_MATRIX
+    const uint8_t tileFlow = TILES_IN_MATRIX;        //0 = HORIZONTAL_TILES, 1 = VERTICAL_TILES, 2 = HORIZONTAL_ZIGZAG_TILES, 3 = VERTICAL_ZIGZAG_TILES
+#else
+    const uint8_t hasTiles = 0;
+    const uint8_t numTiles = 0;
+    const uint8_t tilesPerRow = 0;
+    const uint8_t tilesPerCol = 0;
+    const uint8_t tileWidth = 0;
+    const uint8_t tileHeight = 0;
+    const uint8_t tileLedsFlow = 0;
+    const uint8_t tileFlow = 0;
+#endif  //if true
+
+#if HAS_EXTENDER
+    boolean hasExtender = HAS_EXTENDER;     //otherwise leave these a defalut of zero
+    const uint8_t numBanks = NUM_BANKS;
+    const uint8_t stripsPerBank = STRIPS_PER_BANK;
+    const int16_t ledsPerBank = LEDS_PER_BANK;
+    const int16_t ledsPerStrip = LEDS_PER_STRIP;
+    const int16_t numStrips = NUM_STRIPS;
+#else
+    boolean hasExtender = 0;     //otherwise leave these a defalut of zero
+    const uint8_t numBanks = 0;
+    const uint8_t stripsPerBank = 0;
+    const int16_t ledsPerBank = 0;
+    const int16_t ledsPerStrip = 0;
+    const int16_t numStrips = 0;
+#endif
+
 
   public:
     cLEDMatrix(bool doMalloc=true)
@@ -386,103 +411,125 @@ class cLEDMatrix : public cLEDMatrixBase
       cLED = pLED;
     }
 
+
     //int16 for arrays > 256 x 256 in the future. 
     //Also must allow for negative number or get rediculous results like 65534 or other erroneus indexes
-    virtual int16_t mXY(int16_t x, int16_t y)   //ppd99 was uint32, uint16, uint16
+    //int16 for arrays > 256 x 256 in the future. 
+    //Also must allow for negative number or get rediculous results like 65534 or other erroneus indexes
+    virtual int16_t mXY(int16_t x, int16_t y)      //int to allows for negative numbers
     {
-      #ifdef XYTable_LookUp         //keeping it simple, leave the rest of the code
-        return XYTable[y][x];      //x,y indexes are always result in y,x arrays
-      #endif
+        #ifdef XYTable_LookUp         //keeping it simple, leave the rest of the code
+                return XYTable[y][x];      //x,y indexes are always result in y,x arrays
+        #endif
 
-		if ((tBWidth == 1) && (tBHeight == 1))
-		{
-			// No Blocks, just a Matrix
-	    if (tMWidth < 0)
-	    x = (m_absMWidth - 1) - x;
-		if (tMHeight < 0)
-	    y = (m_absMHeight - 1) - y;
-	    if (tMType == HORIZONTAL_MATRIX)
-	    return((y * m_absMWidth) + x);
-	    else if (tMType == VERTICAL_MATRIX)
-	    return((x * m_absMHeight) + y);
-	    else if (tMType == HORIZONTAL_ZIGZAG_MATRIX)
-	    {
-	    if (y % 2)
-	        return((((y + 1) * m_absMWidth) - 1) - x);
-	    else
-	        return((y * m_absMWidth) + x);
-	    }
-	    else /* if (tMType == VERTICAL_ZIGZAG_MATRIX) */
-	    {
-	    if (x % 2)
-	        return((((x + 1) * m_absMHeight) - 1) - y);
-	    else
-	        return((x * m_absMHeight) + y);
-	    }
-		}
-		else
-		{
-			// Reverse Block/Matrix X coordinate if needed
-			if ((tBWidth < 0) && (tMWidth < 0))
-				x = (((m_absBWidth - 1) - (x / m_absMWidth)) * m_absMWidth) + ((m_absMWidth - 1) - (x % m_absMWidth));
-			else if (tBWidth < 0)
-				x = (((m_absBWidth - 1) - (x / m_absMWidth)) * m_absMWidth) + (x % m_absMWidth);
-			else if (tMWidth < 0)
-				x = x - ((x % m_absMWidth) * 2) + (m_absMWidth - 1);
-			// Reverse Block/Matrix Y coordinate if needed
-			if ((tBHeight < 0) && (tMHeight < 0))
-				y = (((m_absBHeight - 1) - (y / m_absMHeight)) * m_absMHeight) + ((m_absMHeight - 1) - (y % m_absMHeight));
-			else if(tBHeight < 0)
-				y = (((m_absBHeight - 1) - (y / m_absMHeight)) * m_absMHeight) + (y % m_absMHeight);
-			else if (tMHeight < 0)
-				y = y - ((y % m_absMHeight) * 2) + (m_absMHeight - 1);
-			// Calculate Block base
-	    uint16_t Base;
-		if (tBType == HORIZONTAL_BLOCKS)
-		    Base = (((y / m_absMHeight) * m_absBWidth) + (x / m_absMWidth)) * (m_absMWidth * m_absMHeight);
-		else if (tBType == VERTICAL_BLOCKS)
-		    Base = (((x / m_absMWidth) * m_absBHeight) + (y / m_absMHeight)) * (m_absMHeight * m_absMWidth);
-		else if (tBType == HORIZONTAL_ZIGZAG_BLOCKS)
-		{
-	    if ((y / m_absMHeight) % 2)
-			    Base = (((y / m_absMHeight) * m_absBWidth) + ((m_absBWidth - 1) - (x / m_absMWidth))) * (m_absMWidth * m_absMHeight);
-	    else
-			    Base = (((y / m_absMHeight) * m_absBWidth) + (x / m_absMWidth)) * (m_absMWidth * m_absMHeight);
-	    }
-	    else /* if (tBType == VERTICAL_ZIGZAG_BLOCKS) */
-	    {
-	    if ((x / m_absMWidth) % 2)
-			    Base = (((x / m_absMWidth) * m_absBHeight) + ((m_absBHeight - 1) - (y / m_absMHeight))) * (m_absMHeight * m_absMWidth);
-	    else
-			    Base = (((x / m_absMWidth) * m_absBHeight) + (y / m_absMHeight)) * (m_absMHeight * m_absMWidth);
-	    }
-			// Calculate Matrix offset
-	    if (tMType == HORIZONTAL_MATRIX)
-	    return(Base + ((y % m_absMHeight) * m_absMWidth) + (x % m_absMWidth));
-	    else if (tMType == VERTICAL_MATRIX)
-	    return(Base + ((x % m_absMWidth) * m_absMHeight) + (y % m_absMHeight));
-	    else if (tMType == HORIZONTAL_ZIGZAG_MATRIX)
-	    {
-	    if ((y % m_absMHeight) % 2)
-	        return(Base + ((((y % m_absMHeight) + 1) * m_absMWidth) - 1) - (x % m_absMWidth));
-	    else
-	        return(Base + ((y % m_absMHeight) * m_absMWidth) + (x % m_absMWidth));
-	    }
-	    else /* if (tMType == VERTICAL_ZIGZAG_MATRIX) */
-	    {
-	    if ((x % m_absMWidth) % 2)
-	        return(Base + ((((x % m_absMWidth) + 1) * m_absMHeight) - 1) - (y % m_absMHeight));
-	    else
-	        return(Base + ((x % m_absMWidth) * m_absMHeight) + (y % m_absMHeight));
-	    }
-	}
+        if ((tBWidth == 1) && (tBHeight == 1)) {
+            // No Tiles, just a Matrix
+            if (tMWidth < 0) {
+                x = (m_absMWidth - 1) - x;
+            }
+            if (tMHeight < 0) {
+                y = (m_absMHeight - 1) - y;
+            }
+            if (tMType == HORIZONTAL_MATRIX) {
+                return((y * m_absMWidth) + x);
+            }
+            else if (tMType == VERTICAL_MATRIX) {
+                return((x * m_absMHeight) + y);
+            }
+            else if (tMType == HORIZONTAL_ZIGZAG_MATRIX) {
+                if (y % 2) {
+                    return((((y + 1) * m_absMWidth) - 1) - x);
+                }
+                else {
+                    return((y * m_absMWidth) + x);
+                }
+            }
+            else { /* if (tMType == VERTICAL_ZIGZAG_MATRIX) */
+                if (x % 2) {
+                    return((((x + 1) * m_absMHeight) - 1) - y);
+                }
+                else
+                    return((x * m_absMHeight) + y);
+            }
+        }
+        else {   // Reverse Tile/Matrix X coordinate if needed
+            if ((tBWidth < 0) && (tMWidth < 0)) {
+                x = (((m_absBWidth - 1) - (x / m_absMWidth)) * m_absMWidth) + ((m_absMWidth - 1) - (x % m_absMWidth));
+            }
+            else if (tBWidth < 0) {
+                x = (((m_absBWidth - 1) - (x / m_absMWidth)) * m_absMWidth) + (x % m_absMWidth);
+            }
+            else if (tMWidth < 0) {
+                x = x - ((x % m_absMWidth) * 2) + (m_absMWidth - 1);
+            }
+            // Reverse Tile/Matrix Y coordinate if needed
+            if ((tBHeight < 0) && (tMHeight < 0)) {
+                y = (((m_absBHeight - 1) - (y / m_absMHeight)) * m_absMHeight) + ((m_absMHeight - 1) - (y % m_absMHeight));
+            }
+            else if (tBHeight < 0) {
+                y = (((m_absBHeight - 1) - (y / m_absMHeight)) * m_absMHeight) + (y % m_absMHeight);
+            }
+            else if (tMHeight < 0) {
+                y = y - ((y % m_absMHeight) * 2) + (m_absMHeight - 1);
+            }
+
+            // Calculate Tile base
+            uint16_t Base;
+            if (tBType == HORIZONTAL_TILES) {
+                Base = (((y / m_absMHeight) * m_absBWidth) + (x / m_absMWidth)) * (m_absMWidth * m_absMHeight);
+            }
+            else if (tBType == VERTICAL_TILES) {
+                Base = (((x / m_absMWidth) * m_absBHeight) + (y / m_absMHeight)) * (m_absMHeight * m_absMWidth);
+            }
+            else if (tBType == HORIZONTAL_ZIGZAG_TILES) {
+                if ((y / m_absMHeight) % 2) {
+                    Base = (((y / m_absMHeight) * m_absBWidth) + ((m_absBWidth - 1) - (x / m_absMWidth))) * (m_absMWidth * m_absMHeight);
+                }
+                else {
+                    Base = (((y / m_absMHeight) * m_absBWidth) + (x / m_absMWidth)) * (m_absMWidth * m_absMHeight);
+                }
+            }
+            else {      /* if (tBType == VERTICAL_ZIGZAG_TILES) */
+                if ((x / m_absMWidth) % 2) {
+                    Base = (((x / m_absMWidth) * m_absBHeight) + ((m_absBHeight - 1) - (y / m_absMHeight))) * (m_absMHeight * m_absMWidth);
+                }
+                else {
+                    Base = (((x / m_absMWidth) * m_absBHeight) + (y / m_absMHeight)) * (m_absMHeight * m_absMWidth);
+                }
+            }
+
+            // Calculate Matrix offset
+            if (tMType == HORIZONTAL_MATRIX) {
+                return(Base + ((y % m_absMHeight) * m_absMWidth) + (x % m_absMWidth));
+            }
+            else if (tMType == VERTICAL_MATRIX) {
+                return(Base + ((x % m_absMWidth) * m_absMHeight) + (y % m_absMHeight));
+            }
+            else if (tMType == HORIZONTAL_ZIGZAG_MATRIX) {
+                if ((y % m_absMHeight) % 2) {
+                    return(Base + ((((y % m_absMHeight) + 1) * m_absMWidth) - 1) - (x % m_absMWidth));
+                }
+                else {
+                    return(Base + ((y % m_absMHeight) * m_absMWidth) + (x % m_absMWidth));
+                }
+            }
+            else {      /* if (tMType == VERTICAL_ZIGZAG_MATRIX) */
+                if ((x % m_absMWidth) % 2) {
+                    return(Base + ((((x % m_absMWidth) + 1) * m_absMHeight) - 1) - (y % m_absMHeight));
+                }
+                else {
+                    return(Base + ((x % m_absMWidth) * m_absMHeight) + (y % m_absMHeight));
+                }
+            }
+        }
  }
+
 
     void shiftLeft(void)
     {
       if ((tBWidth != 1) || (tBHeight != 1))
      	{
-				// Blocks, so no optimisation
+				// Tiles, so no optimisation
 		    for (int16_t x=1; x<m_Width; ++x)
   			{
 				  for (int16_t y=0; y<m_Height; ++y)
@@ -493,7 +540,7 @@ class cLEDMatrix : public cLEDMatrixBase
      	}
      	else
       {
-				// No Blocks, just a Matrix so optimise a little
+				// No Tiles, just a Matrix so optimise a little
         switch (tMType)
         {
           case HORIZONTAL_MATRIX:
@@ -528,7 +575,7 @@ class cLEDMatrix : public cLEDMatrixBase
     {
       if ((tBWidth != 1) || (tBHeight != 1))
      	{
-				// Blocks, so no optimisation
+				// Tiles, so no optimisation
 		    for (int16_t x=m_Width-1; x>=1; --x)
   			{
 				  for (int16_t y=0; y<m_Height; ++y)
@@ -539,7 +586,7 @@ class cLEDMatrix : public cLEDMatrixBase
      	}
      	else
       {
-				// No Blocks, just a Matrix so optimise a little
+				// No Tiles, just a Matrix so optimise a little
         switch (tMType)
         {
           case HORIZONTAL_MATRIX:
@@ -574,7 +621,7 @@ class cLEDMatrix : public cLEDMatrixBase
     {
       if ((tBWidth != 1) || (tBHeight != 1))
      	{
-				// Blocks, so no optimisation
+				// Tiles, so no optimisation
 			  for (int16_t y=1; y<m_Height; ++y)
   			{
 			    for (int16_t x=0; x<m_Width; ++x)
@@ -585,7 +632,7 @@ class cLEDMatrix : public cLEDMatrixBase
      	}
      	else
       {
-				// No Blocks, just a Matrix so optimise a little
+				// No Tiles, just a Matrix so optimise a little
         switch (tMType)
         {
           case HORIZONTAL_MATRIX:
@@ -620,7 +667,7 @@ class cLEDMatrix : public cLEDMatrixBase
     {
       if ((tBWidth != 1) || (tBHeight != 1))
      	{
-				// Blocks, so no optimisation
+				// Tiles, so no optimisation
 			  for (int16_t y=m_Height-1; y>=1; --y)
   			{
 			    for (int16_t x=0; x<m_Width; ++x)
@@ -631,7 +678,7 @@ class cLEDMatrix : public cLEDMatrixBase
      	}
      	else
       {
-				// No Blocks, just a Matrix so optimise a little
+				// No Tiles, just a Matrix so optimise a little
         switch (tMType)
         {
           case HORIZONTAL_MATRIX:
@@ -663,7 +710,7 @@ class cLEDMatrix : public cLEDMatrixBase
     }
 
   private:
-  	// Optimised functions used by shiftLeft & shiftRight in non block mode
+  	// Optimised functions used by shiftLeft & shiftRight in non tile mode
     void HPWSL(void)
     {
       uint32_t i = 0;
@@ -785,7 +832,7 @@ class cLEDMatrix : public cLEDMatrixBase
         p_LED[i--] = CRGB(0, 0, 0);
     }
 
-  	// Optimised functions used by shiftDown & shiftUp in non block mode
+  	// Optimised functions used by shiftDown & shiftUp in non tile mode
     void HPHSD(void)
     {
       uint32_t i = 0;

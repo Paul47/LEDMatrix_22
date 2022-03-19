@@ -67,7 +67,7 @@ unsigned char pattern = AllOff;
 unsigned int maxLoops;  // go to next state when loopCount >= maxLoops
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -208,7 +208,7 @@ void loop()
   }
  
   // update the LED strips with the colors in the colors array
-  leds.LEDShow();
+  leds.show();
 
   // Make sure that loops are not too fast there are a small number
   // of LEDs and the colors are calculated quickly.

@@ -36,9 +36,6 @@
     * SmartMatrix has transitioned into a software + hardware solution for HUB75 LED panels. 
        LEDMatrix_22 currently does not support SmartMatrix or HUB75 hardware.
 
-
-
-
 ###The LEDMatrix_22 manual can be accessed with the wiki button above
 
 ### Using multiple LED Strips together but not as a matrix or panel? 
@@ -56,6 +53,18 @@ LEDMatrix_22 supports a small shield PCB and FastLED's multiple Controllers to d
 Now, using the LED Extender shields we can break up the 32x32 matrix and insert a second DATA/CLOCK line for LEDs 512-1024. No more sparkle even with higher data/brightness/fps rates. Additing additional data lines for 256, 128, or 64 LED segments allows even high data rates. 
 
 ## Available Methods
+
+NOTE: Be sure to replace: 
+```c
+FastLED.show(); 
+'''
+with this library's show function, for example: 
+```c
+leds.show();) 
+'''
+or your led matix will remain blank. This new show function handles simple, tiled, and Extender matrix displays.
+
+
 ```c
   void SetLEDArray(struct CRGB *pLED);	// Only used with externally defined LED arrays
 
@@ -81,6 +90,7 @@ Now, using the LED Extender shields we can break up the 32x32 matrix and insert 
     
     //================LEDMatrix_22 additions ============================
     CRGB getPixel(int16_t x, int16_t y);
+    int16_t getPixelIndex(int16_t x, int16_t y);
     void fadeAll(uint16_t value);
     void fillScreen(CRGB color);
     void drawTriangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, CRGB color);
@@ -140,11 +150,11 @@ Now, using the LED Extender shields we can break up the 32x32 matrix and insert 
     void freeBlock(uint8_t blockNum);
 
     //=====================LEDMatrix_22  EXTENDER hardware ===============================
-    void LEDShow();
-    void LEDShow(uint8_t gBrightness);
-    void LEDShow(uint8_t Bank, uint8_t gBrightness);
-    void LEDShow(uint8_t Bank1, uint8_t Bank2, uint8_t gBrightness);
-    void LEDShow(uint8_t Bank1, uint8_t Bank2, uint8_t Bank3, uint8_t gBrightness);
+    void show();
+    void show(uint8_t gBrightness);
+    void show(uint8_t Bank, uint8_t gBrightness);
+    void show(uint8_t Bank1, uint8_t Bank2, uint8_t gBrightness);
+    void show(uint8_t Bank1, uint8_t Bank2, uint8_t Bank3, uint8_t gBrightness);
     void addLeds());  (replaces FastLed.addLeds)
     void defineBanks();
 

@@ -8,15 +8,14 @@ Definitons used from the sketch:
     HORIZ_DIR           //LEFT_2_RIGHT, RIGHT_2_LEFT
     VERT_DIR            //TOP_DOWN, BOTTOM_UP
 
-    MATRIX_TILE_WIDTH   // width of EACH MATRIX "cell" (not total display)
-    MATRIX_TILE_HEIGHT  // height of each matrix "cell"
+    MATRIX_TILE_WIDTH   // width of EACH MATRIX "tile" (not total display)
+    MATRIX_TILE_HEIGHT  // height of each matrix "tile"
     MATRIX_TILE_H       // number of matrices arranged horizontally
     MATRIX_TILE_V       // number of matrices arranged vertically
     LEDS_IN_TILE        //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                 //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
-    TILES_IN_MATRIX     //HORIZONTAL_BLOCKS, VERTICAL_BLOCKS,
-                                //HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
-
+       TILES_IN_MATRIX     //HORIZONTAL_TILES, VERTICAL_TILES,
+                                //HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
     NUM_STRIPS
     NUM_BANKS           // 1 to 4 extender "banks"
     STRIPS_PER_BANK     //1 or more but 4 strips per Bank is the most effiicient use of the hardware
@@ -31,7 +30,7 @@ void run_report();
 String tilesInMatrix();
 String ledsInTile();
 String matrixTypeStr();
-void listBlocks();
+void listTiles();
 void listBanks();
 void listExtender();
 void fmt(float input, byte columns, byte places);
@@ -92,9 +91,9 @@ void run_report() {
 
     #ifdef XYTable_LookUp
     pt("XYTable_LookUp is enabled");
-    pt("  Your lookup table overrides the HAS_BLOCKS section of the Configuration header");  
+    pt("  Your lookup table overrides the HAS_TILES section of the Configuration header");  
     #else
-        listBlocks();                   
+        listTiles();                   
         mapOfLedsInTile();
         mapOfTiles();
     #endif
@@ -107,19 +106,19 @@ void run_report() {
 }
 
 String tilesInMatrix() {
-    #ifdef HAS_BLOCKS   //stub out if not
-    #if HAS_BLOCKS
-        if (TILES_IN_MATRIX == HORIZONTAL_BLOCKS) {
-            return "HORIZONTAL_BLOCKS";
+    #ifdef HAS_TILES   //stub out if not
+    #if HAS_TILES
+        if (TILES_IN_MATRIX == HORIZONTAL_TILES) {
+            return "HORIZONTAL_TILES";
         }
-        else if (TILES_IN_MATRIX == VERTICAL_BLOCKS) {
-            return "VERTICAL_BLOCKS";
+        else if (TILES_IN_MATRIX == VERTICAL_TILES) {
+            return "VERTICAL_TILES";
         }
-        else if (TILES_IN_MATRIX == HORIZONTAL_ZIGZAG_BLOCKS) {
-            return "HORIZONTAL_ZIGZAG_BLOCKS";
+        else if (TILES_IN_MATRIX == HORIZONTAL_ZIGZAG_TILES) {
+            return "HORIZONTAL_ZIGZAG_TILES";
         }
-        else if (TILES_IN_MATRIX == VERTICAL_ZIGZAG_BLOCKS) {
-            return "VERTICAL_ZIGZAG_BLOCKS";
+        else if (TILES_IN_MATRIX == VERTICAL_ZIGZAG_TILES) {
+            return "VERTICAL_ZIGZAG_TILES";
         }
     #endif
     #endif
@@ -163,20 +162,21 @@ String matrixTypeStr() {
    return "";
 }
 
-void listBlocks() {
-    #ifdef HAS_BLOCKS   //defined?
-    #if (!HAS_BLOCKS)
+void listTiles() {
+    #ifdef HAS_TILES   //defined?
+    #if (!HAS_TILES)
         ptt("MATRIX_TYPE = "); ptt(matrixTypeStr()); pt(" mapping of LEDs thru the entire matrix panel");
     #else
-        ptt("HAS_BLOCKS = ");
-        if (HAS_BLOCKS == true) { pt("true"); }
+        ptt("HAS_TILES = ");
+        if (HAS_TILES == true) { pt("true"); }
         else { pt("false"); }
-        ptt("   LEDS_IN_TILE = "); ptt(ledsInTile()); pt(" (direction of flow of LEDs INSIDE each tile/block)");
-        ptt("   MATRIX_TILE_WIDTH = "); ptt(MATRIX_TILE_WIDTH); pt(" (Number of LED columns horizontally inside each tile/block)");
-        ptt("   MATRIX_TILE_HEIGHT = "); ptt(MATRIX_TILE_HEIGHT); pt(" (Number of LED rows vertically inside each tile/block)")
-        ptt("   MATRIX_TILE_H = "); ptt(MATRIX_TILE_H); pt(" (Number of tiles across the entire matrix panel)");
-        ptt("   MATRIX_TILE_V = "); ptt(MATRIX_TILE_V);  pt(" (Number of tiles or strips up/down the entire matrix panel)");
-        ptt("   TILES_IN_MATRIX = "); ptt(tilesInMatrix()); pt(" (direction of flow of tiles/blocks thru the matrix panel)");
+        ptt("   LEDS_IN_TILE = "); ptt(ledsInTile()); pt("        (direction of flow of LEDs INSIDE each tile/tile)");
+        ptt("   MATRIX_TILE_WIDTH = "); ptt(MATRIX_TILE_WIDTH); pt("        (Number of LED columns horizontally inside each tile/tile)");
+        ptt("   MATRIX_TILE_HEIGHT = "); ptt(MATRIX_TILE_HEIGHT); pt("        (Number of LED rows vertically inside each tile/tile)")
+        ptt("   MATRIX_TILE_H = "); ptt(MATRIX_TILE_H); pt("                (Number of tiles across the entire matrix panel)");
+        ptt("   MATRIX_TILE_V = "); ptt(MATRIX_TILE_V);  pt("                (Number of tiles or strips up/down the entire matrix panel)");
+
+        ptt("   TILES_IN_MATRIX = "); ptt(tilesInMatrix()); pt("        (direction of flow of tiles/tiles thru the matrix panel)");
         #endif
         pt("");
     #endif
@@ -346,17 +346,17 @@ void matrixDirection(){
 }
 
 void mapOfTiles() {     //print table w/ tile positons in the matrix panel
-    #ifdef HAS_BLOCKS   //is it even defined?
-    #if HAS_BLOCKS
+    #ifdef HAS_TILES   //is it even defined?
+    #if HAS_TILES
         pt("Map of tiles in your matrix panel");
         byte columns = 5;
         uint8_t count = 0;
         uint8_t index;
 
-        if (TILES_IN_MATRIX == HORIZONTAL_BLOCKS) {
+        if (TILES_IN_MATRIX == HORIZONTAL_TILES) {
             for (int16_t y = 0; y < MATRIX_TILE_V; y++) {
                 for (int16_t x = 0; x < MATRIX_TILE_H; x++) {
-                    if (TILES_IN_MATRIX == HORIZONTAL_ZIGZAG_BLOCKS) {
+                    if (TILES_IN_MATRIX == HORIZONTAL_ZIGZAG_TILES) {
                         if (y % 2) {            //odd row
                             index = (y * MATRIX_TILE_V) + (MATRIX_TILE_H-1) - x;
                         }
@@ -373,10 +373,10 @@ void mapOfTiles() {     //print table w/ tile positons in the matrix panel
                 pt("");
             }
         }
-        else if (TILES_IN_MATRIX == VERTICAL_BLOCKS) {
+        else if (TILES_IN_MATRIX == VERTICAL_TILES) {
             for (int16_t x = 0; x < MATRIX_TILE_H; x++) {
                 for (int16_t y = 0; y < MATRIX_TILE_V; y++) {
-                    if (TILES_IN_MATRIX == VERTICAL_ZIGZAG_BLOCKS) {
+                    if (TILES_IN_MATRIX == VERTICAL_ZIGZAG_TILES) {
                         if (x % 2) {            //odd row
                             index = (x * MATRIX_TILE_H) + (MATRIX_TILE_V-1) - y;
                         }
@@ -399,14 +399,14 @@ void mapOfTiles() {     //print table w/ tile positons in the matrix panel
 }
 
 void mapOfLedsInTile() {
-    #ifdef HAS_BLOCKS   //is it even defined?
-    #if HAS_BLOCKS      //is it true
+    #ifdef HAS_TILES   //is it even defined?
+    #if HAS_TILES      //is it true
         pt("Map of LEDs in your tiles");
         byte columns = 5;
         uint8_t count = 0;
         uint8_t index;
 
-        if (TILES_IN_MATRIX == HORIZONTAL_BLOCKS) {
+        if (TILES_IN_MATRIX == HORIZONTAL_TILES) {
             for (int16_t y = 0; y < MATRIX_TILE_HEIGHT; y++) {
                 for (int16_t x = 0; x < MATRIX_TILE_WIDTH; x++) {
                     if (LEDS_IN_TILE == HORIZONTAL_ZIGZAG_MATRIX) { 
@@ -426,7 +426,7 @@ void mapOfLedsInTile() {
                 pt("");
             }
         }
-        else if (TILES_IN_MATRIX == VERTICAL_BLOCKS) {
+        else if (TILES_IN_MATRIX == VERTICAL_TILES) {
             for (int16_t x = 0; x < MATRIX_TILE_WIDTH; x++) {
                 for (int16_t y = 0; y < MATRIX_TILE_HEIGHT; y++) {
                     if (LEDS_IN_TILE == VERTICAL_ZIGZAG_MATRIX) {

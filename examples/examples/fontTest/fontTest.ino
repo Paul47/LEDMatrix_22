@@ -30,7 +30,7 @@ struct C_FONTS {
 C_FONTS c_fonts[NUM_cFONTS];        //registeer up to NUM_cFONTS fonts.
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -97,7 +97,7 @@ void textTest() {
          leds.setCursor(1, 10);
         for (uint8_t i = 0; i < sizeof(my_str); i++) {
             leds.write(my_str[i]);
-             leds.LEDShow();   //for Extender - replace FastLED.show()();
+             leds.show();   //for Extender - replace leds.show()();
             delay(1000);
         }
         leds.clear();
@@ -111,7 +111,7 @@ void printTest() {
     char text[] = "HELLO WORLD!";
 
     leds.fillScreen(CRGB::Black);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     leds.setTextWrap(0);
     for (x = MATRIX_WIDTH; x > -55; x--) {
         leds.setTextColor(CRGB::OrangeRed);
@@ -124,7 +124,7 @@ void printTest() {
     }
     char text1[] = "Wrapping";
     leds.clear();
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     leds.setTextWrap(1);
     for (x = -55; x < MATRIX_WIDTH; x++) {
         leds.setTextColor(CRGB::Blue);

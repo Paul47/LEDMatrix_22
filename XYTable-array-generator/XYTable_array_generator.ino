@@ -20,7 +20,7 @@ FastLED XY Map Generator:  https:macetech.github.io/FastLED-XY-Map-Generator
     NOTE: make the array simple, left to right and top to bottom, no zigzag.
     We will make all these changes here.
 
-    WHEN DESIGNING BLOCKS IN A MATRIX, COMBINATIONS CAN GIVE SURPRISING RESULTS.
+    WHEN DESIGNING Tiles IN A MATRIX, COMBINATIONS CAN GIVE SURPRISING RESULTS.
     IF THE RESULT IS NOT WHAT YOU EXPECTS, REVIEW EACH STEP'S SETTINGS AGAIN!
 */
 
@@ -54,59 +54,59 @@ STEPS
 #define MATRIX_HEIGHT 32     //use negative value for reversed (bottom to top)
 
 /*
-3.	How are the LEDs in the total matrix organized? (Regardless of and blocks 
-    or cells making up the matrix).
+3.	How are the LEDs in the total matrix organized? (Regardless of and Tiles 
+     making up the matrix).
 
->>>>> If using BLOCKs/cell to make up your matrix, this is n/a. See steps 6 and 7
+>>>>> If using Tiles to make up your matrix, this is n/a. See steps 6 and 7
 
 */
 MatrixType_t matrix_type = HORIZONTAL_MATRIX;  //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
                                                        //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
 
-/* =============== BLOCKS options =================
+/* =============== Tiles options =================
 
-4.	 LEDs make a BLOCK (cell), BLOCKS make up a MATRIX (panel). 
-    if you have one long LED string in your display set HAS_BLOCK false 
-    and ignore these BLOCK values
+4.	 LEDs make a TILE, Tiles make up a MATRIX (panel). 
+    if you have one long LED string in your display set HAS_TILE false 
+    and ignore these TILE values
 */
-#define HAS_BLOCKS  false     //Is this matrix made up of block/cells of LEDs?
-    #define MATRIX_TILE_WIDTH  8 //width of each matrix BLOCK/CELL  (not total display)
-    #define MATRIX_TILE_HEIGHT  8 // height of each matrix BLOCK/CELL
+#define HAS_TILES  false     //Is this matrix made up of tile of LEDs?
+    #define MATRIX_TILE_WIDTH  8 //width of each matrix TILE/  (not total display)
+    #define MATRIX_TILE_HEIGHT  8 // height of each matrix TILE
 
     #define MATRIX_TILE_H    4  // number of tiles arranged horizontally
     #define MATRIX_TILE_V    4  // number of tiles arranged vertically
 
 /*
-5. How are the leds organized inside the block/cell?
+5. How are the leds organized inside the tile?
 */
-    BlockType_t blockOrg = HORIZONTAL_BLOCKS;   //HORIZONTAL_BLOCKS, VERTICAL_BLOCKS, 
-                                                       //HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
+    TileType_t tileOrg = HORIZONTAL_TILES;   //HORIZONTAL_TILES, VERTICAL_TILES, 
+                                                       //HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
 
 /*
-6. how are the block/cells organized in the matrix?
+6. how are the tile organized in the matrix?
 */
-    BlockType_t blocksInMatrix = HORIZONTAL_BLOCKS;   //HORIZONTAL_BLOCKS, VERTICAL_BLOCKS, 
-                                                      //HORIZONTAL_ZIGZAG_BLOCKS, VERTICAL_ZIGZAG_BLOCKS
+    TileType_t TILESInMatrix = HORIZONTAL_TILES;   //HORIZONTAL_TILES, VERTICAL_TILES, 
+                                                      //HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
 /*
 7. NEW OPTION NOT AVAILABLE IN LEDMatrix ONLY IF USING THIS TABLE LOOKUP METHOD
-    These 2 flip the order of the tiles/BLOCKS in the matrix
-    The LED order inside the blocks stay the same
-    To flip everything in the matrix panel including the LEDs inside the blocks see step 3.
+    These 2 flip the order of the tiles in the matrix
+    The LED order inside the TILES stay the same
+    To flip everything in the matrix panel including the LEDs inside the TILES see step 3.
 | Parameter    | Description                                   |
 | ------------ |-----------------------------------------------|
-| H_blockDir   | horizontal direction of led flow in the tile  |
-| V_blockDir   | vertical direction of led flow in the tile    |
+| H_tileDir   | horizontal direction of led flow in the tile  |
+| V_tileDir   | vertical direction of led flow in the tile    |
 */
-    MatrixOrder_horizDir H_blockDir = LEFT_2_RIGHT;        //leds in tile LEFT_2_RIGHT, RIGHT_2_LEFT
-    MatrixOrder_vertDir V_blockDir = TOP_DOWN;             //leds in tile TOP_DOWN, BOTTOM_UP
+    MatrixOrder_horizDir H_tileDir = LEFT_2_RIGHT;        //leds in tile LEFT_2_RIGHT, RIGHT_2_LEFT
+    MatrixOrder_vertDir V_tileDir = TOP_DOWN;             //leds in tile TOP_DOWN, BOTTOM_UP
 
 /*
-8. DEBUGGING: Add h and v hash marks between blocks for easier viewing
+8. DEBUGGING: Add h and v hash marks between TILES for easier viewing
   you can delete in an editor after copying
 */
 #define TABLE_DIVIDERS true 
 
-// ================= End BLOCKS =================
+// ================= End TILES =================
 
 /*
 9.     DONE - compile and run
@@ -118,8 +118,8 @@ boolean error = false;  //CAPTURE A FEW ERRORS
 #define ptt(msg)     Serial.print(msg);    //Serial.printl MACRO
 
 /*
-These flip THE ENTIRE MATRIX even LED order inside of BLOCKS if present
-To change the order of BLOCKS see the blocks see step 7.
+These flip THE ENTIRE MATRIX even LED order inside of TILES if present
+To change the order of TILES see the TILES see step 7.
 */
 #if (MATRIX_WIDTH < 0)
     MatrixOrder_horizDir horizDir = RIGHT_2_LEFT;        //LEFT_2_RIGHT, RIGHT_2_LEFT
@@ -137,7 +137,7 @@ To change the order of BLOCKS see the blocks see step 7.
 #endif
 
 #define NUM_LEDS        MATRIX_WIDTH_ABS * MATRIX_HEIGHT_ABS 	//leds total on entire panel
-#define LEDS_PER_BLOCK  MATRIX_TILE_WIDTH * MATRIX_TILE_HEIGHT
+#define LEDS_PER_TILE  MATRIX_TILE_WIDTH * MATRIX_TILE_HEIGHT
 
 uint16_t mainArray[MATRIX_WIDTH_ABS][MATRIX_HEIGHT_ABS ];
 uint16_t workingArray[MATRIX_WIDTH_ABS][MATRIX_HEIGHT_ABS ];
@@ -164,33 +164,33 @@ void loop() {
 
 step 1. load array if #included  = build_sinple_table()
 step 2. if not, build the full matrix array top/left to lower right = build_sinple_table()
-If a SIMPLE array (w/o BLOCKS)
+If a SIMPLE array (w/o TILES)
         step 3. convert row/column structure, and zizzag/not as needed = matrix_reorg()
         step 4. convert to horizontal/vertical direction as needed = matrix_direction()
         steps 5, 6, 7, 8 - skip
-If BLOCKS
-        step 5. build a block (a cell of LEDs that will be organized into the full matrix)
-        step 6, organize leds inside the block/cell
-        step 7. organize blocks in the matrix
-        step 8. optionally print hash marks seperating blocks
+If TILES
+        step 5. build a tile (a tile of LEDs that will be organized into the full matrix)
+        step 6, organize leds inside the tile
+        step 7. organize TILES in the matrix
+        step 8. optionally print hash marks seperating TILES
 
 step 9. done, report main array as table
 */
 
 void mainProcessor() {
  
-    if (HAS_BLOCKS) {
+    if (HAS_TILES) {
         if (HAVE_ARRAY) {
-            pt("You cannot make a BLOCK array using a custom starting array");
+            pt("You cannot make a TILE array using a custom starting array");
         }
         else {
-            build_block_table();    //start from scratch always
+            build_tile_table();    //start from scratch always
             if (error) {
                 return;
             }
-            blocks_in_matrix();     //fill out rest of matrix
-            matrix_block_direction();        //flips block order, no change inside blocks
-            matrix_direction();     //flips ENTIRE matrix direction, including LED order inside blocks
+            tiles_in_matrix();     //fill out rest of matrix
+            matrix_tile_direction();        //flips tile order, no change inside TILES
+            matrix_direction();     //flips ENTIRE matrix direction, including LED order inside TILES
         }
     }
     else{
@@ -210,7 +210,7 @@ void build_sinple_table() {
 #if (HAVE_ARRAY == true)
     uint16_t toX = 0;
     uint16_t toY = 0;
-    copy_table_array(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS , toX, toY);        //copy an array block to a starting start x,y offset (for blocks
+    copy_table_array(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS , toX, toY);        //copy an array tile to a starting start x,y offset (for TILES
     pt("your array copied");
 #else
     build_horiz_array(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS );         //build a ENTIRE simple MAINarray
@@ -266,170 +266,170 @@ void matrix_reorg() {
     pt("matrix reorg completed");
 }
 
-//=================================== blocks ==========================
+//=================================== TILES ==========================
 
-// build the leds inside the block(s)
-void build_block_table() {
-    pt("LEDs in block started");
+// build the leds inside the tile(s)
+void build_tile_table() {
+    pt("LEDs in tile started");
 
     if (((MATRIX_TILE_WIDTH * MATRIX_TILE_H) != MATRIX_WIDTH_ABS) ||
         ((MATRIX_TILE_HEIGHT * MATRIX_TILE_V) != MATRIX_HEIGHT_ABS )) {
-        pt("ERROR: Matrix tiles do not match matrix sizes - build_block_table");
+        pt("ERROR: Matrix tiles do not match matrix sizes - build_tile_table");
         error = true;
         return;
     }
     else {
-        pt("build horiz leds block");
-        horiz_leds_block(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT);
-        switch (blockOrg) {
-        case HORIZONTAL_BLOCKS:
+        pt("build horiz leds tile");
+        horiz_leds_tile(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT);
+        switch (tileOrg) {
+        case HORIZONTAL_TILES:
             //nothing more
             break;
-        case VERTICAL_BLOCKS:
-            vertical_leds_block(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT);
+        case VERTICAL_TILES:
+            vertical_leds_tile(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT);
             break;
-        case HORIZONTAL_ZIGZAG_BLOCKS:
-            horiz_zigzag_ledsinBlock(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT);
+        case HORIZONTAL_ZIGZAG_TILES:
+            horiz_zigzag_ledsinTile(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT);
             break;
-        case VERTICAL_ZIGZAG_BLOCKS:
-            vertrical_zigzag_ledsinBlock(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT);
+        case VERTICAL_ZIGZAG_TILES:
+            vertrical_zigzag_ledsinTile(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT);
             break;
         }
         work2main(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS );
     }
-    pt("LEDs in block completed");
+    pt("LEDs in tile completed");
 }
 
 
-void horiz_leds_block(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
-    pt("horiz_leds_block start");
+void horiz_leds_tile(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+    pt("horiz_leds_tile start");
     build_horiz_array(x1, y1, x2, y2);
-    pt("horiz_leds_block completed");
+    pt("horiz_leds_tile completed");
 }
 
-void vertical_leds_block(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
-    pt("vertical_leds_block start");
+void vertical_leds_tile(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+    pt("vertical_leds_tile start");
     Diagonal_swap(x1, y1, x2, y2);          
-    pt("vertical_leds_block completed");
+    pt("vertical_leds_tile completed");
 }
 
-void horiz_zigzag_ledsinBlock(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
-    pt("horizontal_zigzag_block start");
+void horiz_zigzag_ledsinTile(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+    pt("horizontal_zigzag_tile start");
     horiz_zig(x1, y1, x2, y2);
-    pt("horizontal_zigzag_block completed");
+    pt("horizontal_zigzag_tile completed");
 }
 
-void vertrical_zigzag_ledsinBlock(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
-    pt("vertical_zigzag_block start");
+void vertrical_zigzag_ledsinTile(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+    pt("vertical_zigzag_tile start");
     horiz_zig(x1, y1, x2, y2);
     Diagonal_swap(x1, y1, x2, y2);
-    pt("vertical_zigzag_block completed");
+    pt("vertical_zigzag_tile completed");
 }
 
-//organize the block inside the matrix
-void blocks_in_matrix() {
-    pt("blocks in matrix reorg started");
-    switch (blocksInMatrix) {
-    case HORIZONTAL_BLOCKS:
-        h_block_copy();
+//organize the tile inside the matrix
+void tiles_in_matrix() {
+    pt("tiles in matrix reorg started");
+    switch (tilesInMatrix) {
+    case HORIZONTAL_TILES:
+        h_tile_copy();
         break;
-    case VERTICAL_BLOCKS:
-        v_block_copy();
+    case VERTICAL_TILES:
+        v_tile_copy();
         break;
-    case HORIZONTAL_ZIGZAG_BLOCKS:
-        h_zig_block_copy(); 
+    case HORIZONTAL_ZIGZAG_TILES:
+        h_zig_tile_copy(); 
         break;
-    case VERTICAL_ZIGZAG_BLOCKS:
-        v_zig_block_copy(); 
+    case VERTICAL_ZIGZAG_TILES:
+        v_zig_tile_copy(); 
         break;
     }
-    pt("blocks in matrix reorg completed");
+    pt("tiles in matrix reorg completed");
 }
 
-//reorg block order in matrix, LEDs in the blacks stay the same
+//reorg tile order in matrix, LEDs in the blacks stay the same
 //must check on both H and V
-void matrix_block_direction() {
-    pt("matrix block direction started");
-    switch (H_blockDir) {
+void matrix_tile_direction() {
+    pt("matrix tile direction started");
+    switch (H_tileDir) {
     case LEFT_2_RIGHT:
         pt("  top left-2-right do nothing");
         break;
     case RIGHT_2_LEFT:
         pt("  right-2-left-H swap");
-        H_block_swap();
+        H_tile_swap();
         break;
     }
-    switch (V_blockDir) {
+    switch (V_tileDir) {
     case TOP_DOWN:
         pt("  top down do nothing");
         break;
     case BOTTOM_UP:
         pt("  bottom up V swap");
-        V_block_swap();
+        V_tile_swap();
         break;
     }
-    pt("matrix block direction completed");
+    pt("matrix tile direction completed");
 }
 
 //1 2 3 4  -> 4 3 2 1
-//5 6 7 8  -> 8 7 6 5 //inside blocks not changed
-void H_block_swap() {
-    pt("H_block_swap started");
+//5 6 7 8  -> 8 7 6 5 //inside tiles not changed
+void H_tile_swap() {
+    pt("H_tile_swap started");
 
     uint16_t toX, toY, frmX, frmY;     //target xand y
-    uint16_t x1 = 0;    //original block start loc
+    uint16_t x1 = 0;    //original tile start loc
     uint16_t y1 = 0;
-    uint16_t block_num = 0;
-    //make block size steps
-    for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {        //copy block y number of blocks
-        for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy block x number of blocks
-            block_num = (MATRIX_TILE_H - 1) - x2;             //reverse horiz block order
+    uint16_t tile_num = 0;
+    //make tile size steps
+    for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {        //copy tile y number of tiles
+        for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy tile x number of tiles
+            tile_num = (MATRIX_TILE_H - 1) - x2;             //reverse horiz tile order
             frmX = x2 * MATRIX_TILE_WIDTH;
             frmY = y2 * MATRIX_TILE_HEIGHT;
-            toX = (block_num * MATRIX_TILE_WIDTH);
+            toX = (tile_num * MATRIX_TILE_WIDTH);
             toY = (y2 * MATRIX_TILE_HEIGHT);
             //test here
-            copy_block_service(frmX, frmY, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY);
+            copy_tile_service(frmX, frmY, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY);
         }
     }
     work2main(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS );
-    pt("H_block_swap completed");
+    pt("H_tile_swap completed");
 }
 
-void V_block_swap() {
-    pt("V_block_swap started");
+void V_tile_swap() {
+    pt("V_tile_swap started");
 
     uint16_t toX, toY, frmX, frmY;     //target xand y
-    uint16_t x1 = 0;    //original block start loc
+    uint16_t x1 = 0;    //original tile start loc
     uint16_t y1 = 0;
-    uint16_t block_num = 0;
-    //make block size steps
-    for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy block x number of blocks
-        for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {        //copy block y number of blocks
-            block_num = (MATRIX_TILE_V - 1) - y2;             //reverse vertical block order
+    uint16_t tile_num = 0;
+    //make tile size steps
+    for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy tile x number of tiles
+        for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {        //copy tile y number of tiles
+            tile_num = (MATRIX_TILE_V - 1) - y2;             //reverse vertical tile order
             frmX = x2 * MATRIX_TILE_WIDTH;
             frmY = y2 * MATRIX_TILE_HEIGHT;
             toX = (x2 * MATRIX_TILE_WIDTH);
-            toY = (block_num * MATRIX_TILE_HEIGHT);
+            toY = (tile_num * MATRIX_TILE_HEIGHT);
             //test here
-            copy_block_service(frmX, frmY, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY);
+            copy_tile_service(frmX, frmY, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY);
         }
     }
     work2main(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS );
-    pt("V_block_swap completed");
+    pt("V_tile_swap completed");
 }
 
-//copy_block_service(x1, y1, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY);
-//copy block from x1,y1 to x2,y2
+//copy_tile_service(x1, y1, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY);
+//copy tile from x1,y1 to x2,y2
 
-void copy_block_service(uint16_t x1, uint16_t y1, uint16_t cellWidth, uint16_t cellHeight, uint16_t x2, uint16_t y2) {
+void copy_tile_service(uint16_t x1, uint16_t y1, uint16_t tileWidth, uint16_t tileHeight, uint16_t x2, uint16_t y2) {
 
     int16_t x, y, tox, toy;
     uint16_t ix = 0, iy = 0;  //offset into traget
 
-    for (y = y1; y < y1 + cellHeight; y++) {
+    for (y = y1; y < y1 + tileHeight; y++) {
         ix = 0;
-        for (x = x1; x < x1 + cellWidth; x++) {
+        for (x = x1; x < x1 + tileWidth; x++) {
             tox = x2 + ix;
             toy = y2 + iy;
             //test here
@@ -444,19 +444,19 @@ void copy_block_service(uint16_t x1, uint16_t y1, uint16_t cellWidth, uint16_t c
 1 2 3 4
 8 7 6 5
 */
-void h_zig_block_copy() {
-    pt("h_zig_block_copy started");
+void h_zig_tile_copy() {
+    pt("h_zig_tile_copy started");
 
     uint16_t toX, toY;     //target xand y
     uint16_t toNum;      //array cotent offset value
-    uint16_t x1 = 0;    //original block start loc
+    uint16_t x1 = 0;    //original tile start loc
     uint16_t y1 = 0;
-    uint16_t block_num = 0;
-    //make block size steps
-    for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {        //copy block y number of blocks
-        for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy block x number of blocks
+    uint16_t tile_num = 0;
+    //make tile size steps
+    for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {        //copy tile y number of tiles
+        for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy tile x number of tiles
             if (y2 % 2) {            //odd row
-               uint16_t xBack = (MATRIX_TILE_WIDTH - 1) - x2;       //reverse block number
+               uint16_t xBack = (MATRIX_TILE_WIDTH - 1) - x2;       //reverse tile number
                 toX = (xBack * MATRIX_TILE_WIDTH);          //convert
                 toY = (y2 * MATRIX_TILE_HEIGHT);
             }
@@ -464,13 +464,13 @@ void h_zig_block_copy() {
                 toX = (x2 * MATRIX_TILE_WIDTH);
                 toY = (y2 * MATRIX_TILE_HEIGHT);
             }
-            toNum = (block_num * LEDS_PER_BLOCK);
-            copy_zero_block_array(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY, toNum);
-            block_num++;    //keep x increasing thru the next block
+            toNum = (tile_num * LEDS_PER_TILE);
+            copy_zero_tile_array(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY, toNum);
+            tile_num++;    //keep x increasing thru the next tile
         }
     }
     work2main(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS );
-    pt("h_zig_block_copy completed");
+    pt("h_zig_tile_copy completed");
 }
 
 
@@ -480,19 +480,19 @@ void h_zig_block_copy() {
 3 6 11
 4 5 12
 */
-void v_zig_block_copy() {
-    pt("v_zig_block_copy started");
+void v_zig_tile_copy() {
+    pt("v_zig_tile_copy started");
 
    uint16_t toX, toY;     //target xand y
     uint16_t toNum;      //array cotent offset value
-    uint16_t x1 = 0;    //original block start loc
+    uint16_t x1 = 0;    //original tile start loc
     uint16_t y1 = 0;
-    uint16_t block_num = 0;
-    //make block size steps
-     for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy block x number of blocks
-        for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {       //copy block y number of blocks
+    uint16_t tile_num = 0;
+    //make tile size steps
+     for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy tile x number of tiles
+        for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {       //copy tile y number of tiles
             if (x2 % 2) {            //odd row
-               uint16_t yBack = (MATRIX_TILE_HEIGHT - 1) - y2;       //reverse block number
+               uint16_t yBack = (MATRIX_TILE_HEIGHT - 1) - y2;       //reverse tile number
                 toX = (x2 * MATRIX_TILE_WIDTH);          //convert
                 toY = (yBack * MATRIX_TILE_HEIGHT);
             }
@@ -500,45 +500,45 @@ void v_zig_block_copy() {
                 toX = (x2 * MATRIX_TILE_WIDTH);
                 toY = (y2 * MATRIX_TILE_HEIGHT);
             }
-            toNum = (block_num * LEDS_PER_BLOCK);
-            copy_zero_block_array(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY, toNum);
-            block_num++;    //keep x increasing thru the next block
+            toNum = (tile_num * LEDS_PER_TILE);
+            copy_zero_tile_array(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY, toNum);
+            tile_num++;    //keep x increasing thru the next tile
         }
     }
     work2main(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS );
-    pt("v_zig_block_copy completed");
+    pt("v_zig_tile_copy completed");
 }
 
 /*
     1 2 3 4
     5 6 9 8
 */
-void h_block_copy() {
-    pt("h_block_copy started");
+void h_tile_copy() {
+    pt("h_tile_copy started");
 
     uint16_t toX, toY;     //target xand y
     uint16_t toNum;      //array cotent offset value
-    uint16_t x1 = 0;    //original block start loc
+    uint16_t x1 = 0;    //original tile start loc
     uint16_t y1 = 0;
-    uint16_t block_num = 0;
-    //make block size steps
-    for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {        //copy block y number of blocks
-        for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy block x number of blocks
+    uint16_t tile_num = 0;
+    //make tile size steps
+    for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {        //copy tile y number of tiles
+        for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy tile x number of tiles
             toX = (x2 * MATRIX_TILE_WIDTH);
             toY = (y2 * MATRIX_TILE_HEIGHT);
-            toNum = (block_num * LEDS_PER_BLOCK);
-            copy_zero_block_array(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY, toNum);
-            block_num++;    //keep x increasing thru the next block
+            toNum = (tile_num * LEDS_PER_TILE);
+            copy_zero_tile_array(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY, toNum);
+            tile_num++;    //keep x increasing thru the next tile
         }
     }
     work2main(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS );
-    pt("h_block_copy completed");
+    pt("h_tile_copy completed");
 }
 
-void copy_zero_block_array(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
+void copy_zero_tile_array(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
                         uint16_t toX, uint16_t toY, uint16_t toNum) {
 
-    for (uint16_t y = y1; y < y2; y++) {        //copy a block countents 
+    for (uint16_t y = y1; y < y2; y++) {        //copy a tile countents 
         for (uint16_t x = x1; x < x2; x++) { 
             workingArray[x + toX][y + toY] =
                 mainArray[x][y] + toNum;
@@ -550,29 +550,29 @@ void copy_zero_block_array(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
  1  3
  2  4
 */
-void v_block_copy() {
-    pt("v_block_copy started");
+void v_tile_copy() {
+    pt("v_tile_copy started");
 
     uint16_t toX, toY;     //target xand y
     uint16_t toNum;      //array cotent offset value
-    uint16_t x1 = 0;    //original block start loc
+    uint16_t x1 = 0;    //original tile start loc
     uint16_t y1 = 0;
-    uint16_t block_num = 0;
-    //make block size steps
-    for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy block x number of blocks
-        for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {        //copy block y number of blocks
+    uint16_t tile_num = 0;
+    //make tile size steps
+    for (uint16_t x2 = x1; x2 < MATRIX_TILE_H; x2++) {       //copy tile x number of tiles
+        for (uint16_t y2 = y1; y2 < MATRIX_TILE_V; y2++) {        //copy tile y number of tiles
             toX = (x2 * MATRIX_TILE_WIDTH);
             toY = (y2 * MATRIX_TILE_HEIGHT);
-            toNum = (block_num * LEDS_PER_BLOCK);
-            copy_zero_block_array(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY, toNum);
-            block_num++;    //keep x increasing thru the next block
+            toNum = (tile_num * LEDS_PER_TILE);
+            copy_zero_tile_array(0, 0, MATRIX_TILE_WIDTH, MATRIX_TILE_HEIGHT, toX, toY, toNum);
+            tile_num++;    //keep x increasing thru the next tile
         }
     }
     work2main(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS );
-    pt("v_block_copy completed");
+    pt("v_tile_copy completed");
 }
 
-//copy an array block to a starting start x,y offset (for blocks)
+//copy an array tile to a starting start x,y offset (for tiles)
 void copy_table_array(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
                         uint16_t toX, uint16_t toY) {
 #if (HAVE_ARRAY == true)
@@ -731,20 +731,20 @@ void run_report() {
     ptt("HAVE_ARRAY = "); pt(HAVE_ARRAY);
     ptt("MATRIX_WIDTH = "); pt(MATRIX_WIDTH);       //display possible negative value
     ptt("MATRIX_HEIGHT  = "); pt(MATRIX_HEIGHT);
-    if (!HAS_BLOCKS){
+    if (!HAS_TILES){
      ptt("matrix_type = "); pt(MatrixType[matrix_type]);
     }
     ptt("horizDir = "); pt(matrixHorizDir[horizDir]);
     ptt("vertDir = "); pt(matrixVertDir[vertDir]);
 
-    if (HAS_BLOCKS) {
-        ptt("HAS_BLOCKS = "); pt(hasBlocks[HAS_BLOCKS]);
+    if (HAS_TILES) {
+        ptt("HAS_TILES = "); pt(hastiles[HAS_TILES]);
         ptt("   MATRIX_TILE_WIDTH = "); pt(MATRIX_TILE_WIDTH);
         ptt("   MATRIX_TILE_HEIGHT = "); pt(MATRIX_TILE_HEIGHT);
         ptt("   MATRIX_TILE_H = "); pt(MATRIX_TILE_H);
         ptt("   MATRIX_TILE_V = "); pt(MATRIX_TILE_V);
-        ptt("   blockOrg = "); pt(block_Org[blockOrg]);
-        ptt("   blocksInMatrix = "); pt(block_Org[blocksInMatrix]);
+        ptt("   tileOrg = "); pt(tile_Org[tileOrg]);
+        ptt("   tilesInMatrix = "); pt(tile_Org[tilesInMatrix]);
         if (MATRIX_WIDTH_ABS > 64) {
             pt("");
             pt("WIDE ARRAYS WILL LOOK MESSY");
@@ -774,7 +774,7 @@ void run_report() {
     }
     for (y = 0; y < MATRIX_HEIGHT_ABS ; y++) {           //catch last line
         for (x = 0; x < MATRIX_WIDTH_ABS; x++) {
-            if (HAS_BLOCKS && TABLE_DIVIDERS) {                //for easier fiewing -
+            if (HAS_TILES && TABLE_DIVIDERS) {                //for easier fiewing -
                 table_dividers(x, y, columns); 
             }
             fmt(mainArray[x][y], columns, 0);

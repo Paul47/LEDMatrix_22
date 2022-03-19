@@ -14,7 +14,7 @@ in the library folder.
 #include <LEDMatrix_22.h>
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -57,7 +57,7 @@ void flowingRainbow() {
         else {
             FastLED.setBrightness(BRIGHTNESS);
         }
-         leds.LEDShow();   //for Extender - replace FastLED.show()();
+         leds.show();   //for Extender - replace leds.show()();
     }
 }
 
@@ -83,7 +83,7 @@ void StepThru() {
         for (int16_t x = 0; x < MATRIX_WIDTH; x++) {
             uint8_t pixelHue = seed;
             leds.drawPixel(x, y, CHSV(pixelHue, 255, 255));
-             leds.LEDShow();   //for Extender - replace FastLED.show()();
+             leds.show();   //for Extender - replace leds.show()();
             //FastLED.delay(30);
         }
     }
@@ -101,7 +101,7 @@ void Cylon() {
             for (y = 0; y < MATRIX_HEIGHT; y++) {
                 leds.drawPixel(x, y, CRGB::Red);
             }
-             leds.LEDShow();   //for Extender - replace FastLED.show()();
+             leds.show();   //for Extender - replace leds.show()();
             leds.fadeAll(value);
             delay(80);
         }
@@ -110,7 +110,7 @@ void Cylon() {
             for (y = 0; y < MATRIX_HEIGHT; y++) {
                 leds.drawPixel(x, y, CRGB::Red); 
             }
-             leds.LEDShow();   //for Extender - replace FastLED.show()();
+             leds.show();   //for Extender - replace leds.show()();
             leds.fadeAll(value);
             delay(80);
         }
@@ -123,30 +123,30 @@ void canvasTest(){
     CRGB color;
 
     leds.fillScreen(CRGB::Green);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(1000);
 
     leds.setRotation(0); //0-3 in 90 deg steps
 
     color = CRGB::White;
     leds.drawLine(15, 0, MATRIX_WIDTH - 1, MATRIX_HEIGHT - 1, color);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(1000);
     color = CRGB::Blue;
     leds.drawCircle(4, 4, 2, CRGB(255, 255, 0));
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(1000);
     color = CRGB::HotPink;
     leds.drawRectangle(8, 8, 16, 16, color);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(1000);
     color = CRGB::Olive;
     leds.drawFilledRectangle(9, 9, 15, 15, color);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(1000);
     color = CRGB::DarkCyan;
     leds.drawTriangle(0,10, 8, 16, 0, 16, color);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(1000);
 
     CRGB bkg;
@@ -158,7 +158,7 @@ void canvasTest(){
     size = 1;
     leds.drawChar(10, 20, c, color, bkg, size); 
 
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(2000);
     leds.setRotation(0); //reset
     leds.fillScreen(CRGB::Black);
@@ -257,22 +257,22 @@ void invertTest() {
     leds.setTextColor(CRGB::Black);
     leds.setCursor(0,0);
     leds.print(text);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(2000);
     leds.invertDisplay();
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(2000);
     leds.invertDisplay();
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(2000);
     leds.fillScreen(CRGB::Blue);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(2000);
     leds.invertSquare(10, 10, 21, 21);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(2000);
     leds.invertSquare(12, 12, 19, 19);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(2000);
     leds.setRotation(0); //0-3 in 90 deg steps
     leds.fillScreen(CRGB::Black);
@@ -286,14 +286,14 @@ void Scottish_Flag() {
     leds.drawLine(0, 1, leds.Width() - 1, leds.Height() - 2, CRGB(255, 255, 255));
     leds.drawLine(0, leds.Height() - 1, leds.Width() - 1, 0, CRGB(255, 255, 255));
     leds.drawLine(0, leds.Height() - 2, leds.Width() - 1, 1, CRGB(255, 255, 255));
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(5000);
 
     // Japanese Flag
     leds.drawFilledRectangle(0, 0, leds.Width() - 1, leds.Height() - 1, CRGB(255, 255, 255));
     uint16_t r = min((leds.Width() - 1) / 2, (leds.Height() - 1) / 2) - 1;
     leds.drawFilledCircle((leds.Width() - 1) / 2, (leds.Height() - 1) / 2, r, CRGB(255, 0, 0));
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(5000);
 
     // Norwegian Flag
@@ -311,7 +311,7 @@ void Scottish_Flag() {
     leds.drawLine(0, y + 2, leds.Width() - 1, y + 2, CRGB(0, 0, 255));
     leds.drawLine(x + 1, 0, x + 1, leds.Height() - 1, CRGB(0, 0, 255));
     leds.drawLine(x + 2, 0, x + 2, leds.Height() - 1, CRGB(0, 0, 255));
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     delay(5000);
     leds.shiftLeft();
     leds.fillScreen(CRGB::Black);
@@ -368,7 +368,7 @@ void textTest() {
          }
         for (uint8_t i = 0; i < sizeof(my_str); i++) {
             leds.write(my_str[i]);
-             leds.LEDShow();   //for Extender - replace FastLED.show()();
+             leds.show();   //for Extender - replace leds.show()();
             delay(1000);
         }
         leds.clear();
@@ -382,7 +382,7 @@ void printTest() {
     char text[] = "HELLO WORLD!";
 
     leds.fillScreen(CRGB::Black);
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     leds.setTextWrap(0);
     for (x = MATRIX_WIDTH; x > -55; x--) {
         leds.setTextColor(CRGB::OrangeRed);
@@ -396,7 +396,7 @@ void printTest() {
     }
     char text1[] = "Wrapping";
     leds.clear();
-     leds.LEDShow();   //for Extender - replace FastLED.show()();
+     leds.show();   //for Extender - replace leds.show()();
     leds.setTextWrap(1);
     for (x = -55; x < MATRIX_WIDTH; x++) {
         leds.setTextColor(CRGB::Blue);

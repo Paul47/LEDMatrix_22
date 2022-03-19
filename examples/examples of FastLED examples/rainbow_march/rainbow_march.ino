@@ -31,7 +31,7 @@ in the library folder.
 #include <LEDMatrix_22.h>
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -57,7 +57,7 @@ void setup() {
 void loop () {
 
   rainbow_march(200, 10);
- leds.LEDShow();
+ leds.show();
   
 } // loop()
 

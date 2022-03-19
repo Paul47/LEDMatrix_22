@@ -15,7 +15,7 @@ in the library folder.
 #include <LEDMatrix_22.h>
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -38,7 +38,7 @@ void loop() {
 
 /*
 * stepThruStrips - light up each strip in each Bank
-uses leds.LEDShow() instead of FastLED.show() for the extender
+uses leds.show() instead of leds.show() for the extender
 */
 void stepThruStrips() {
     uint8_t dly = 50;
@@ -50,28 +50,28 @@ void stepThruStrips() {
             for (int16_t x = 0; x < MATRIX_TILE_WIDTH; x++) {
                 leds.drawPixel(x, y, CRGB::Green);
             }
-            leds.LEDShow();
+            leds.show();
             FastLED.delay(dly);
         }
         for (int16_t y = row1 * MATRIX_TILE_HEIGHT; y < row2 * MATRIX_TILE_HEIGHT; y++) {
             for (int16_t x = MATRIX_TILE_WIDTH; x < 2 * MATRIX_TILE_WIDTH; x++) {
                 leds.drawPixel(x, y, CRGB::Blue);
             }
-            leds.LEDShow();
+            leds.show();
             FastLED.delay(dly);
         }
         for (int16_t y = row1 * MATRIX_TILE_HEIGHT; y < row2 * MATRIX_TILE_HEIGHT; y++) {
             for (int16_t x = 2 * MATRIX_TILE_WIDTH; x < 3 * MATRIX_TILE_WIDTH; x++) {
                 leds.drawPixel(x, y, CRGB::Red);
             }
-            leds.LEDShow();
+            leds.show();
             FastLED.delay(dly);
         }
         for (int16_t y = row1 * MATRIX_TILE_HEIGHT; y < row2 * MATRIX_TILE_HEIGHT; y++) {
             for (int16_t x = 3 * MATRIX_TILE_WIDTH; x < 4 * MATRIX_TILE_WIDTH; x++) {
                 leds.drawPixel(x, y, CRGB::Yellow);
             }
-            leds.LEDShow();
+            leds.show();
             FastLED.delay(dly);
         }
         row1++;

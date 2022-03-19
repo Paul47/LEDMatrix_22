@@ -41,7 +41,7 @@ after all parameters are defined <<<
 //#define RUN_REPORT      //will open Serial.pprint when started in setup
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -77,7 +77,7 @@ void loop() {
 			// Set the i'th led to red 
 			leds.drawPixel(x ,y, CHSV(hue++, 255, 255));
 			// Show the leds
-			leds.LEDShow();   //for Extender - replace FastLED.show() 
+			leds.show();   //for Extender - replace leds.show() 
 			// now that we've shown the leds, reset the i'th led to black
 			// leds[i] = CRGB::Black;
 			leds.fadeAll(value);
@@ -90,7 +90,7 @@ void loop() {
 			// Set the i'th led to red 
 			leds.drawPixel(x ,y, CHSV(hue++, 255, 255));
 			// Show the leds
-			leds.LEDShow();   //for Extender - replace FastLED.show()
+			leds.show();   //for Extender - replace leds.show()
 			// now that we've shown the leds, reset the i'th led to black
 			// leds[i] = CRGB::Black;
 			leds.fadeAll(value);

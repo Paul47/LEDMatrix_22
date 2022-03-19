@@ -9,7 +9,7 @@ void loop()
 		void writeCellToLed	...						Use current cell status/state...
 				...array index =(cellState(x, y)) 	...converting x,y to array index
 			leds.cLED[ledIndex].r,g,b 				...To choose led color for each pixel in the array
-		leds.LEDShow()								Now display state of the game to the LED panel
+		leds.showhow()								Now display state of the game to the LED panel
 		
 		
 		

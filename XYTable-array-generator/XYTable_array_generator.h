@@ -43,17 +43,17 @@ String matrixVertDir[] = { "BOTTOM_UP",
                           "TOP_DOWN" };
 
 
-//how are the blocks/cells organized in the matrix
-enum BlockType_t {
-    HORIZONTAL_BLOCKS,
-    VERTICAL_BLOCKS,
-    HORIZONTAL_ZIGZAG_BLOCKS,   //how are cells organized within the cell as well
-    VERTICAL_ZIGZAG_BLOCKS
+//how are the tiles organized in the matrix
+enum TileType_t {
+    HORIZONTAL_TILES,
+    VERTICAL_TILES,
+    HORIZONTAL_ZIGZAG_TILES,   //how are tiles organized within the tile as well
+    VERTICAL_ZIGZAG_TILES
 };
-String block_Org[] = { "HORIZONTAL_BLOCKS",
-                        "VERTICAL_BLOCKS",
-                        "HORIZONTAL_ZIGZAG_BLOCKS",
-                        "VERTICAL_ZIGZAG_BLOCKS" };
+String tile_Org[] = { "HORIZONTAL_TILES",
+                        "VERTICAL_TILES",
+                        "HORIZONTAL_ZIGZAG_TILES",
+                        "VERTICAL_ZIGZAG_TILES" };
 
-String hasBlocks[] = { "false", "true" };
+String hasTiles[] = { "false", "true" };
 

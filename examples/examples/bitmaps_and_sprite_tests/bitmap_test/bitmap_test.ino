@@ -15,7 +15,7 @@ in the library folder.
 #include <LEDMatrix_22.h>
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -62,7 +62,7 @@ void numbersTest() {
     uint8_t x = 1, y = 1;
     for (uint8_t i = 0; i < 10; i++){
         leds.drawBitmap(x, y, num[i], NUM_W, NUM_H, CRGB::Red + 100 * i);        //ppd LOCAL from adafruit
-        leds.LEDShow();
+        leds.show();
         delay(2000);
         x = x + NUM_W + 1;
         if (x > 20) {

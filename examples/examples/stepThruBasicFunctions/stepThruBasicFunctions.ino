@@ -14,7 +14,7 @@ in the library folder.
 #include <LEDMatrix_22.h>
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_BLOCKS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -45,7 +45,7 @@ leds.fillScreen(), leds.clear(), leds.showColor() - these replace FastLED calls
 void stepThruBasicFunctions() {
     leds.setBrightness(BRIGHTNESS);
     leds.fillScreen(CRGB::Green);
-    leds.LEDShow();
+    leds.show();
     FastLED.delay(1000);
     leds.clear();          //no show cmd needed.
     FastLED.delay(1000);

@@ -45,7 +45,7 @@ int16_t X[5] = { -1, -1, -1, -1, -1 }; //ul,ur,ll,lr,center of matrix
 int16_t Y[5] = { -1, -1, -1, -1, -1 };
 
 uint8_t matrixHeight = 0;
-int8_t ledHrorizDir = 0, ledVertDir = 0;	
+int8_t ledHorizDir = 0, ledVertDir = 0;	
 int8_t tilesPerRow = 0, tilesPerCol = 0;
 int8_t numTiles = 0, tileWidth = 0, tileHeight = 0, tileLedsFlow = 0, tileFlow = 0;
 int8_t  tileLedHorizDir = 0, tileLedVertDir = 0;
