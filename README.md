@@ -55,16 +55,12 @@ Now, using the LED Extender shields we can break up the 32x32 matrix and insert 
 ## Available Methods
 
 NOTE: Be sure to replace: 
-
 ```c
 FastLED.show(); 
-
 ```
 with this library's show function, for example: 
-
 ```c
 leds.show();
-
 ```
 or your led matix will remain blank. This new show function handles simple, tiled, and Extender matrix displays.
 
