@@ -69,11 +69,6 @@ in the library folder.
 
 #include <LEDMatrix_22.h>
 
-/*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
-the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
-*/
-
 cLEDMatrix leds;
 
 //------------------------ Setup and loop ------------------------
@@ -105,11 +100,11 @@ void bitmap24_test1() {
     leds.setRotation(0); //0-3 in 90 deg steps
 
     //store the background infomation
-    uint8_t tileNum = 0;
+    uint8_t blockNum = 0;
     int16_t wd = DIGDUG02_W;
     int16_t wh = DIGDUG02_H;
     //get set to save the background
-    if (!leds.tileInit(tileNum, wd, wh)) return;  //leave if can't getr storsge
+    if (!leds.blockInit(blockNum, wd, wh)) return;  //leave if can't getr storsge
 
     // set up the graphic image info
     int16_t x, y = 0;
@@ -117,20 +112,20 @@ void bitmap24_test1() {
     x = -wd - 1;        //start way off screen
 
     while (x < leds.matrixWidth + 1) {
-        leds.tileStore(tileNum, x, y);    //store only if enough memory
+        leds.blockStore(blockNum, x, y);    //store only if enough memory
         leds.drawBitmap24(x, y, DigDug01, wd, wh, 0);   //0=transparent background
         leds.show();   //for Extender - replace leds.show()();
         delay(500);
-        leds.tileRestore(tileNum);     //retore at same location
+        leds.blockRestore(blockNum);     //retore at same location
         x = x + step;       //go across
-        leds.tileStore(tileNum, x, y);    //store only if enough memory
+        leds.blockStore(blockNum, x, y);    //store only if enough memory
         leds.drawBitmap24(x, y, DigDug02, wd, wh, 0);
         leds.show();   //for Extender - replace leds.show()();
         delay(500);
-        leds.tileRestore(tileNum);
+        leds.blockRestore(blockNum);
         x = x + step;       //go across
     }
-   leds.freeTile(tileNum);        //done with tile
+   leds.freeBlock(blockNum);        //done with block
  }
 
 // this one is in the code above - NOT in progMem
@@ -141,12 +136,12 @@ void bitmap24_test1() {
 
      leds.setRotation(0); //0-3 in 90 deg steps
      //store the background infomation
-     uint8_t tileNum = 0;
+     uint8_t blockNum = 0;
      // set up the graphic image info
     int16_t wd = BOMBJACK01_W;
     int16_t wh = BOMBJACK01_H;
     //get set to save the background
-    if (!leds.tileInit(tileNum, wd, wh)) return;  //leave if can't getr storsge
+    if (!leds.blockInit(blockNum, wd, wh)) return;  //leave if can't getr storsge
     int16_t x, y, min = 0, maxx = leds.matrixWidth - 8, maxy = leds.matrixHeight - 8;
     uint8_t bg;
     uint8_t loop = 0;
@@ -156,7 +151,7 @@ void bitmap24_test1() {
         bg = random(0, 255);
         leds.fillScreen(CHSV(bg, 255, 100));    //each appearance is on different background
 
-        leds.tileStore(tileNum, x, y);    //store only if enough memory
+        leds.blockStore(blockNum, x, y);    //store only if enough memory
         leds.drawBitmap24(x, y, BombJack01, wd, wh, BOMBJACK01_P, BOMBJACK01_Z, 0);   //0=transparent background
         leds.show();   //for Extender - replace leds.show()();
         delay(500);
@@ -164,7 +159,7 @@ void bitmap24_test1() {
         leds.drawBitmap24(x, y, BombJack02, wd, wh, BOMBJACK02_P, BOMBJACK02_Z, 0);
         leds.show();   //for Extender - replace leds.show()();
         delay(500);
-        leds.tileRestore(tileNum);     //retore at same location
+        leds.blockRestore(blockNum);     //retore at same location
         loop++;
     }
 }

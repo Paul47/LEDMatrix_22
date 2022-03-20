@@ -53,12 +53,13 @@ arrays, look at the LEDMatrix manual for details.
 #define VOLTS 5
 #define MAXIMUM_AMPS 50
 
-//Is your matrix panel made up of tiles of LEDs ?
+//Is your matrix panel made up of tiles of LEDs such a ADafruit NEOPIXEL 8x8 tiles?
 //If true complete Sections #1 and #2
 
 #define HAS_TILES  true        //true/false for LED tiles
 
-//setup number of extendersand LED "strips" in each bank in Section #3.
+//setup number of me LED Extender Shield PCBs and LED "strips" in each bank in Section #3.
+//See the documentation for how to use these Extenders to support up to 16 LED strips and thousands of leds.
 //If true, complete Sections #1, #2, and #3
 
 #define HAS_EXTENDER  true    //true/false for LED Extender shields 
@@ -77,29 +78,21 @@ arrays, look at the LEDMatrix manual for details.
 #define MATRIX_TYPE     HORIZONTAL_MATRIX     //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
                                                    //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX };
 
-//what direction does the FIRST row of LEDs in the matrix panel go (not within the tiles if you have them)? 
+//what direction does the FIRST row of LEDs in the matrix panel go 
+//these may be in one large matrix or the first tile if you are using them)
 
-
-
-
-
-
-//VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-
-  //what direction does the FIRST row of LEDs go?
-    #define HORIZ_DIR     LEFT_2_RIGHT   //LEFT_2_RIGHT, RIGHT_2_LEFT
-    #define VERT_DIR      TOP_DOWN      //BOTTOM_UP, TOP_DOWN
-
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
+#define HORIZ_DIR     LEFT_2_RIGHT   //LEFT_2_RIGHT, RIGHT_2_LEFT
+#define VERT_DIR      TOP_DOWN      //BOTTOM_UP, TOP_DOWN
 
 //================== Select the data or data+clock pins =========================
 /*   
 If you are NOT using the LEDS Extender Shields, but want to use up to 4 separate led strips, 
 set HAS_EXTENDER (below) to true, set the Banks = 1, and the NUM_STRIPS to your strips. 
 Be sure to assign the DATA or DATA/CLOCK  pins correctly. Teensy boards limit the useable pins for 1-wire led strips. 
+
+If using the hardware Extender Shield choose DATA and CLOCK pins in the bank (all banks use the same pins)
+The same data/clock pins are used for all Banks, and made active by the BANK_PIN. 
+Alternate pins (14-17) depend on how Teensy is rotated on the Extender board
 
 For 1-wire leds, it appears that only some Teensy pins will work as DATA lines.
 Usable pins: 
@@ -109,7 +102,6 @@ Teensy 3.5:  1, 5, 8, 10, 26, 32, 33, 48
 Teensy 3.6:  1, 5, 8, 10, 26, 32, 33 
 Teensy 4.0:  1, 8, 14, 17, 20, 24, 29, 39
 Teensy 4.1:  1, 8, 14, 17, 20, 24, 29, 35, 47, 53
-
 More details are here: https://github.com/PaulStoffregen/WS2812Serial
 
 For 2-wire leds, select your DATA/CLOCK pins
@@ -169,12 +161,7 @@ CLOCK_2  27
     #define TILES_IN_MATRIX     HORIZONTAL_TILES           //sequence of tiles in the entire panel
                                                             //HORIZONTAL_TILES, VERTICAL_TILES,
                                                             //HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
-
-
-   //ppd tiles direction defines were here <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
 #endif
-    //================================= end of Tiles ==============================
 
 //Section #3. ========= setup number of extenders and LED "strips" in each bank =========================
 
@@ -194,13 +181,13 @@ CLOCK_2  27
     #define NUM_STRIPS      STRIPS_PER_BANK * NUM_BANKS 
 
     /*---------------- choose pins to enable each bank -------------------
-       Define as many as the number of Banks
-       Depending on what Teensy pins are used for other purposes, the extender board
-       allow you to rotate the Teensy MCU 180 degrees. Normal placement of the Teensy on the extender board
-       will use for Bank control pins 5,6,7,8 nd for data/clock pins 1,2,3,4.
-       By roitating the Teensy board, you can use for Bank control pins 18,19,20,12 nd for data/clock pins 14,15,16,17.. 
-       Alternate pins (18-21) depend on how Teensy is rotated on the Extender board
-       */
+    Define as many as the number of Banks
+    Depending on what Teensy pins are used for other purposes, the extender board
+    allow you to rotate the Teensy MCU 180 degrees. Normal placement of the Teensy on the extender board
+    will use for Bank control pins 5,6,7,8 nd for data/clock pins 1,2,3,4.
+    By roitating the Teensy board, you can use for Bank control pins 18,19,20,12 nd for data/clock pins 14,15,16,17.. 
+    Alternate pins (18-21) depend on how Teensy is rotated on the Extender board
+    */
 #if CLOCK_PIN_REQUIRED  //2-wire		Teensy	ESP32(typical)	
     #define BANK_PIN_0          5       //	5	17
     #define BANK_PIN_1          6       //	6	5
@@ -212,32 +199,23 @@ CLOCK_2  27
     #define BANK_PIN_2          5       //	5		5
     #define BANK_PIN_3          6       //	6		6
 #endif
-    
-    /*-----------------choose DATA and CLOCK pins in the bank (all banks use the same pins)
-        The same data/clock pins are used for all Banks, and made active by the BANK_PIN above. 
-        All 4 are required regardless of 2, 3, or 4 physical strips per Bank are present.
-        Alternate pins (14-17) depend on how Teensy is rotated on the Extender board
-        */
-
-    /*
-    Now slice and dice the FastLED array up into a Bank size then into strips in each Bank
+     /*
+    Now we slice and dice the FastLED array up into a Bank size then into strips in each Bank
     Number of LEDS IN EACH BANK - this is the value used in FastLEDS.addleds()    <<<<<<<<<<<<<<<<<<<<
     since FastLEDS only "sees" 1 Bank of led strips, and thinks its the SAME strips even when we
     are switching banks. 
     */
     #define LEDS_PER_BANK       NUM_LEDS/NUM_BANKS      //equally split the total number of leds across the number of active Banks 
-
-    //change to num leds per bank
     #define LEDS_PER_STRIP      LEDS_PER_BANK / STRIPS_PER_BANK      //equally split the number of leds in each banks into the number of strips in each Bank
-    #if HAS_TILES  //TOTAL LEDS IN THE ENTIRE MATRIX
-        #define NUM_LEDS_CALC          MATRIX_TILE_WIDTH * MATRIX_TILE_H * MATRIX_TILE_HEIGHT * MATRIX_TILE_V	//leds total on entire matrix panel
-        #if NUM_LEDS != NUM_LEDS_CALC
-        #warning ">>> Your NUM_LEDS does not equal the calculated MATRIX_WIDTH * MATRIX_HEIGHT check MATRIX_TILE_ V and H <<<"
-        #endif
-    #endif
 #endif  //HAS_EXTENDER true
 
 //================================= end of USER DATA for Extender Control ==============================
+#if HAS_TILES  //TOTAL LEDS IN THE ENTIRE MATRIX
+	#define NUM_LEDS_CALC          MATRIX_TILE_WIDTH * MATRIX_TILE_H * MATRIX_TILE_HEIGHT * MATRIX_TILE_V	//leds total on entire matrix panel
+	#if NUM_LEDS != NUM_LEDS_CALC
+	#warning ">>> Your NUM_LEDS does not equal the calculated MATRIX_WIDTH * MATRIX_HEIGHT check MATRIX_TILE_ V and H <<<"
+	#endif
+#endif
 
 //house keeping if no Extender present - set all to 1 with no Bank pins.
 
