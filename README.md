@@ -63,7 +63,7 @@ FastLED.show();
 with this library's show function, for example: 
 
 ```c
-leds.show();) 
+leds.show();
 
 ```
 or your led matix will remain blank. This new show function handles simple, tiled, and Extender matrix displays.
