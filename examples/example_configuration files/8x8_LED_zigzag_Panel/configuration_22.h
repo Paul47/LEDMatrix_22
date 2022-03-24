@@ -37,45 +37,62 @@ arrays, look at the LEDMatrix manual for details.
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
-#define CHIPSET             APA102   //TX1813	//WS2812, APA102 //see FastLED docs or examples for list
-#define CLOCK_PIN_REQUIRED  true  //Does this LED need DATA + CLOCK??
+#define CHIPSET             APA102  //TX1813	//WS2812, APA102 //see FastLED docs or examples for list
+#define CLOCK_PIN_REQUIRED  true //Does this LED need DATA + CLOCK??
 
 
 //Is DATA_RATE_MHZ(SPI_MHZ) used w/ 2-wire leds requires a speed defined constant - AFFECTS SPEED EVEN IF SPI PINS NOT USED 
 //	Example: APA102 is up to 24Mhz (predicted only) */
-#define SPI_MHZ         24  //Too high a value causes individual led white flashes (sparkles)
+#define SPI_MHZ         8  //Too high a value causes individual led white flashes (sparkles)
 
-#define COLOR_ORDER GRB		//Set the color order. Most 1-wire types like WS2812B are GRB.
+#define COLOR_ORDER BGR //GRB		//Set the color order. Most 1-wire types like WS2812B are GRB.
 #define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
-#define BRIGHTNESS  10  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
+#define BRIGHTNESS  50  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
 
 //set these optional parameters as needed or comment out
 #define VOLTS 5
 #define MAXIMUM_AMPS 50
 
-//============ set up physical LED arrangement in overall matrix then blocks within the matrix ============= 
+//Is your matrix panel made up of tiles of LEDs such a ADafruit NEOPIXEL 8x8 tiles?
+//If true complete Sections #1 and #2
+
+#define HAS_TILES  false        //true/false for LED tiles
+
+//setup number of me LED Extender Shield PCBs and LED "strips" in each bank in Section #3.
+//See the documentation for how to use these Extenders to support up to 16 LED strips and thousands of leds.
+//If true, complete Sections #1, #2, and #3
+
+#define HAS_EXTENDER  false    //true/false for LED Extender shields 
+
+//Section #1. ======= set up physical LED arrangement in overall matrix then tiles within the matrix ============= 
 /*
 	Set the overall Panel size in number of LEDs (POSITIVE VALUES ONLY).
     Previous LEDMatrix versions use a negative value for reserved (right to left)
     and (bottom to top). Use HORIZ_DIR and VERT_DIR below to do this.
 */
-#define MATRIX_WIDTH    8   //former LEDMatrix use negative value for reversed (right to left)
+#define MATRIX_WIDTH    8    //former LEDMatrix use negative value for reversed (right to left)
 #define MATRIX_HEIGHT   8  //former LEDMatrix use negative value for reversed (bottom to top)
 #define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 	//the total number of LEDs in your display calculated
 
-//if this is a simple matrix (no tiles/blocks), then define the flow of the led strip(s), otherwise ignore
+//if this is a simple matrix (no tiles), then define the flow of the led strip(s), otherwise ignore
 #define MATRIX_TYPE     HORIZONTAL_ZIGZAG_MATRIX     //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
                                                    //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX };
 
-//what direction does the FIRST row of LEDs in the matrix panel go (not within the tiles if you have them)? 
-#define HORIZ_DIR      LEFT_2_RIGHT    //LEFT_2_RIGHT, RIGHT_2_LEFT
-#define VERT_DIR       TOP_DOWN        //BOTTOM_UP, TOP_DOWN
+//what direction does the FIRST row of LEDs in the matrix panel go 
+//these may be in one large matrix or the first tile if you are using them)
+//what direction does the FIRST row of LEDs go?
+#define HORIZ_DIR     LEFT_2_RIGHT   //LEFT_2_RIGHT, RIGHT_2_LEFT
+#define VERT_DIR      TOP_DOWN      //BOTTOM_UP, TOP_DOWN
 
 //================== Select the data or data+clock pins =========================
 /*   
 If you are NOT using the LEDS Extender Shields, but want to use up to 4 separate led strips, 
 set HAS_EXTENDER (below) to true, set the Banks = 1, and the NUM_STRIPS to your strips. 
 Be sure to assign the DATA or DATA/CLOCK  pins correctly. Teensy boards limit the useable pins for 1-wire led strips. 
+
+If using the hardware Extender Shield choose DATA and CLOCK pins in the bank (all banks use the same pins)
+The same data/clock pins are used for all Banks, and made active by the BANK_PIN. 
+Alternate pins (14-17) depend on how Teensy is rotated on the Extender board
 
 For 1-wire leds, it appears that only some Teensy pins will work as DATA lines.
 Usable pins: 
@@ -85,7 +102,6 @@ Teensy 3.5:  1, 5, 8, 10, 26, 32, 33, 48
 Teensy 3.6:  1, 5, 8, 10, 26, 32, 33 
 Teensy 4.0:  1, 8, 14, 17, 20, 24, 29, 39
 Teensy 4.1:  1, 8, 14, 17, 20, 24, 29, 35, 47, 53
-
 More details are here: https://github.com/PaulStoffregen/WS2812Serial
 
 For 2-wire leds, select your DATA/CLOCK pins
@@ -117,52 +133,15 @@ CLOCK_2  27
 #else   //1-wire DATA only. Teensy pins are limted to just a few
         //if other MCU change as desired
 									  //Teensy4x	Teensy 3.5/3.6	ESP32(typical)
-    #define DATA_1        1		      //	1     		1				2
+    #define DATA_1        1		      //	1     		1				2 
     #define DATA_2        8		      //	8			8				0
-    #define DATA_3        10		  //	17			10				4
-    #define DATA_4        26	      //	20			26				16
+    #define DATA_3        17		  //	17			10				4
+    #define DATA_4        20          //	20			26				16
 #endif
+
+//Section #2.=========== tiles in the matrix panel =========================
+//left out for ths example
+//Section #3. ========= setup number of extenders and LED "strips" in each bank =========================
+//left out for ths example
 
 //================================= end of USER DATA for Extender Control ==============================
-
-//house keeping if no Extender present - set all to 1 with no Bank pins.
-#if ! HAS_EXTENDER
-    #define NUM_BANKS           1
-    #define STRIPS_PER_BANK     1
-    #define NUM_STRIPS          1
-    #define LEDS_PER_BANK       NUM_LEDS/NUM_BANKS
-    #define LEDS_PER_STRIP      LEDS_PER_BANK / STRIPS_PER_BANK 
-    #define BANK_PIN_0          -1
-    #define BANK_PIN_1          -1
-    #define BANK_PIN_2          -1
-    #define BANK_PIN_3          -1
-#endif      // HAS_EXTENDER false
-
-//housekeeping for matrix - need to set these 2 as NEGATIVE for FastLEDS cLEDMatrix if direction is "reversed"
-#define LEFT_2_RIGHT true
-#define RIGHT_2_LEFT false
-#define BOTTOM_UP   true
-#define TOP_DOWN    false
-#if HORIZ_DIR == RIGHT_2_LEFT
-    #define MATRIX_WIDTH_DIR    -(MATRIX_WIDTH)       //right to left requires negative defined contant value for LEDMatrix
-#else
-    #define MATRIX_WIDTH_DIR    MATRIX_WIDTH
-#endif
-#if (VERT_DIR == BOTTOM_UP)
-    #define MATRIX_HEIGHT_DIR   -(MATRIX_HEIGHT)      //bottom up requires negative defined contant value for LEDMatrix
-#else
-    #define MATRIX_HEIGHT_DIR   MATRIX_HEIGHT
-#endif
-
-//need to set these 2 as NEGATIVE for cLEDMatrix if direction is "reversed"
-#if LEDS_HORIZ_DIR == RIGHT_2_LEFT
-#define MATRIX_TILE_H_DIR    -(MATRIX_TILE_H)       //right to left requires negative defined contant value for LEDMatrix
-#else
-#define MATRIX_TILE_H_DIR    MATRIX_TILE_H
-#endif
-#if (LEDS_VERT_DIR == BOTTOM_UP)
-#define MATRIX_TILE_V_DIR   -(MATRIX_TILE_V)      //bottom up requires negative defined contant value for LEDMatrix
-#else
-#define MATRIX_TILE_V_DIR   MATRIX_TILE_V
-#endif
-//================== end of house keeping =====================

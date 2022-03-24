@@ -1,13 +1,14 @@
+
 /* --------------LEDMatrix_22 -------------------------
-  LEDMatrix_22 updated previous by DrOldies 2021
-  modified:  LEDMatrix V5 class by Aaron Liddiment (c) 2016
-  modified:  Juergen Skrotzky (JorgenVikingGod@gmail.com)
-  date:      2016/04/27
-
-  Inspiration for some of the Matrix functions from Stefan Petrick
-
-  FastLED v3.1 library by Daniel Garcia and Mark Kriegsmann.
-  Written & tested on a Teensy 3.1 using Arduino V1.6.3 & teensyduino V1.22
+* LEDMatrix_22 updates and expands previous version, by Paul Dymerski 2021
+* modified:  LEDMatrix V5 class by Aaron Liddiment (c) 2016
+* modified:  Juergen Skrotzky (JorgenVikingGod@gmail.com)
+* date:      2016/04/27
+*
+* Inspiration for some of the Matrix functions from Stefan Petrick
+*
+* FastLED v3.1 library by Daniel Garcia and Mark Kriegsmann.
+* Written & tested on a Teensy 3.1 using Arduino V1.6.3 & teensyduino V1.22
 */
 
 #include "LEDMatrix_22.h"
@@ -312,11 +313,10 @@ void cLEDMatrixBase::fillScreen(CRGB col) {
 }
 
 /*
- Original code in this library did not do rotation
- new draw routine below does rotation
-void cLEDMatrixBase::drawPixel(int16_t x, int16_t y, CRGB Col) {
-  drawLine(x, y, x, y, Col);
-}
+* Original code in this library did not do rotation
+*  new draw routine below does rotation
+* void cLEDMatrixBase::drawPixel(int16_t x, int16_t y, CRGB Col) {
+*   drawLine(x, y, x, y, Col);
 */
 
 //from FastLED_GFX - can rotate
@@ -340,13 +340,8 @@ void cLEDMatrixBase::drawPixel(int16_t x, int16_t y, CRGB color) {
     break;
   }
 
-  //drawP_100 = -1;                       //debug out of bounds                                                                      //ppd100 mXY test
-
   if ((x < 0) || (y < 0) || (x >= _width) || (y >= _height)) return;   //rotated sizes
   cLED[mXY(x, y)] = color;                //original code
-
-  //drawP_100 = mXY(x, y);                //debug capture mXY index
-  //cLED[drawP_100] = color;              //debug go thru mXY only once
   
   //cLED[M_XY(x, y)] = color;  //future trigger test only	
 }
@@ -376,9 +371,9 @@ CRGB cLEDMatrixBase::getPixel(int16_t x, int16_t y) {
 }
 
 /*
-New function getPixelIndex  - return led index into led strip.
-Takes into account any rotation to match drawPixel() with rotation
-set by setRotation(); //0-3 in 90 deg steps
+* New function getPixelIndex  - return led index into led strip.
+* Takes into account any rotation to match drawPixel() with rotation
+* set by setRotation(); //0-3 in 90 deg steps
 */
 int16_t  cLEDMatrixBase::getPixelIndex(int16_t x, int16_t y) {
 
@@ -911,23 +906,23 @@ void cLEDMatrixBase::drawChar(int16_t x, int16_t y, unsigned char c,
         }
 
         // Todo: Add character clipping here
-
-        // NOTE: THERE IS NO 'BACKGROUND' COLOR OPTION ON CUSTOM FONTS.
-        // THIS IS ON PURPOSE AND BY DESIGN.  The background color feature
-        // has typically been used with the 'classic' font to overwrite old
-        // screen contents with new data.  This ONLY works because the
-        // characters are a uniform size; it's not a sensible thing to do with
-        // proportionally-spaced fonts with glyphs of varying sizes (and that
-        // may overlap).  To replace previously-drawn text when using a custom
-        // font, use the getTextBounds() function to determine the smallest
-        // rectangle encompassing a string, erase the area with fillRect(),
-        // then draw new text.  This WILL infortunately 'blink' the text, but
-        // is unavoidable.  drawing 'background' pixels will NOT fix this,
-        // only creates a new set of problems.  Have an idea to work around
-        // this (a canvas object type for MCUs that can afford the RAM and
-        // displays supporting setAddrWindow() and pushColors()), but haven't
-        // implemented this yet.
-
+        /*
+        * NOTE: THERE IS NO 'BACKGROUND' COLOR OPTION ON CUSTOM FONTS.
+        * THIS IS ON PURPOSE AND BY DESIGN.  The background color feature
+        /* has typically been used with the 'classic' font to overwrite old
+        * screen contents with new data.  This ONLY works because the
+        * characters are a uniform size; it's not a sensible thing to do with
+        * proportionally-spaced fonts with glyphs of varying sizes (and that
+        * may overlap).  To replace previously-drawn text when using a custom
+        * font, use the getTextBounds() function to determine the smallest
+        * rectangle encompassing a string, erase the area with fillRect(),
+        * then draw new text.  This WILL infortunately 'blink' the text, but
+        * is unavoidable.  drawing 'background' pixels will NOT fix this,
+        * only creates a new set of problems.  Have an idea to work around
+        * this (a canvas object type for MCUs that can afford the RAM and
+        * displays supporting setAddrWindow() and pushColors()), but haven't
+        * implemented this yet.
+        */
         for (yy = 0; yy < h; yy++) {
             for (xx = 0; xx < w; xx++) {
                 if (!(bit++ & 7)) {
@@ -1026,12 +1021,13 @@ void cLEDMatrixBase::invertSquare(int16_t x0, int16_t y0, int16_t x1, int16_t y1
     }
 
 }
-
-//---------------------------- bitmaps -----------------------------
-
-// draw a 1 - bit image(bitmap) at the specified(x, y) position from the
-// provided bitmap buffer using the specified
-// foreground color (unset bits are transparent).
+/*
+* ---------------------------- bitmaps -----------------------------
+*
+* draw a 1 - bit image(bitmap) at the specified(x, y) position from the
+* provided bitmap buffer using the specified
+* foreground color (unset bits are transparent).
+*/
 void cLEDMatrixBase::drawBitmap(int16_t x, int16_t y, const uint8_t * bitmap, int16_t w, int16_t h, CRGB color) {
     int16_t i, j, byteWidth = (w + 7) / 8;
     uint8_t byte = 0;
@@ -1096,13 +1092,14 @@ void cLEDMatrixBase::drawXBitmap(int16_t x, int16_t y,
   }
 }
 
-
-//---------------------------24 bit full color bitmaps ------------------------------
-//        ============ background of Black = transparent ===============
-// 24 bit color bitnmap image - Draw a bitmap image at the specified(x, y) position from the
-// bitmap must be PROGMEM memory) using the specified foreground color. 
-// A bg color of 0x000000 (black) = transparent, otherwise color of bg
-// each row must be from left to right
+/*
+* ---------------------------24 bit full color bitmaps ------------------------------
+*         ============ background of Black = transparent ===============
+* 24 bit color bitnmap image - Draw a bitmap image at the specified(x, y) position from the
+* bitmap must be PROGMEM memory) using the specified foreground color.
+* A bg color of 0x000000 (black) = transparent, otherwise color of bg
+* each row must be from left to right
+*/
 void cLEDMatrixBase::drawBitmap24(int16_t x, int16_t y, const long* bitmap, int16_t w, int16_t h, CRGB bg) {
     uint8_t i, j;
     uint8_t  k = 0;
@@ -1122,13 +1119,13 @@ void cLEDMatrixBase::drawBitmap24(int16_t x, int16_t y, const long* bitmap, int1
         }
 }
 
-//        ============ zigzag or not ===============
-//        ============ background of Black = transparent ===============
-// 24 bit color bitnmap image - Draw a bitmap image at the specified(x, y) position from the
-// bitmap must be PROGMEM memory) using the specified // foreground color 
-// A bg color of 0x000000 (black) = transparent, otherwise color of bg
-//if all rows are left to right, zigzag = 0. If Odd rows are reversed, zigzag = 1;
-
+/*       ============ zigzag or not ============== =
+*        ============ background of Black = transparent ===============
+* 24 bit color bitnmap image - Draw a bitmap image at the specified(x, y) position from the
+* bitmap must be PROGMEM memory) using the specified // foreground color
+* A bg color of 0x000000 (black) = transparent, otherwise color of bg
+* if all rows are left to right, zigzag = 0. If Odd rows are reversed, zigzag = 1;
+*/
 void cLEDMatrixBase::drawBitmap24(int16_t x, int16_t y, const long* bitmap, int16_t w, int16_t h, boolean progMem, boolean zigzag, CRGB bg) {
     uint8_t i, j;
     uint8_t  k = 0;
@@ -1332,16 +1329,16 @@ void cLEDMatrixBase::show(uint8_t Bank1, uint8_t Bank2, uint8_t Bank3, uint8_t g
 }
 
 /* ==================== FGastLED Conyrollers setup ================================
-memory array: Instead of one large led array, to use strips and Banks we must use these Controllers - one per led strip.
-BUT for my Banks, the "output" array is only part of the full led array. For a 1024 led array with 4 Banks, each is
-only 256 leds inm 4 strips. Further, for 4 strips in each bank we now have 64 leds in each strip and 4 controllers as below.
-Finally, each BANK is using the same 4 pins and the SAME 256 LED array. memmov8 (FastLED's faster version of memcpy) copies the 256 led portion of
-the fill array into this 256 led output array, once for each Bank.
-
-============== explaining all the layered conditiional compiles ======================
-NOTE: Using #ifs because of the required #defines. Using #ifs cause compile errors if, for
-example, DATA_1 is not defined in config by the user. This will display a compile time #error message!
-So must test for 1-wire, or 2-wire leds. Number of Banks defined, is the MCU a Teensy, and if ATA_RATE_MHZ(SPI_MHZ) are defined.
+* memory array: Instead of one large led array, to use strips and Banks we must use these Controllers - one per led strip.
+* BUT for my Banks, the "output" array is only part of the full led array. For a 1024 led array with 4 Banks, each is
+* only 256 leds inm 4 strips. Further, for 4 strips in each bank we now have 64 leds in each strip and 4 controllers as below.
+* Finally, each BANK is using the same 4 pins and the SAME 256 LED array. memmov8 (FastLED's faster version of memcpy) copies the 256 led portion of
+* the fill array into this 256 led output array, once for each Bank.
+*
+* ============== explaining all the layered conditiional compiles ======================
+* NOTE: Using #ifs because of the required #defines. Using #ifs cause compile errors if, for
+* example, DATA_1 is not defined in config by the user. This will display a compile time #error message!
+* So must test for 1-wire, or 2-wire leds. Number of Banks defined, is the MCU a Teensy, and if ATA_RATE_MHZ(SPI_MHZ) are defined.
 */
 void cLEDMatrixBase::defineBanks() {
 
@@ -1372,10 +1369,10 @@ void cLEDMatrixBase::defineBanks() {
 }
 
 /*
-LEDMatrix addleds() version. Creates 1 to 4 controller(s) for simple matrix, blocks/Entender hardware.
-Need to do in reverse order to get the hardware stacking correct. With top extender always #1.
-Enable pin 3,4,5,6 as needed.
-Otherwise pin 3 moves down as more banks are added.
+* LEDMatrix addleds() version. Creates 1 to 4 controller(s) (1 for simple matrix), or blocks/Entender hardware.
+* Need to do in reverse order to get the hardware stacking correct. With top extender always #1.
+* Enable pin 3,4,5,6 as needed.
+* Otherwise pin 3 moves down as more banks are added.
 */
 void cLEDMatrixBase::addLeds() {
 
@@ -1395,10 +1392,11 @@ void cLEDMatrixBase::addLeds() {
         BankPin0(3);
     #endif
 
+    //Create an output CRGB array for all banks or full matrix if no Extenders
     //just one bank size up to LED strips used by 1 to 4 strips, used for 0 4 Banks
     e_LED = (struct CRGB*)malloc(e_ledsPerStrip * e_stripsPerBank * sizeof(CRGB));
 
-    //offset into leds[] for each strip - used for memcopy LEDS[] to LEDS_2[]
+    //offset into leds[] for each strip - used for memcopy LEDS[] to e_LED[]
     //NOTE: this index is reversed - from top down - thats  the way FastLED sets up the memory
     uint8_t index = e_numStrips - 1;
     for (int8_t i = 0; i < e_numStrips; i++) {
@@ -1450,13 +1448,14 @@ void cLEDMatrixBase::BankPin3(uint8_t pin) {
 }
 
 /*
-Controller functions require #defined constants in the calls so each controller version must use seperate code. 
-For example for 2-wire, DATA1 and DATA2 cannot be assigned to a simple array. For clarity its easier just to use #if..#endif.
-2-wire format DATA+CLOCK
-FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION is the Sketch equivalent format for 2-wire leds
-1-wire format DATA only
-General sketch equivalent format for 4 DATA lines
-FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION)
+* Create 1 to 4 FastLED controllers as needed for Extender hardware. Create just 1 if no Extender.
+* FastLED Controller functions require #defined constants in the calls so each controller version must use seperate code. 
+* For example for 2-wire, DATA1 and DATA2 cannot be assigned to a simple array. For clarity its easier just to use #if..#endif.
+* 2-wire format DATA+CLOCK FastLED format:
+* FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION is the Sketch equivalent format for 2-wire leds
+* 1-wire format DATA only FastLED format:
+* Replaces FastLED sketch equivalent format for 4 DATA lines:
+* FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION)
 */
 void cLEDMatrixBase::setControllerA(uint8_t index) {
     #if CLOCK_PIN_REQUIRED		//must be atleast 1 clock pin defined for 2-wire
@@ -1553,96 +1552,4 @@ void cLEDMatrixBase::setControllerD(uint8_t index) {
         #endif
     #endif
 }
-
-
-#if (0) //old controller code
-    #if CLOCK_PIN_REQUIRED		//must be atleast 1 clock pin defined for 2-wire
-    // this doesn't work #if FASTLED_HAS_CLOCKLESS
-    #if (NUM_STRIPS > 0)    //must avoid undefined pin(s)
-    #if defined DATA_1 && defined CLOCK_1
-    #if defined SPI_MHZ                //because of FastLED definitions, must have 2 forms hard coded
-    controllers[0] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_1, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #else
-    controllers[0] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_1, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #endif
-    #else
-    #error "DATA_1 or CLOCK_1 pin not defined-cannot enable Bank 1" 
-    #endif
-    #endif
-    #if (NUM_STRIPS > 1)    //must avoid undefined pin(s)
-    #if defined DATA_2 && defined CLOCK_1
-    #if defined SPI_MHZ                 //because of FastLED definitions, must have 2 forms hard coded
-    controllers[1] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_1, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #else
-    controllers[1] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_1, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #endif
-    #else
-    #error "DATA_2 or CLOCK_1 pin not defined-cannot enable Bank 2"  
-    #endif
-    #endif
-    #if (NUM_STRIPS > 2)    //must avoid undefined pin(s)
-    #if defined DATA_1 && defined CLOCK_2
-    #if defined SPI_MHZ                //because of FastLED definitions, must have 2 forms hard coded
-    controllers[2] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_2, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #else
-    controllers[2] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_2, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #endif
-    #else
-    #error "DATA_1 or CLOCK_2 pin not defined-cannot enable Bank 3"  
-    #endif
-    #endif
-    #if (NUM_STRIPS > 3)    //must avoid undefined pin(s)
-    #if defined DATA_2 && defined CLOCK_2
-    #if defined SPI_MHZ                //because of FastLED definitions, must have 2 forms hard coded
-    controllers[3] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_2, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #else
-    controllers[3] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_2, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #endif
-    #else
-    #error "DATA_1 or CLOCK_1 pin not defined-cannot enable Bank 4"  
-    #endif
-    #endif
-        }
-    #else
-    //1-wire format DATA only
-    //General sketch equivalent format for 4 DATA lines
-    //FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION)
-    for (uint8_t i = 0; i < e_numBanks; i++) {
-    #if (NUM_STRIPS > 0)    //must avoid undefined pin(s)
-    #ifdef DATA_1
-        controllers[0] = &FastLED.addLeds<CHIPSET, DATA_1, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #else
-    #error "DATA_1 pin not defined-cannot enable Bank 1"
-    #endif
-    #endif
-    #if (NUM_STRIPS > 1)    //must avoid undefined pin(s)
-    #ifdef DATA_2
-        controllers[1] = &FastLED.addLeds<CHIPSET, DATA_2, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #else
-    #error "DATA_2 pin not defined-cannot enable Bank 2"
-    #endif
-    #endif
-    #if (NUM_STRIPS > 2)    //must avoid undefined pin(s)
-    #ifdef DATA_3
-        controllers[2] = &FastLED.addLeds<CHIPSET, DATA_3, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #else
-        #error "DATA_3 pin not defined-cannot enable Bank 3"
-    #endif
-    #endif
-    #if (NUM_STRIPS > 3)    //must avoid undefined pin(s)
-    #ifdef DATA_4
-        controllers[3] = &FastLED.addLeds<CHIPSET, DATA_4, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-    #else
-    #error "DATA_4 pin not defined-cannot enable Bank 4"
-    #endif
-    #endif
-    }
-    #endif
-
-#endif      //old code
-
-
-
-
-
 

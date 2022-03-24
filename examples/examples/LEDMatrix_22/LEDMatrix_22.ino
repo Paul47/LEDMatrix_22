@@ -346,7 +346,7 @@ void menu() {
     pt("*Sketh functionality*");
     pt("Locate and exercise your matrix panel, Extender Banks and Strips.");
     pt("This is an interactive menu on serial monitor to select functions:");
-    pt("    If no tiless, menu stops after 'd' ");
+    pt("    If no tiles, menu stops after 'd' ");
     pt("    If no Extender, menu stops after 'e' ");
     pt("");
     pt("a. We will report your configuration.");

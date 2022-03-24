@@ -1,5 +1,5 @@
 //Tom Thumb Numbers as 1 color sprites
-//These are small 3x5 numbers for displaying in tiles
+//These are small 3x5 numbers for displaying in blocks
 
 //avr/pgmspace.h
 #ifdef __AVR__

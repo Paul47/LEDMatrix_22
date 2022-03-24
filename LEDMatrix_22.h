@@ -1,8 +1,15 @@
+
+
 /* --------------LEDMatrix_22 -------------------------
-  LEDMatrix_22 updated previous by DrOldies 2021
-  modified:  LEDMatrix V5 class by Aaron Liddiment (c) 2016
-  modified:  Juergen Skrotzky (JorgenVikingGod@gmail.com)
-  date:      2016/04/27
+* LEDMatrix_22 updates and expands previous version, by Paul Dymerski 2021
+* modified:  LEDMatrix V5 class by Aaron Liddiment (c) 2016
+* modified:  Juergen Skrotzky (JorgenVikingGod@gmail.com)
+* date:      2016/04/27
+*
+* Inspiration for some of the Matrix functions from Stefan Petrick
+*
+* FastLED v3.1 library by Daniel Garcia and Mark Kriegsmann.
+* Written & tested on a Teensy 3.1 using Arduino V1.6.3 & teensyduino V1.22
 */
 
 #pragma once
@@ -22,7 +29,13 @@ enum TileType_t	{	HORIZONTAL_TILES,
 #define FASTLED_INTERNAL        // Suppress build banner
 #include <FastLED.h>
 
-#include "configuration_22.h"
+//#include "configuration_22.h"
+
+//#include "TX1813 1x1 C.h"
+#include "WS2812 16x16 C.h"
+//#include "APA_102 2x3 C.h"
+
+
 
 /*If ENABLE_FONTS is defined in Configuration_22.h, use this default font.
 Both files must be in the libary older. If not defined, these 2 files are not needed.
@@ -71,7 +84,7 @@ It reduces pixelation and flashing with longer LED strips.
 This makes wiring your much project much easier. 
 */
 
-//for future use //ppd
+//for future use 
 #define TRIGGER_LED 0
 #define M_XY(x,y)    (mXY(x, y) + TRIGGER_LED)
 
@@ -267,6 +280,21 @@ TILES block[48];   //48 max
     void setControllerD(uint8_t index);
 
 
+#if HAS_EXTENDER  
+    const boolean hasExtender = true;
+#else
+    const boolean hasExtender = false;
+    #define NUM_BANKS           1
+    #define STRIPS_PER_BANK     1 
+    #define NUM_STRIPS          1 
+    #define LEDS_PER_BANK       NUM_LEDS/NUM_BANKS 
+    #define LEDS_PER_STRIP      LEDS_PER_BANK / STRIPS_PER_BANK
+    #define BANK_PIN_0          -1
+    #define BANK_PIN_1          -1
+    #define BANK_PIN_2          -1
+    #define BANK_PIN_3          -1
+#endif
+
 private:
 
     void BankPin0(uint8_t pin);    //link bank to enable pin
@@ -274,7 +302,7 @@ private:
     void BankPin2(uint8_t pin);
     void BankPin3(uint8_t pin);
 
-    boolean e_hasExtender = HAS_EXTENDER;     //otherwise leave these a defalut of zero
+    //use these constants instead of defines 
     const int16_t e_numLeds = NUM_LEDS;
     const uint8_t e_numBanks = NUM_BANKS;
     const uint8_t e_stripsPerBank = STRIPS_PER_BANK;
@@ -293,29 +321,48 @@ private:
 class cLEDMatrix : public cLEDMatrixBase
 
 {
+
+    //>>>>>>>>>>>>>>>>>>>>> orientation  >>>>>>>>>>>>>>>>>>
+
+    #define LEFT_2_RIGHT  1     //L2R is positive direction
+    #define RIGHT_2_LEFT -1     //R2L is negative direction
+    #define TOP_DOWN      1     //positive direction
+    #define BOTTOM_UP    -1     //negative direction
+
+
+    #define MATRIX_WIDTH_DIR        HORIZ_DIR * MATRIX_WIDTH   //include the sign from above
+    #define MATRIX_HEIGHT_DIR       VERT_DIR * MATRIX_HEIGHT
+    #define MATRIX_TILE_H_DIR       LEDS_HORIZ_DIR * MATRIX_TILE_WIDTH
+    #define MATRIX_TILE_V_DIR       LEDS_VERT_DIR * MATRIX_TILE_HEIGHT
+
+
   private:
     #if HAS_TILES 
-      //NEW
-//     static const int16_t tMWidth = MATRIX_WIDTH_DIR;     //NEW
-     //OLD
-      static const int16_t tMWidth = MATRIX_TILE_WIDTH;     //OLD
+      static const int16_t tMWidthMatrix = MATRIX_WIDTH_DIR;      //size of entire matrix, negative = reversed direction
+      static const int16_t tMHeightMatrix = MATRIX_HEIGHT_DIR;
 
-      //NEW
-//      static const int16_t tMHeight = MATRIX_HEIGHT_DIR;     //NEW
-      //OLD
-      static const int16_t tMHeight = MATRIX_TILE_HEIGHT;     //OLD
+      static const int16_t tMWidth = MATRIX_TILE_H_DIR;    //NUMBER if tiles in each direction - NOT width
+      static const int16_t tMHeight = MATRIX_TILE_V_DIR;
+
+      static const int8_t tBWidth = MATRIX_TILE_H;    //size of tiles, negative = reversed direction
+      static const int8_t tBHeight = MATRIX_TILE_V;
+
       static const MatrixType_t tMType = LEDS_IN_TILE; 
-      static const int8_t tBWidth = MATRIX_TILE_H_DIR;
-      static const int8_t tBHeight = MATRIX_TILE_V_DIR;
-      static const TileType_t tBType = TILES_IN_MATRIX;
+	  static const TileType_t tBType = TILES_IN_MATRIX;
     #else
-      static const int16_t tMWidth = MATRIX_WIDTH_DIR;      //these are just the defaults listed in the template
+      static const int16_t tMWidth = MATRIX_WIDTH_DIR;           //these are just the defaults listed in the template
       static const int16_t tMHeight = MATRIX_HEIGHT_DIR;
+
+      static const int16_t tMWidthMatrix = tMWidth;            //size of entire matrix, negative = reversed direction
+      static const int16_t tMHeightMatrix = tMHeight;      
       static const MatrixType_t tMType = MATRIX_TYPE;
       static const int8_t tBWidth = 1;
       static const int8_t tBHeight = 1;
       static const TileType_t tBType = HORIZONTAL_TILES;
     #endif
+
+    static const int16_t m_absMWidthMatrix = (tMWidthMatrix * ((tMWidthMatrix < 0) * -1 + (tMWidthMatrix > 0)));
+    static const int16_t m_absMHeightMatrix = (tMHeightMatrix * ((tMHeightMatrix < 0) * -1 + (tMHeightMatrix > 0)));
 
     static const int16_t m_absMWidth = (tMWidth * ((tMWidth < 0) * -1 + (tMWidth > 0)));
     static const int16_t m_absMHeight = (tMHeight * ((tMHeight < 0) * -1 + (tMHeight > 0)));
@@ -324,8 +371,10 @@ class cLEDMatrix : public cLEDMatrixBase
     struct CRGB *p_LED;
 
 public:
-    //>>>>>>>>>>>>>>>>>orientation test variables <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-#if(0)
+    //>>>>>>>>>>>>>>>>>orientation test variables for debugging<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+#define  LEDMATRIX_22_DEBUG       //enable debugging variables
+#if defined LEDMATRIX_22_DEBUG           //add to sketch to use these
     static const int16_t tmw = tMWidth;
     static const int16_t tmh = tMHeight;
     static const int16_t tbw = tBWidth;
@@ -336,21 +385,25 @@ public:
     static const int16_t m_ah = m_absBHeight;
     static const MatrixType_t tMt = tMType;
     static const TileType_t tBt = tBType;
-#endif  //test variables  
+
+    static const int16_t tmwM = tMWidthMatrix;
+    static const int16_t tmhM = tMHeightMatrix;
+    static const int16_t m_amwM = m_absMWidthMatrix;
+    static const int16_t m_amhM = m_absMHeightMatrix;
+#endif  //LEDMATRIX_22_DEBU
+    //end of debugging variables
 
    //global declarations for definition replacements with constant variables
     const uint8_t matrixWidth = MATRIX_WIDTH;
     const uint8_t matrixHeight = MATRIX_HEIGHT;
-    static const uint8_t ledHorizDir = HORIZ_DIR;	         //0 = LEFT_2_RIGHT, 1 = RIGHT_2_LEFT
+    static const uint8_t ledHorizDir = HORIZ_DIR;	    //0 = LEFT_2_RIGHT, 1 = RIGHT_2_LEFT
     const uint8_t ledVertDir = VERT_DIR;	            //0 = BOTTOM_UP, 1 = TOP_DOWN
     const int16_t numLeds = NUM_LEDS;
-
-
 
     //capture tile & extender info as integers rather than #defines so we don't get undefined errors.
     //default is 0 if define = 0 or not defined
 #if HAS_TILES
-    const uint8_t hasTiles = HAS_TILES;                  //otherwise leave these a defalut of zero
+    const uint8_t hasTiles = HAS_TILES; 
     const uint8_t numTiles = MATRIX_TILE_H * MATRIX_TILE_V;
     const uint8_t tilesPerRow = MATRIX_TILE_H;
     const uint8_t tilesPerCol = MATRIX_TILE_V;
@@ -358,6 +411,15 @@ public:
     const uint8_t tileHeight = MATRIX_TILE_HEIGHT;    //leds in a tile's column
     const uint8_t tileLedsFlow = LEDS_IN_TILE;        //0 = HORIZONTAL_MATRIX, 1 = VERTICAL_MATRIX, 2 = HORIZONTAL_ZIGZAG_MATRIX, 3 = VERTICAL_ZIGZAG_MATRIX
     const uint8_t tileFlow = TILES_IN_MATRIX;        //0 = HORIZONTAL_TILES, 1 = VERTICAL_TILES, 2 = HORIZONTAL_ZIGZAG_TILES, 3 = VERTICAL_ZIGZAG_TILES
+    const uint8_t tileLedsHDir = LEDS_HORIZ_DIR;     //L0 - EFT_2_RIGHT, 1 = RIGHT_2_LEFT
+    const uint8_t tileLedsVDir = LEDS_VERT_DIR;      //0 = TOP_DOWN, 1= BOTTOM_UP
+
+    //TOTAL LEDS IN THE ENTIRE MATRIX
+    #define NUM_LEDS_CALC          MATRIX_TILE_WIDTH * MATRIX_TILE_H * MATRIX_TILE_HEIGHT * MATRIX_TILE_V	//leds total on entire matrix panel
+    #if NUM_LEDS != NUM_LEDS_CALC
+        #error "        >>> Your NUM_LEDS does not equal the calculated MATRIX_WIDTH * MATRIX_HEIGHT check MATRIX_TILE_ V and H <<<"
+    #endif
+ 
 #else
     const uint8_t hasTiles = 0;
     const uint8_t numTiles = 0;
@@ -367,24 +429,15 @@ public:
     const uint8_t tileHeight = 0;
     const uint8_t tileLedsFlow = 0;
     const uint8_t tileFlow = 0;
-#endif  //if true
+    const uint8_t tileLedsHDir = 0;
+    const uint8_t tileLedsVDir = 0;
+#endif  //if has_tiles
 
-#if HAS_EXTENDER
-    boolean hasExtender = HAS_EXTENDER;     //otherwise leave these a defalut of zero
     const uint8_t numBanks = NUM_BANKS;
     const uint8_t stripsPerBank = STRIPS_PER_BANK;
     const int16_t ledsPerBank = LEDS_PER_BANK;
     const int16_t ledsPerStrip = LEDS_PER_STRIP;
     const int16_t numStrips = NUM_STRIPS;
-#else
-    boolean hasExtender = 0;     //otherwise leave these a defalut of zero
-    const uint8_t numBanks = 0;
-    const uint8_t stripsPerBank = 0;
-    const int16_t ledsPerBank = 0;
-    const int16_t ledsPerStrip = 0;
-    const int16_t numStrips = 0;
-#endif
-
 
   public:
     cLEDMatrix(bool doMalloc=true)
@@ -411,12 +464,28 @@ public:
       cLED = pLED;
     }
 
+/*
+* int16 for arrays > 256 x 256 in the future. 
+* Also must allow for negative number or get rediculous results like 65534 or other erroneus indexes
+* int16 for arrays > 256 x 256 in the future. 
+* Also must allow for negative number or get rediculous results like 65534 or other erroneus indexes
+*
+* 3-21-22 problem with previous LEDMatrix libraries:
+* 1. Early libs used drawLine to all plottting, even drawPixel - no rotation or flipping orientations.
+* 2. I moved all plotting to use mXY() to enable rotation and flipping.
+* 3. The original mXY() did simple matrix flipping OR tile flipping but not both!
+* Its checks in this order:
+*  It 1st checked to see if tB's equals 1 (no tile) - it flips matrix as needed
+*  ELSE it tiles present, do tile flipping as needed.
+* It needs to do BOTH in the order flip tiles, then entire matrix
+* 
+* This new mXY() code:
+*   checks for tiles, if present do tile flipping as needed
+*   then ALWAYS do full matrix flipping as needed
+* By moving matrix code AFTER tile code, flipping is done in the proper order.
+*/
 
-    //int16 for arrays > 256 x 256 in the future. 
-    //Also must allow for negative number or get rediculous results like 65534 or other erroneus indexes
-    //int16 for arrays > 256 x 256 in the future. 
-    //Also must allow for negative number or get rediculous results like 65534 or other erroneus indexes
-    virtual int16_t mXY(int16_t x, int16_t y)      //int to allows for negative numbers
+   virtual int16_t mXY(int16_t x, int16_t y)      //int to allows for negative numbers
     {
         #ifdef XYTable_LookUp         //keeping it simple, leave the rest of the code
                 return XYTable[y][x];      //x,y indexes are always result in y,x arrays
