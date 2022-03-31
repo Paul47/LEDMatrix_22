@@ -29,13 +29,7 @@ enum TileType_t	{	HORIZONTAL_TILES,
 #define FASTLED_INTERNAL        // Suppress build banner
 #include <FastLED.h>
 
-//#include "configuration_22.h"
-
-//#include "TX1813 1x1 C.h"
-#include "WS2812 16x16 C.h"
-//#include "APA_102 2x3 C.h"
-
-
+#include "configuration_22.h"
 
 /*If ENABLE_FONTS is defined in Configuration_22.h, use this default font.
 Both files must be in the libary older. If not defined, these 2 files are not needed.
@@ -282,6 +276,9 @@ TILES block[48];   //48 max
 
 #if HAS_EXTENDER  
     const boolean hasExtender = true;
+    #if (NUM_BANKS > 4) || (STRIPS_PER_BANK > 4)    // 1 to 4 extender "banks"
+        #error “    >>> NUM_BANKS and STRIPS_PER_BANK cannot be greater than 4”;
+    #endif
 #else
     const boolean hasExtender = false;
     #define NUM_BANKS           1
@@ -337,6 +334,8 @@ class cLEDMatrix : public cLEDMatrixBase
 
 
   private:
+
+    //Several changes here from previous LEDMatrix versions to both matrix flipping and tile flipping will work together.
     #if HAS_TILES 
       static const int16_t tMWidthMatrix = MATRIX_WIDTH_DIR;      //size of entire matrix, negative = reversed direction
       static const int16_t tMHeightMatrix = MATRIX_HEIGHT_DIR;
@@ -346,18 +345,19 @@ class cLEDMatrix : public cLEDMatrixBase
 
       static const int8_t tBWidth = MATRIX_TILE_H;    //size of tiles, negative = reversed direction
       static const int8_t tBHeight = MATRIX_TILE_V;
-
-      static const MatrixType_t tMType = LEDS_IN_TILE; 
+      static const MatrixType_t tMType = MATRIX_TYPE;       //meaning split from tiles so always matrix type
+      static const MatrixType_t tLType = LEDS_IN_TILE;     //new type to seperate TMType for matrix from tiles
 	  static const TileType_t tBType = TILES_IN_MATRIX;
     #else
-      static const int16_t tMWidth = MATRIX_WIDTH_DIR;           //these are just the defaults listed in the template
+      static const int16_t tMWidth = MATRIX_WIDTH_DIR;
       static const int16_t tMHeight = MATRIX_HEIGHT_DIR;
 
       static const int16_t tMWidthMatrix = tMWidth;            //size of entire matrix, negative = reversed direction
       static const int16_t tMHeightMatrix = tMHeight;      
-      static const MatrixType_t tMType = MATRIX_TYPE;
       static const int8_t tBWidth = 1;
       static const int8_t tBHeight = 1;
+      static const MatrixType_t tMType = MATRIX_TYPE;
+      static const MatrixType_t tLType = LEDS_IN_TILE
       static const TileType_t tBType = HORIZONTAL_TILES;
     #endif
 
@@ -384,6 +384,7 @@ public:
     static const int16_t m_abw = m_absBWidth;
     static const int16_t m_ah = m_absBHeight;
     static const MatrixType_t tMt = tMType;
+    static const MatrixType_t tLt = tLType;
     static const TileType_t tBt = tBType;
 
     static const int16_t tmwM = tMWidthMatrix;
@@ -485,43 +486,82 @@ public:
 * By moving matrix code AFTER tile code, flipping is done in the proper order.
 */
 
-   virtual int16_t mXY(int16_t x, int16_t y)      //int to allows for negative numbers
+    virtual int16_t mXY(int16_t x, int16_t y)      //int to allows for negative numbers
     {
-        #ifdef XYTable_LookUp         //keeping it simple, leave the rest of the code
-                return XYTable[y][x];      //x,y indexes are always result in y,x arrays
-        #endif
+	    #ifdef XYTable_LookUp         //keeping it simple, leave the rest of the code
+			return XYTable[y][x];      //x,y indexes are always result in y,x arrays
+	    #endif
 
+        //===============================  NO TILES - SIMPLE MATRIX ================================================
         if ((tBWidth == 1) && (tBHeight == 1)) {
-            // No Tiles, just a Matrix
+            // No Blocks, just a Matrix
             if (tMWidth < 0) {
-                x = (m_absMWidth - 1) - x;
+                x = (m_absMWidthMatrix  - 1) - x;
             }
             if (tMHeight < 0) {
-                y = (m_absMHeight - 1) - y;
+                y = (m_absMHeightMatrix  - 1) - y;
             }
             if (tMType == HORIZONTAL_MATRIX) {
-                return((y * m_absMWidth) + x);
+                return((y * m_absMWidthMatrix ) + x);
             }
             else if (tMType == VERTICAL_MATRIX) {
-                return((x * m_absMHeight) + y);
+                return((x * m_absMHeightMatrix ) + y);
             }
             else if (tMType == HORIZONTAL_ZIGZAG_MATRIX) {
                 if (y % 2) {
-                    return((((y + 1) * m_absMWidth) - 1) - x);
+                    return((((y + 1) * m_absMWidthMatrix ) - 1) - x);
                 }
                 else {
-                    return((y * m_absMWidth) + x);
+                    return((y * m_absMWidthMatrix ) + x);
                 }
             }
             else { /* if (tMType == VERTICAL_ZIGZAG_MATRIX) */
                 if (x % 2) {
-                    return((((x + 1) * m_absMHeight) - 1) - y);
+                    return((((x + 1) * m_absMHeightMatrix ) - 1) - y);
                 }
-                else
-                    return((x * m_absMHeight) + y);
+                else {
+                    return((x * m_absMHeightMatrix ) + y);
+                }
             }
         }
-        else {   // Reverse Tile/Matrix X coordinate if needed
+        else {   // Reverse Block/Matrix X coordinate if needed
+
+            //================================= TILES ====================================================
+
+            //1st flip the x, y positions in the entire MATRIX if needed
+            //SAme code as above for the matrix, but DO NOT include returns as above, 
+            //just "flip" x and y coords so these can be used by tile flips next
+           if (tMWidthMatrix < 0) {   /* reversed horiz or vert directions */
+                x = (m_absMWidthMatrix - 1) - x;
+            }
+            if (tMHeightMatrix < 0) {
+                y = (m_absMHeightMatrix - 1) - y;
+            }
+            if (tMType == HORIZONTAL_MATRIX) {
+                // do nothing - based on hardware wiring
+            }
+            else if (tMType == VERTICAL_MATRIX) {
+                 // do nothing - based on hardware wiring
+            }
+            else if (tMType == HORIZONTAL_ZIGZAG_MATRIX) {
+                if (y % 2) {
+                    x = (m_absMWidthMatrix - 1) - x;    //reverse x these rows
+                }
+                else {
+                    // do nothing for this row 
+                }
+            }
+            else { /* if (tMType == VERTICAL_ZIGZAG_MATRIX) */
+                if (x % 2) {
+                    y = (m_absMHeightMatrix - 1) - y;   // y reversed for this ro;
+
+                }
+                else { 
+                    // do nothing for this column
+                }
+            }
+            //================================ NOW FLIP TILES AS NEEDED ======================
+
             if ((tBWidth < 0) && (tMWidth < 0)) {
                 x = (((m_absBWidth - 1) - (x / m_absMWidth)) * m_absMWidth) + ((m_absMWidth - 1) - (x % m_absMWidth));
             }
@@ -531,7 +571,7 @@ public:
             else if (tMWidth < 0) {
                 x = x - ((x % m_absMWidth) * 2) + (m_absMWidth - 1);
             }
-            // Reverse Tile/Matrix Y coordinate if needed
+            // Reverse Block/Matrix Y coordinate if needed
             if ((tBHeight < 0) && (tMHeight < 0)) {
                 y = (((m_absBHeight - 1) - (y / m_absMHeight)) * m_absMHeight) + ((m_absMHeight - 1) - (y % m_absMHeight));
             }
@@ -542,7 +582,7 @@ public:
                 y = y - ((y % m_absMHeight) * 2) + (m_absMHeight - 1);
             }
 
-            // Calculate Tile base
+            // Calculate Tile Base offset within the tile
             uint16_t Base;
             if (tBType == HORIZONTAL_TILES) {
                 Base = (((y / m_absMHeight) * m_absBWidth) + (x / m_absMWidth)) * (m_absMWidth * m_absMHeight);
@@ -567,14 +607,14 @@ public:
                 }
             }
 
-            // Calculate Matrix offset
-            if (tMType == HORIZONTAL_MATRIX) {
+            // Now calculate the offset in the entire matrix using the Base from the tile calc's above
+            if (tLType == HORIZONTAL_MATRIX) {
                 return(Base + ((y % m_absMHeight) * m_absMWidth) + (x % m_absMWidth));
             }
-            else if (tMType == VERTICAL_MATRIX) {
+            else if (tLType == VERTICAL_MATRIX) {
                 return(Base + ((x % m_absMWidth) * m_absMHeight) + (y % m_absMHeight));
             }
-            else if (tMType == HORIZONTAL_ZIGZAG_MATRIX) {
+            else if (tLType == HORIZONTAL_ZIGZAG_MATRIX) {
                 if ((y % m_absMHeight) % 2) {
                     return(Base + ((((y % m_absMHeight) + 1) * m_absMWidth) - 1) - (x % m_absMWidth));
                 }
@@ -582,7 +622,7 @@ public:
                     return(Base + ((y % m_absMHeight) * m_absMWidth) + (x % m_absMWidth));
                 }
             }
-            else {      /* if (tMType == VERTICAL_ZIGZAG_MATRIX) */
+            else {      /* if (tLType == VERTICAL_ZIGZAG_MATRIX) */
                 if ((x % m_absMWidth) % 2) {
                     return(Base + ((((x % m_absMWidth) + 1) * m_absMHeight) - 1) - (y % m_absMHeight));
                 }
@@ -591,8 +631,7 @@ public:
                 }
             }
         }
- }
-
+   }
 
     void shiftLeft(void)
     {

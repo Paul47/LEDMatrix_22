@@ -13,8 +13,8 @@
 
 #include "LEDMatrix_22.h"
 
-#define pt(msg)     Serial.println(msg);    //Serial.println MACRO
-#define ptt(msg)     Serial.print(msg);    //Serial.printl MACRO
+//#define pt(msg)     Serial.println(msg);    //Serial.println MACRO
+//#define ptt(msg)     Serial.print(msg);    //Serial.printl MACRO
 
 
 #ifdef __AVR__
@@ -909,7 +909,7 @@ void cLEDMatrixBase::drawChar(int16_t x, int16_t y, unsigned char c,
         /*
         * NOTE: THERE IS NO 'BACKGROUND' COLOR OPTION ON CUSTOM FONTS.
         * THIS IS ON PURPOSE AND BY DESIGN.  The background color feature
-        /* has typically been used with the 'classic' font to overwrite old
+        * has typically been used with the 'classic' font to overwrite old
         * screen contents with new data.  This ONLY works because the
         * characters are a uniform size; it's not a sensible thing to do with
         * proportionally-spaced fonts with glyphs of varying sizes (and that
@@ -1328,7 +1328,7 @@ void cLEDMatrixBase::show(uint8_t Bank1, uint8_t Bank2, uint8_t Bank3, uint8_t g
     show(Bank3, gBrightness);
 }
 
-/* ==================== FGastLED Conyrollers setup ================================
+/* ==================== FGastLED Controllers setup ================================
 * memory array: Instead of one large led array, to use strips and Banks we must use these Controllers - one per led strip.
 * BUT for my Banks, the "output" array is only part of the full led array. For a 1024 led array with 4 Banks, each is
 * only 256 leds inm 4 strips. Further, for 4 strips in each bank we now have 64 leds in each strip and 4 controllers as below.
@@ -1340,33 +1340,6 @@ void cLEDMatrixBase::show(uint8_t Bank1, uint8_t Bank2, uint8_t Bank3, uint8_t g
 * example, DATA_1 is not defined in config by the user. This will display a compile time #error message!
 * So must test for 1-wire, or 2-wire leds. Number of Banks defined, is the MCU a Teensy, and if ATA_RATE_MHZ(SPI_MHZ) are defined.
 */
-void cLEDMatrixBase::defineBanks() {
-
-    /*
-    Controller index MUST BE IN THIS ORDER from zero up. This is backwards from the extender Banks A B C D order,
-    so code must step thru strips in reverse! Controller index MUST BE IN THIS ORDER fron zero up
-    */
-   
-    //initialize up to 4 controllers. Even with no Extender, Controller0 is used.
-    for (uint8_t i = 0; i < e_numBanks; i++) {
-   
-        #if NUM_STRIPS == 1 
-            setControllerA(0);  //controller 0
-        #elif (NUM_STRIPS == 2)
-            setControllerA(1);  //controller 1
-            setControllerB(0);  //controller 0
-        #elif (NUM_STRIPS == 3)
-            setControllerA(2);  //controller 2
-            setControllerB(1);  //controller 1
-            setControllerC(0);  //controller 0
-        #elif (NUM_STRIPS == 4)
-            setControllerA(3);  //controller 3
-            setControllerB(2);  //controller 2
-            setControllerC(1);  //controller 1
-            setControllerD(0);  //controller 0
-        #endif  //controller selection
-    }
-}
 
 /*
 * LEDMatrix addleds() version. Creates 1 to 4 controller(s) (1 for simple matrix), or blocks/Entender hardware.
@@ -1457,99 +1430,102 @@ void cLEDMatrixBase::BankPin3(uint8_t pin) {
 * Replaces FastLED sketch equivalent format for 4 DATA lines:
 * FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION)
 */
-void cLEDMatrixBase::setControllerA(uint8_t index) {
-    #if CLOCK_PIN_REQUIRED		//must be atleast 1 clock pin defined for 2-wire
-        #if (NUM_STRIPS > index)    //must avoid undefined pin(s)
+void cLEDMatrixBase::defineBanks() {
+    /*
+    Controller index MUST BE IN THIS ORDER from zero up. This is backwards from the extender Banks A B C D order,
+    so code must step thru strips in reverse! Controller index MUST BE IN THIS ORDER fron zero up
+    */
+#if CLOCK_PIN_REQUIRED        //must be atleast 1 clock pin defined for 2-wire
+    //2-wire format DATA+CLOCK
+    //FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION is the Sketch equivalent format for 2-wire leds
+    for (uint8_t i = 0; i < e_numBanks; i++) {
+        #if (STRIPS_PER_BANK > 0)    //must avoid undefined pin(s)
             #if defined DATA_1 && defined CLOCK_1
+                uint8_t idx = STRIPS_PER_BANK - 1; //count backwards and only when valid
                 #if defined SPI_MHZ                //because of FastLED definitions, must have 2 forms hard coded
-                     controllers[index] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_1, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                    controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_1, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
                 #else
-                    controllers[index] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_1, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                    controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_1, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
                 #endif
             #else
                 #error "DATA_1 or CLOCK_1 pin not defined-cannot enable Bank 1" 
             #endif
         #endif
-    #else        //1-wire format DATA only
-        #if (NUM_STRIPS > index)    //must avoid undefined pin(s)
-            #ifdef DATA_1
-                controllers[index] = &FastLED.addLeds<CHIPSET, DATA_1, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-            #else
-                #error "DATA_1 pin not defined-cannot enable Bank 1"
-            #endif
-        #endif
-    #endif
-}
-void cLEDMatrixBase::setControllerB(uint8_t index) {
-
-    #if CLOCK_PIN_REQUIRED		//must be atleast 1 clock pin defined for 2-wire
-        #if (NUM_STRIPS > index)    //must avoid undefined pin(s)
+        #if (STRIPS_PER_BANK > 1)    //must avoid undefined pin(s)
             #if defined DATA_2 && defined CLOCK_1
+                idx--;
                 #if defined SPI_MHZ                 //because of FastLED definitions, must have 2 forms hard coded
-                    controllers[index] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_1, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                    controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_1, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
                 #else
-                    controllers[index] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_1, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                    controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_1, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
                 #endif
             #else
                 #error "DATA_2 or CLOCK_1 pin not defined-cannot enable Bank 2"  
             #endif
         #endif
-    #else        //1-wire format DATA only
-            #if (NUM_STRIPS > index)    //must avoid undefined pin(s)
-            #ifdef DATA_2
-                controllers[index] = &FastLED.addLeds<CHIPSET, DATA_2, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-            #else
-                #error "DATA_2 pin not defined-cannot enable Bank 2"
-            #endif
-        #endif
-    #endif
-}
-void cLEDMatrixBase::setControllerC(uint8_t index) {
-
-    #if CLOCK_PIN_REQUIRED		//must be atleast 1 clock pin defined for 2-wire
-        #if (NUM_STRIPS > index)    //must avoid undefined pin(s)
-            #if defined DATA_1 && defined CLOCK_2
-                #if defined SPI_MHZ                //because of FastLED definitions, must have 2 forms hard coded
-                    controllers[index] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_2, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+            #if (STRIPS_PER_BANK > 2)    //must avoid undefined pin(s)
+                #if defined DATA_1 && defined CLOCK_2
+                    idx--;
+                    #if defined SPI_MHZ                //because of FastLED definitions, must have 2 forms hard coded
+                        controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_2, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                    #else
+                        controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_2, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                    #endif
                 #else
-                    controllers[index] = &FastLED.addLeds<CHIPSET, DATA_1, CLOCK_2, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                    #error "DATA_1 or CLOCK_2 pin not defined-cannot enable Bank 3"  
                 #endif
-            #else
-                #error "DATA_1 or CLOCK_2 pin not defined-cannot enable Bank 3"  
             #endif
-        #endif
-    #else        //1-wire format DATA only
-        #if (NUM_STRIPS > index)    //must avoid undefined pin(s)
-            #ifdef DATA_3
-                controllers[index] = &FastLED.addLeds<CHIPSET, DATA_3, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-            #else
-                #error "DATA_3 pin not defined-cannot enable Bank 3"
-            #endif
-        #endif
-    #endif
-}
-void cLEDMatrixBase::setControllerD(uint8_t index) {
-
-    #if CLOCK_PIN_REQUIRED		//must be atleast 1 clock pin defined for 2-wire
-        #if (NUM_STRIPS > index)    //must avoid undefined pin(s)
+        #if (STRIPS_PER_BANK > 3)    //must avoid undefined pin(s)
+            idx--;
             #if defined DATA_2 && defined CLOCK_2
                 #if defined SPI_MHZ                //because of FastLED definitions, must have 2 forms hard coded
-                    controllers[index] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_2, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                    controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_2, COLOR_ORDER, DATA_RATE_MHZ(SPI_MHZ)>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
                 #else
-                    controllers[index] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_2, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                    controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_2, CLOCK_2, COLOR_ORDER>(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
                 #endif
             #else
                 #error "DATA_1 or CLOCK_1 pin not defined-cannot enable Bank 4"  
             #endif
         #endif
-    #else        //1-wire format DATA only
-        #if (NUM_STRIPS > index)    //must avoid undefined pin(s)
-            #ifdef DATA_4
-                controllers[index] = &FastLED.addLeds<CHIPSET, DATA_4, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
-            #else
-                #error "DATA_4 pin not defined-cannot enable Bank 4"
+    }
+#else
+    //1-wire format DATA only
+    //General sketch equivalent format for 4 DATA lines
+    //FastLED.addLeds<CHIPSET, DATA, COLOR_ORDER>(leds[0], NUM_LEDS).setCorrection(CORRECTION)
+    for (uint8_t i = 0; i < e_numBanks; i++) {
+   
+            #if (STRIPS_PER_BANK > 0)    //must avoid undefined pin(s)
+                uint8_t idx = STRIPS_PER_BANK - 1; //count backwards and only when valid
+                #ifdef DATA_1
+                    controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_1, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                #else
+                    #error "DATA_1 pin not defined-cannot enable Bank 1"
+                #endif
             #endif
-        #endif
-    #endif
+            #if (STRIPS_PER_BANK > 1)    //must avoid undefined pin(s)
+                #ifdef DATA_2
+                    idx--;
+                     controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_2, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                #else
+                    #error "DATA_2 pin not defined-cannot enable Bank 2"
+                #endif
+            #endif
+            #if (STRIPS_PER_BANK > 2)    //must avoid undefined pin(s)
+                #ifdef DATA_3
+                    idx--;
+                    controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_3, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                #else
+                    #error "DATA_3 pin not defined-cannot enable Bank 3"
+                #endif
+            #endif
+            #if (STRIPS_PER_BANK > 3)    //must avoid undefined pin(s)
+                #ifdef DATA_4
+                    idx--;
+                    controllers[idx] = &FastLED.addLeds<CHIPSET, DATA_4, COLOR_ORDER >(e_LED, LEDS_PER_STRIP).setCorrection(CORRECTION);
+                #else
+                    #error "DATA_4 pin not defined-cannot enable Bank 4"
+                #endif
+            #endif
+     }
+#endif
 }
-
