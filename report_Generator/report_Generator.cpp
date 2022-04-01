@@ -212,8 +212,8 @@ void listBanks(){
             ptt("      strip");  ptt(" | Data pin"); ptt(" | Clock pin"); ptt(" | StripStart"); pt(" |  StripEnd");
             pt("       ----------------------------------------");
             for (uint8_t i = 0; i < NUM_BANKS; i++) {
-                ptt("Bank =  "); pt(i); ptt(" Enable Pin = ");
-                numberBank(i);
+                ptt("Bank =  "); pt(NUM_BANKS - 1 - i);
+                ptt(" Enable Pin = "); numberBank(i); pt("");
                     #if STRIPS_PER_BANK  > 0
                         fmt(strip+1, col, 0); fmt(DATA_1, col, 0);   fmt(CLOCK_1, col, 0);   fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP-1, col, 0); pt("");
                         strip++;
@@ -235,8 +235,8 @@ void listBanks(){
             ptt("      strip");  ptt(" | Data pin"); ptt(" | StripStart"); pt(" |  StripEnd");
             pt("      ----------------------------------------");
             for (uint8_t i = 0; i < NUM_BANKS; i++) {
-                ptt("Bank =  "); pt(i); ptt(" Enable Pin = "); 
-                numberBank(i);
+                 ptt("Bank =  "); pt(NUM_BANKS - 1 - i);
+                ptt(" Enable Pin = "); numberBank(i); pt("");
                 #if STRIPS_PER_BANK  > 0
                    fmt(strip + 1, col, 0); fmt(DATA_1, col, 0); fmt(stripStart[strip], col, 0);  fmt(stripStart[strip] + LEDS_PER_STRIP - 1, col, 0); pt("");
                    strip++;
@@ -263,8 +263,8 @@ void listBanks(){
             }else{
                 pt("Error: LED COUNTS DO NOT MATCH - # of LEDs in strips or # of strips is incorrect!");
             }
-    #endif      //HAS_EXTENDER
-    #endif      //HAS_EXTENDER                   
+    #endif      //#if HAS_EXTENDER
+    #endif      //#ifdefHAS_EXTENDER                   
 }
 
 
@@ -478,13 +478,14 @@ void numberBank(uint8_t i){
         if (i == 0) {                  //again forced to cluge because of defines
             pt(BANK_PIN_3);
         }
-        else if (i == 2) {
+        else if (i == 1) {
             pt(BANK_PIN_2);
         }
-        else if (i == 2)
+        else if (i == 2) {
             pt(BANK_PIN_1);
-    }
-    else {
-        pt(BANK_PIN_0);
+        }
+        else {
+            pt(BANK_PIN_0);
+        }
     }
 }
