@@ -69,18 +69,23 @@ arrays, look at the LEDMatrix manual for details.
 	Set the overall Panel size in number of LEDs (POSITIVE VALUES ONLY).
     Previous LEDMatrix versions use a negative value for reserved (right to left)
     and (bottom to top). Use HORIZ_DIR and VERT_DIR below to do this.
+    MATRIX_TYPE must match your hardware or will get trash on the panel.
 */
 #define MATRIX_WIDTH    32    //former LEDMatrix use negative value for reversed (right to left)
 #define MATRIX_HEIGHT   32  //former LEDMatrix use negative value for reversed (bottom to top)
 #define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 	//the total number of LEDs in your display calculated
-
-//if this is a simple matrix (no tiles), then define the flow of the led strip(s), otherwise ignore
-#define MATRIX_TYPE     HORIZONTAL_MATRIX     //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
-                                                   //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX };
-
-//what direction does the FIRST row of LEDs in the MATRIX PANEL go 
-//these may be in one large matrix or the first tile if you are using them)
-//what direction does the FIRST row of LEDs go?
+/*
+    Define the flow of the leds in the full led Matrix panel 
+    If the panel has tiles, ignore the flow of leds in each tile for now. The tiles are
+    organized either horizontally in rows or vertically in columns. If tiled, start with HORIZONTAL_MATRIX.
+*/
+#define MATRIX_TYPE     HORIZONTAL_MATRIX          //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
+                                                   //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
+/*
+    what direction does the FIRST row of LEDs in the MATRIX PANEL flow?
+    these may be in one large matrix or the first tile if you are using them
+    This is also the entry point of the data signal. Example: top left or bottom right.
+*/
     #define HORIZ_DIR     RIGHT_2_LEFT   //LEFT_2_RIGHT, RIGHT_2_LEFT
     #define VERT_DIR      TOP_DOWN      //BOTTOM_UP, TOP_DOWN
 	
@@ -147,6 +152,7 @@ CLOCK_2  27
     If yes, enable XYTable_LookUp in LEDMatric_22.h and ignore this section.
  3. If NOT 1 or 2, use this section to describe your tile layout in you martix/panel.
     LEDMatrix will calculate the x,y offsets.
+     LEDS_IN_TILE & TILES_IN_MATRIX must match your hardware or will get trash on the panel.
 */
 
 #if HAS_TILES
@@ -155,15 +161,20 @@ CLOCK_2  27
     #define MATRIX_TILE_HEIGHT  8               // height of each matrix "tile" 
     #define MATRIX_TILE_H       4               // number of matrices arranged horizontally (positive value only)
     #define MATRIX_TILE_V       4               // number of matrices arranged vertically (positive value only)
-    #define LEDS_IN_TILE        HORIZONTAL_ZIGZAG_MATRIX    //LED sequence within each tile:
+    #define LEDS_IN_TILE        HORIZONTAL_MATRIX    //LED sequence within each tile:
                                                             //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                                             //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
-    #define TILES_IN_MATRIX     HORIZONTAL_TILES           //sequence of tiles in the entire panel
-                                                            //HORIZONTAL_TILES, VERTICAL_TILES,
-                                                            //HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
-    #define LEDS_HORIZ_DIR      RIGHT_2_LEFT   				//LEFT_2_RIGHT, RIGHT_2_LEFT
-    #define LEDS_VERT_DIR       TOP_DOWN       				//BOTTOM_UP, TOP_DOWN												
-#endif
+     #define LEDS_HORIZ_DIR     LEFT_2_RIGHT	        	//LEFT_2_RIGHT, RIGHT_2_LEFT
+    #define LEDS_VERT_DIR      TOP_DOWN     			    //BOTTOM_UP, TOP_DOWN
+/*
+    Define the order the tiles are laid out in the matrix panel.
+    NOTE: HORIZ_DIR and VERT_DIR in section #1 manages the layout of the overall matrix panel
+    flipping left/right or top/bottom. Leave MATRIX_TYPE as HORIZONTAL_MATRIX for now.
+*/
+    #define TILES_IN_MATRIX     HORIZONTAL_TILES         //sequence of tiles in the entire panel
+                                                        //HORIZONTAL_TILES, VERTICAL_TILES,
+                                                        //HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
+#endif  //HAS_TILES
 
 //Section #3. ========= setup number of extenders and LED "strips" in each bank =========================
 
@@ -178,9 +189,6 @@ CLOCK_2  27
     */
     #define NUM_BANKS           1       // 1 to 4 extender "banks"
     #define STRIPS_PER_BANK     2       //1 or more but 4 strips per Bank is the most efficient use of the hardware
-
-    //total number of strips used
-    #define NUM_STRIPS      STRIPS_PER_BANK * NUM_BANKS 
 
     /*---------------- choose pins to enable each bank -------------------
     Define as many as the number of Banks

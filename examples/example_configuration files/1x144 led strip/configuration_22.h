@@ -73,14 +73,18 @@ arrays, look at the LEDMatrix manual for details.
 #define MATRIX_WIDTH    144    //former LEDMatrix use negative value for reversed (right to left)
 #define MATRIX_HEIGHT   1  //former LEDMatrix use negative value for reversed (bottom to top)
 #define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 	//the total number of LEDs in your display calculated
-
-//if this is a simple matrix (no tiles), then define the flow of the led strip(s), otherwise ignore
+*
+    Define the flow of the leds in the full led Matrix panel 
+    If the panel has tiles, ignore the flow of leds in each tile for now. The tiles are
+    organized either horizontally in rows or vertically in columns. If tiled, start with HORIZONTAL_MATRIX.
+*/
 #define MATRIX_TYPE     HORIZONTAL_MATRIX     //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
                                                    //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX };
-
-//what direction does the FIRST row of LEDs in the matrix panel go 
-//these may be in one large matrix or the first tile if you are using them)
-//what direction does the FIRST row of LEDs go?
+/*
+    what direction does the FIRST row of LEDs in the MATRIX PANEL flow?
+    these may be in one large matrix or the first tile if you are using them
+    This is also the entry point of the data signal. Example: top left or bottom right.
+*/
 #define HORIZ_DIR     LEFT_2_RIGHT   //LEFT_2_RIGHT, RIGHT_2_LEFT
 #define VERT_DIR      TOP_DOWN      //BOTTOM_UP, TOP_DOWN
 

@@ -357,7 +357,7 @@ class cLEDMatrix : public cLEDMatrixBase
       static const int8_t tBWidth = 1;
       static const int8_t tBHeight = 1;
       static const MatrixType_t tMType = MATRIX_TYPE;
-      static const MatrixType_t tLType = LEDS_IN_TILE
+      static const MatrixType_t tLType = HORIZONTAL_MATRIX;
       static const TileType_t tBType = HORIZONTAL_TILES;
     #endif
 
