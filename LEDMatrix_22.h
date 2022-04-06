@@ -36,8 +36,8 @@ Both files must be in the libary older. If not defined, these 2 files are not ne
 */
 
 #if ENABLE_FONTS
-    #include "gfxfont.h"
-    #include "glcdfont.c"
+    #include ".\utility\gfxfont.h"
+    #include ".\utility\glcdfont.c"
 #endif
 
 /* If XYTable_LookUp is defined in Configuration_22.h, use an external table named XYTable_LookUp.h,
@@ -47,7 +47,7 @@ arrays, look at the LEDMatrix manual for details.
 */
 //#define XYTable_LookUp
 #ifdef XYTable_LookUp
-  #include "XYTable_LookUp.h"
+  #include ".\utility\"
 #endif
 
 
@@ -277,7 +277,7 @@ TILES block[48];   //48 max
 #if HAS_EXTENDER  
     const boolean hasExtender = true;
     #if (NUM_BANKS > 4) || (STRIPS_PER_BANK > 4)    // 1 to 4 extender "banks"
-        #error “    >>> NUM_BANKS and STRIPS_PER_BANK cannot be greater than 4”;
+        #error ï¿½    >>> NUM_BANKS and STRIPS_PER_BANK cannot be greater than 4ï¿½;
     #endif
 #else
     const boolean hasExtender = false;

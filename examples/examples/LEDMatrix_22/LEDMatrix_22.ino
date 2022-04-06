@@ -49,7 +49,7 @@ cLEDMatrix leds;
 //if run report is defined, the report_Generator.cpp code will be included
 //>>>> the code MUST BE INCLUDED HERE after all parameters are defined
 #ifdef RUN_REPORT
-#include ".\report_Generator\report_Generator.cpp"
+#include ".\utility\report_Generator\report_Generator.cpp"
 #endif
 
 //------------------------ Setup and loop ------------------------

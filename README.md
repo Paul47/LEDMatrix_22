@@ -15,6 +15,7 @@
     <td colspan="2">
       The LEDMatrix_22 library medium weight, two-dimensional graphics library for LED matricies/arrays using FastLED. This is an update and enhancement of previous LEDMatrix libraries. In addition to drawing shapes, and text, this library expands image and animation handling to 24 bit color. Larger displays can be formed using tiles of LED strip/panels - to build one big matrix. New and enhanced feature incude:
 
+* Table based configuration header file defining all matrix parameters with descriptions of each term. Configure once, use with all your Sketches. 
 * 2-wire LEDs: APA102, Adafruit's DotStar, SK9822, HD1701, LPD8806, SM16716, WS2801, and more.
 * 1-wire LEDs: NEOPIXEL, WS2811, WS2812, WS2812B, TX1813N1 (newer 2.2mm x 2.2mm), and more.
 * 24 bit color image and basic sprite display (no edge detection).
@@ -24,9 +25,9 @@
 * Option to read an XYTable_LookUp.h to replace slower, complex coordinate calculations. 
     * An Arduino sketch utility to create the lookup table is included.
     * The lookup table option allows for irregularly shaped LED physical layouts. 
-* A report generator to comfirm proper LED array mapping configuration.
+* A report generator to comfirm proper LED array mapping configuration - lists ALL configuration parameters and maps out leds in the matrix, tiles, and Extenders.
 * Method names now use Adafruit_GFX naming (for similar methods).
-* Along with a soon-to-be-release LED Extender shields (https://github.com/Paul47/FastLED_Extender_boards), 1-wire and 2-wire LEDs can be multiplexed in multiple Banks to total reduce LED strip length or control 16 seperate strings. The extender: 
+* Along with LED Extender shields (https://github.com/Paul47/FastLED_Extender_boards), 1-wire and 2-wire LEDs can be multiplexed in multiple Banks to total reduce LED strip length or control 16 seperate strings. The extender: 
     * Eliminates LED "sparkle" and flashing (a frustrating problem with 2-wire LED types) by reducing the number of LEDS needed in series.
     * With proper power supplies, and wiring, the Extender can support up to 256 LEDs per strip. That's 4,096 LEDs! A 32 bit MCU such as the Teensy 4.0/4.1 is required.
     * Multiplexes controller wiring, reducing pin count. Up to 16 LED strips/panels with only 8 wires! (4 for 2 DATA + 2 CLOCK pins, and up to 4 more "enable" pins to switch between Banks of LED strips.
