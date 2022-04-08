@@ -10,10 +10,8 @@
 
 **Panel of 3096 leds of 48 8x8 tiles**
 
-<table>
-  <tr>
-    <td colspan="2">
-      The LEDMatrix_22 library medium weight, two-dimensional graphics library for LED matricies/arrays using FastLED. This is an update and enhancement of previous LEDMatrix libraries. In addition to drawing shapes, and text, this library expands image and animation handling to 24 bit color. Larger displays can be formed using tiles of LED strip/panels - to build one big matrix. New and enhanced feature incude:
+<hr>
+The LEDMatrix_22 library medium weight, two-dimensional graphics library for LED matricies/arrays using FastLED. This is an update and enhancement of previous LEDMatrix libraries. In addition to drawing shapes, and text, this library expands image and animation handling to 24 bit color. Larger displays can be formed using tiles of LED strip/panels - to build one big matrix. New and enhanced feature incude:
 
 * Table based configuration header file defining all matrix parameters with descriptions of each term. Configure once, use with all your Sketches. 
 * 2-wire LEDs: APA102, Adafruit's DotStar, SK9822, HD1701, LPD8806, SM16716, WS2801, and more.
@@ -37,7 +35,7 @@
     * SmartMatrix has transitioned into a software + hardware solution for HUB75 LED panels. 
        LEDMatrix_22 currently does not support SmartMatrix or HUB75 hardware.
 
-###The LEDMatrix_22 manual can be accessed with the wiki button above
+### The LEDMatrix_22 manual can be accessed with the wiki button above
 
 ### Using multiple LED Strips together but not as a matrix or panel? 
 This library is designed to use up to 4 seperate led strips (1-wire or 2-wire). With optional LED Extender shields control up to 16 LED strips with 8 controller pins (https://github.com/Paul47/FastLED_Extender_boards). 
