@@ -165,7 +165,6 @@ TILES block[48];   //48 max
     cLEDMatrixBase();
 
     virtual int16_t mXY(int16_t x, int16_t y)=0;
-
     void SetLEDArray(struct CRGB *pLED);	// Only used with externally defined LED arrays
 
     struct CRGB *operator[](int n);
@@ -371,9 +370,10 @@ class cLEDMatrix : public cLEDMatrixBase
     struct CRGB *p_LED;
 
 public:
+
     //>>>>>>>>>>>>>>>>>orientation test variables for debugging<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-#define  LEDMATRIX_22_DEBUG       //enable debugging variables
+//#define  LEDMATRIX_22_DEBUG       //enable debugging variables
 #if defined LEDMATRIX_22_DEBUG           //add to sketch to use these
     static const int16_t tmw = tMWidth;
     static const int16_t tmh = tMHeight;
@@ -434,6 +434,7 @@ public:
     const uint8_t tileLedsVDir = 0;
 #endif  //if has_tiles
 
+    bool inBounds = true;           //new flag to detect index out of bounds in mXY()
     const uint8_t numBanks = NUM_BANKS;
     const uint8_t stripsPerBank = STRIPS_PER_BANK;
     const int16_t ledsPerBank = LEDS_PER_BANK;
@@ -447,8 +448,9 @@ public:
       m_Height = m_absMHeight * m_absBHeight;
       m_WH =  m_Width * m_Height;
       if (doMalloc) {
-	  // On ESP32, there is more memory available via malloc than static global arrays
-          p_LED = (struct CRGB *) malloc(((m_absMWidth * m_absBWidth * m_absMHeight * m_absBHeight) + TRIGGER_LED) * sizeof(CRGB));
+	       // On ESP32, there is more memory available via malloc than static global arrays
+          // +1 adds 1 element (1 CRGB element) to have inBounds = false errors point to to avoid crashed
+          p_LED = (struct CRGB *) malloc(((m_absMWidth * m_absBWidth * m_absMHeight * m_absBHeight) + 1 + TRIGGER_LED) * sizeof(CRGB));
           cLED = p_LED;
 	  if (! p_LED) {
 	     Serial.begin(115200);
@@ -488,11 +490,16 @@ public:
 
     virtual int16_t mXY(int16_t x, int16_t y)      //int to allows for negative numbers
     {
+        inBounds = true;		//reset 
 	    #ifdef XYTable_LookUp         //keeping it simple, leave the rest of the code
 			return XYTable[y][x];      //x,y indexes are always result in y,x arrays
 	    #endif
 
         //===============================  NO TILES - SIMPLE MATRIX ================================================
+        if ((x < 0) || (y < 0) || (x >= _width) || (y >= _height)) {
+            inBounds = false;		//out of bounds flag 
+            return NUM_LEDS + 1;    //keep array index from crashing sketch - point to the extra byte allocated by malloc
+        }
         if ((tBWidth == 1) && (tBHeight == 1)) {
             // No Blocks, just a Matrix
             if (tMWidth < 0) {

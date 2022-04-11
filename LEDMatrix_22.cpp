@@ -340,8 +340,7 @@ void cLEDMatrixBase::drawPixel(int16_t x, int16_t y, CRGB color) {
     break;
   }
 
-  if ((x < 0) || (y < 0) || (x >= _width) || (y >= _height)) return;   //rotated sizes
-  cLED[mXY(x, y)] = color;                //original code
+   cLED[mXY(x, y)] = color;       //out of bounds error will place the color in NUM_LEDS + 1 and return inbounds = false
   
   //cLED[M_XY(x, y)] = color;  //future trigger test only	
 }
@@ -366,7 +365,7 @@ CRGB cLEDMatrixBase::getPixel(int16_t x, int16_t y) {
     y = m_Height - 1 - t;
     break;
   }
-  if ((x < 0) || (y < 0) || (x >= _width) || (y >= _height)) return 0;  //rotated out of bounds?
+  // bounds check moved to mXY{} if ((x < 0) || (y < 0) || (x >= _width) || (y >= _height)) return 0;  //rotated out of bounds?
   return cLED[mXY(x, y)];
 }
 

@@ -39,7 +39,7 @@ after all parameters are defined <<<
 #define RUN_REPORT      //will open Serial.pprint when started in setup
 
 /*------------------- create the total matrix panel array -------------------
-If using led panels like 4x4 or 8x8 the you must define HAS_TILESS and configure panel sizes in configuration_22.h
+If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h
 the Class "leds" can be changed to whatever you choose. Example: "myLeds" and all calls are "myLeds." as in myLeds.addLeds();
 */
 
@@ -63,6 +63,7 @@ void setup() {
 
     leds.addLeds();     //no parameters required
     exerciseStart();
+
 }
 
 void loop() {
@@ -179,7 +180,7 @@ void showBanks() {
         for (uint8_t i = 0; i < leds.numBanks; i++) {
             int16_t y = indexStart[i] / leds.matrixWidth;
             int16_t x = 0;
-            leds.setTextColor(CRGB::Black);
+            leds.setTextColor(CRGB::White);
             leds.setCursor(x, y);
 
             char b[2];
@@ -269,7 +270,7 @@ void drawTileDot() {       //display x,y in upper left corner of each tile
         FastLED.delay(2000);
     }
     else {
-        pt(">>>> NO Tiless defined");
+        pt(">>>> NO Tiles defined");
     } //HAS_TILES
 }
 
@@ -351,7 +352,7 @@ void menu() {
     pt("");
     pt("a. We will report your configuration.");
     pt("b. Draw triangles in starting corner and each corner of matrix");
-    pt("IF HAS_TILESS");
+    pt("IF HAS_TILES");
     pt("c.    Draw arrows in starting corners and centers of tiles");
     pt("d.    Light up each tile AND print the number of the Tile in sequence");
     pt("IF HAS_EXTENDER");

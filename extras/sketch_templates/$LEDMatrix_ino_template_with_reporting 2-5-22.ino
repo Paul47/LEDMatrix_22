@@ -24,7 +24,7 @@ then run_report(); will execute at then end of setup.
 >>>> Report Generator.cpp MUST BE INCLUDED BELOW just before sewtup()
 after all parameters are defined <<<
 */
-//#define RUN_REPORT      //will open Serial.pprint when started in setup
+#define RUN_REPORT      //will open Serial.pprint when started in setup
 											 
 /*------------------- create the total matrix panel array -------------------
 If using led panels like 4x4 or 8x8 the you must define HAS_TILES and configure panel sizes in configuration_22.h

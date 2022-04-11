@@ -37,7 +37,7 @@ arrays, look at the LEDMatrix manual for details.
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
-#define CHIPSET             TX1813  //TX1813	//WS2812, APA102 //see FastLED docs or examples for list
+#define CHIPSET             WS2812  //TX1813	//WS2812, APA102 //see FastLED docs or examples for list
 #define CLOCK_PIN_REQUIRED  false //Does this LED need DATA + CLOCK??
 
 
@@ -45,9 +45,9 @@ arrays, look at the LEDMatrix manual for details.
 //	Example: APA102 is up to 24Mhz (predicted only) */
 #define SPI_MHZ         8  //Too high a value causes individual led white flashes (sparkles)
 
-#define COLOR_ORDER BGR //GRB		//Set the color order. Most 1-wire types like WS2812B are GRB.
+#define COLOR_ORDER GRB //BRG		//Set the color order. Most 1-wire types like WS2812B are GRB.
 #define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
-#define BRIGHTNESS  50  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
+#define BRIGHTNESS  10  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
 
 //set these optional parameters as needed or comment out
 #define VOLTS 5
@@ -158,10 +158,10 @@ CLOCK_2  27
     #define MATRIX_TILE_HEIGHT  16               			// height of each matrix "tile" 
     #define MATRIX_TILE_H       3               			// number of matrices arranged horizontally (positive value only)
     #define MATRIX_TILE_V       4              				// number of matrices arranged vertically (positive value only)
-    #define LEDS_IN_TILE        HORIZONTAL_MATRIX           //LED sequence within each tile:
+    #define LEDS_IN_TILE        HORIZONTAL_ZIGZAG_MATRIX           //LED sequence within each tile:
                                                             //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                                            //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
-    #define LEDS_HORIZ_DIR      LEFT_2_RIGHT  				//LEFT_2_RIGHT, RIGHT_2_LEFT
+    #define LEDS_HORIZ_DIR      RIGHT_2_LEFT  				//LEFT_2_RIGHT, RIGHT_2_LEFT
     #define LEDS_VERT_DIR       TOP_DOWN      			    //BOTTOM_UP, TOP_DOWN
 /* 
     Define the order the tiles are laid out in the matrix panel.
@@ -185,7 +185,7 @@ CLOCK_2  27
     - 16 strips with only 8 pins! This drametically increases the total number of addressable LEDs! 
     */
     #define NUM_BANKS           4       // 1 to 4 extender "banks"
-    #define STRIPS_PER_BANK     4       //1 or more but 4 strips per Bank is the most efficient use of the hardware
+    #define STRIPS_PER_BANK     3      //1 or more but 4 strips per Bank is the most efficient use of the hardware
 
     /*---------------- choose pins to enable each bank -------------------
     Define as many as the number of Banks
