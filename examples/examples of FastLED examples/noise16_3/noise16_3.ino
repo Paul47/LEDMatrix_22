@@ -23,7 +23,7 @@
  */
 
 cLEDMatrix leds;
-
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 uint8_t max_bright = 128;
 
@@ -90,7 +90,7 @@ void noise16_3() {                                            // no x/y shifting
     uint8_t index = sin8(noise*3);                            // map led color based on noise data
     uint8_t bri   = noise;
 
-    leds.cLED[i] = ColorFromPalette(currentPalette, index, bri, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
+    pleds[i] = ColorFromPalette(currentPalette, index, bri, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
   }
   
 } // noise16_3()
@@ -113,7 +113,7 @@ void noise16_2() {                                            // just moving alo
         uint8_t index = sin8(noise * 3);                            // map led color based on noise data
         uint8_t bri = noise;
 
-        leds.cLED[i] = ColorFromPalette(currentPalette, index, bri, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
+        pleds[i] = ColorFromPalette(currentPalette, index, bri, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
 
     }
 
@@ -138,7 +138,7 @@ void noise16_1() {                                            // moves a noise u
         uint8_t index = sin8(noise * 3);                           // map LED color based on noise data
         uint8_t bri = noise;
 
-        leds.cLED[i] = ColorFromPalette(currentPalette, index, bri, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
+        pleds[i] = ColorFromPalette(currentPalette, index, bri, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
     }
 
 } // noise16_1()

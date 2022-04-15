@@ -49,6 +49,9 @@ void loop() {
    Marquee();
 }
 
+//using LEDMatrix_22 variables leds.matrixWidth and leds.matrixWidth
+//rather than the defines MATRIX_WIDTH and MATRIX_HEIGHT
+
 void Marquee(){
     CRGB color = CRGB(80, 50, 20);  //old incandesent light bulb tint
 

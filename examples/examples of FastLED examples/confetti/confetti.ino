@@ -32,6 +32,7 @@ the Class "leds" can be changed to whatever you choose. Example: "myLeds" and al
 */
 
 cLEDMatrix leds;
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 // Initialize changeable global variables.
 uint8_t max_bright = 255;                                      // Overall brightness definition. It can be changed on the fly.
@@ -73,9 +74,9 @@ void loop () {
 
 
 void confetti() {                                             // random colored speckles that blink in and fade smoothly
-  fadeToBlackBy(leds.cLED, NUM_LEDS, thisfade);                    // Low values = slower fade.
+  fadeToBlackBy(pleds, NUM_LEDS, thisfade);                    // Low values = slower fade.
   int pos = random16(NUM_LEDS);                               // Pick an LED at random.
-  leds.cLED[pos] += CHSV((thishue + random16(huediff))/4 , thissat, thisbri);  // I use 12 bits for hue so that the hue increment isn't too quick.
+  pleds[pos] += CHSV((thishue + random16(huediff))/4 , thissat, thisbri);  // I use 12 bits for hue so that the hue increment isn't too quick.
   thishue = thishue + thisinc;                                // It increments here.
 } // confetti()
 

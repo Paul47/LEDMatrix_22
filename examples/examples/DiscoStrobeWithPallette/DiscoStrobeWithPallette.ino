@@ -241,8 +241,8 @@ static void drawRainbowDashes(
         // draw one dash
         uint16_t pos = i;
         for (uint8_t w = 0; w < width; w++) {
-            pleds[pos] = color;
-            pos++;
+             pleds[pos] = color;
+             pos++;
             if (pos >= NUM_LEDS) {
                 break;
             }

@@ -36,7 +36,7 @@ the Class "leds" can be changed to whatever you choose. Example: "myLeds" and al
 */
 
 cLEDMatrix leds;
-
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 uint8_t max_bright = 192;                                     // Overall brightness definition. It can be changed on the fly.
 
@@ -101,8 +101,8 @@ void one_sine_pal(uint8_t colorIndex) {                                         
   
    for (int k=0; k<NUM_LEDS; k++) {                                          // For each of the LED's in the strand, set a brightness based on a wave as follows:
     int thisbright = qsuba(cubicwave8((k*allfreq)+thisphase), thiscutoff);    // qsub sets a minimum value called thiscutoff. If < thiscutoff, then bright = 0. Otherwise, bright = 128 (as defined in qsub)..
-    leds.cLED[k] = CHSV(bgclr, 255, bgbright);                                     // First set a background colour, but fully saturated.
-    leds.cLED[k] += ColorFromPalette(currentPalette, colorIndex + k, thisbright, currentBlending);
+    pleds[k] = CHSV(bgclr, 255, bgbright);                                     // First set a background colour, but fully saturated.
+    pleds[k] += ColorFromPalette(currentPalette, colorIndex + k, thisbright, currentBlending);
     colorIndex += thisrot;
   }
 

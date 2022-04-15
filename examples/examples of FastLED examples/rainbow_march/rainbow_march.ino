@@ -36,7 +36,7 @@ the Class "leds" can be changed to whatever you choose. Example: "myLeds" and al
 */
 
 cLEDMatrix leds;
-
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 // Initialize changeable global variables.
 uint8_t max_bright = 255;                                     // Overall brightness definition. It can be changed on the fly.
@@ -70,6 +70,6 @@ void rainbow_march(uint8_t thisdelay, uint8_t deltahue) {     // The fill_rainbo
 // thishue = beat8(50);                                       // This uses a FastLED sawtooth generator. Again, the '50' should not change on the fly.
 // thishue = beatsin8(50,0,255);                              // This can change speeds on the fly. You can also add these to each other.
   
-  fill_rainbow(leds.cLED, NUM_LEDS, thishue, deltahue);            // Use FastLED's fill_rainbow routine.
+  fill_rainbow(pleds, NUM_LEDS, thishue, deltahue);            // Use FastLED's fill_rainbow routine.
 
 } // rainbow_march()

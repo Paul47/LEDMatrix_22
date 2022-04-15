@@ -1,9 +1,5 @@
-/*THIS SKETCH WORKS BEST ON LARGE MATRIX PANELS LIKE 32X32 OR LARGER
+//THIS SKETCH WORKS BEST ON LARGE MATRIX PANELS LIKE 32X32 OR LARGER
 
-FastLED fire on bars project on Wokwi Arduino simulator
-Source: @sutaburosu on Wokwi channel from discord (https://discord.com/channels/787627282663211009/787630013658824707)
-Wokwi Link: https://wokwi.com/arduino/projects/287675911209222664
-*/
 /* Configuring this library and FastLED requires a number of parameters and #defines
 Configure your LED array in myConfiguration.h located in the  library folder.
 This way you can reuse your configuration file(s) across all your sketches.

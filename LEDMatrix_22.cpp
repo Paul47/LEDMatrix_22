@@ -345,6 +345,33 @@ void cLEDMatrixBase::drawPixel(int16_t x, int16_t y, CRGB color) {
   //cLED[M_XY(x, y)] = color;  //future trigger test only	
 }
 
+//ADDS color to exiating matrix color!
+//from FastLED_GFX - can rotate
+void cLEDMatrixBase::drawPixelAdd(int16_t x, int16_t y, CRGB color) {
+
+    int16_t t;
+    switch (rotation) {
+    case 1:
+        t = x;
+        x = m_Width - 1 - y;
+        y = t;
+        break;
+    case 2:
+        x = m_Width - 1 - x;
+        y = m_Height - 1 - y;
+        break;
+    case 3:
+        t = x;
+        x = y;
+        y = m_Height - 1 - t;
+        break;
+    }
+    //ADDS color to exiating matrix color!
+    cLED[mXY(x, y)] += color;       //out of bounds error will place the color in NUM_LEDS + 1 and return inbounds = false
+
+   //cLED[M_XY(x, y)] = color;  //future trigger test only	
+}
+
 //from FastLED_GFX - if rotated still get correct color
 CRGB cLEDMatrixBase::getPixel(int16_t x, int16_t y) {
 

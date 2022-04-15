@@ -1,10 +1,3 @@
-/*
-FastLED Arduino project Spider project on wokwi Arduino simulator
-Source: @stepko on Wokwi channel 🙂from discord (https://discord.com/channels/787627282663211009/787630013658824707)
-Wokwi Link: https://wokwi.com/arduino/projects/287701946731594253
-*/
-
-
 /* Configuring this library and FastLED requires a number of parameters and #defines
 Configure your LED array in myConfiguration.h located in the  library folder.
 This way you can reuse your configuration file(s) across all your sketches.
@@ -36,7 +29,7 @@ cLEDMatrix leds;
 CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 
-// Matrix size
+// Matrix size - using example code defines
 #define HEIGHT  MATRIX_HEIGHT
 #define WIDTH   MATRIX_WIDTH
 #define myMATRIX_TYPE 1
@@ -60,9 +53,10 @@ void drawLine(int x1, int y1, int x2, int y2,
   int signY = y1 < y2 ? 1 : -1;
   int error = deltaX - deltaY;
   
-  pleds[leds.mXY(x2, y2)] += color;
+  //pleds[leds.mXY(x2, y2)] += color;        //direct pixel change
+  leds.drawPixel(x2, y2, leds.getPixel(x2, y2) + color);  //using functions
   while (x1 != x2 || y1 != y2) {
-    pleds[leds.mXY(x1, y1)] += color;
+    leds.drawPixelAdd(x1, y1, color);  //add color to current pixel
     int error2 = error * 2;
     if (error2 > -deltaY) {
       error -= deltaY;
@@ -106,6 +100,6 @@ void loop() {
 //It's a virtual functikon so we can replace it with our own function.
 //for LEDMatrix we need to use leds.mXY(x, y)
 uint16_t XY(uint8_t x, uint8_t y) {
-    leds.mXY(x, y);
+   return leds.mXY(x, y);
 }
 

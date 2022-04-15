@@ -1,11 +1,7 @@
-/*
-Example 60 of 100: FastLED matrix project dot matrix 16x16 on wokwi Arduino simulator
-Source: @arcostasi on Wokwi channel from discord (https://discord.com/channels/787627282663211009/787630013658824707)
-Wokwi Link: https://wokwi.com/arduino/projects/289981660621963784
 
-from Mark Kriegsman
- https://gist.github.com/kriegsman/5adca44e14ad025e6d3b
-*/
+
+// Here's one last, really fun one from Mark Kriegsman
+// https://gist.github.com/kriegsman/5adca44e14ad025e6d3b
 
 /* Configuring this library and FastLED requires a number of parameters and #defines
 Configure your LED array in myConfiguration.h located in the  library folder.
@@ -60,13 +56,12 @@ void draw() {
     // The color of each point shifts over time, each at a different speed.
     uint16_t ms = millis();
     uint16_t ms2 = random8(0, 255);             //add more randomness
-
-     pleds[XY(i, j)] += CHSV(ms / (11+ms2), 200, 255);
-      pleds[XY(j, i)] += CHSV(ms / 13, 200, ms2);
-      pleds[XY(ni, nj)] += CHSV(ms / (17 + ms2), 200, 255);
-      pleds[XY(nj, ni)] += CHSV(ms / 29, 200, ms2);
-      //  pleds[XY(i, nj)] += CHSV(ms / 37, 200, 255);  //more contrast of colors on blackwithout this
-      pleds[XY(ni, j)] += CHSV(ms / 41, ms2, 255);
+      leds.drawPixelAdd(i, j, CHSV(ms / (11 + ms2), 200, 255));       //ADD color to current pixel
+      leds.drawPixelAdd(i, j, CHSV(ms / 13, 200, ms2));       //ADD color to current pixel
+      leds.drawPixelAdd(ni, nj, CHSV(ms / (17 + ms2), 200, 255));       //ADD color to current pixel
+      leds.drawPixelAdd(nj, ni, CHSV(ms / 29, 200, ms2));       //ADD color to current pixel
+     // leds.drawPixelAdd(i, nj, CHSV(ms / 37, 200, 255));       //pattern has more contrast not using this one
+      leds.drawPixelAdd(ni, j, CHSV(ms / 41, ms2, 255));       //ADD color to current pixel
 
     leds.show();
     FastLED.delay(1000 / UPDATES_PER_SECOND);

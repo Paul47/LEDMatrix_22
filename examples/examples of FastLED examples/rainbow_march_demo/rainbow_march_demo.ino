@@ -23,6 +23,7 @@ in the library folder.
     */
 
 cLEDMatrix leds;
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 // Initialize changeable global variables.
 uint8_t max_bright = 128;                                     // Overall brightness definition. It can be changed on the fly.
@@ -66,7 +67,7 @@ void loop () {
 void rainbow_march() {                                        // The fill_rainbow call doesn't support brightness levels. You would need to change the max_bright value.
   
   if (thisdir == 0) thishue += thisrot; else thishue-= thisrot;  // I could use signed math, but 'thisdir' works with other routines.
-  fill_rainbow(leds.cLED, NUM_LEDS, thishue, deltahue);            // I don't change deltahue on the fly as it's too fast near the end of the strip.
+  fill_rainbow(pleds, NUM_LEDS, thishue, deltahue);            // I don't change deltahue on the fly as it's too fast near the end of the strip.
   
 } // rainbow_march()
 

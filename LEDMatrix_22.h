@@ -185,6 +185,7 @@ TILES block[48];   //48 max
     void QuadrantBottomTriangleMirror();
 
     void drawPixel(int16_t x, int16_t y, CRGB Col);
+    void drawPixelAdd(int16_t x, int16_t y, CRGB Col);
     void drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, CRGB Col);
     void drawRectangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, CRGB Col);
     void drawCircle(int16_t xc, int16_t yc, uint16_t r, CRGB Col);

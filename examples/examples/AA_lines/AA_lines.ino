@@ -1,8 +1,4 @@
-/*
-FastLED Arduino project Lumi AA_Lines on wokwi Arduino simulator
-Source: @costyn on Wokwi channel 🙂from discord (https://discord.com/channels/787627282663211009/787630013658824707)
-Wokwi Link: https://wokwi.com/arduino/projects/284541784463245837
-*/
+
 
 /* Configuring this library and FastLED requires a number of parameters and #defines
 Configure your LED array in myConfiguration.h located in the  library folder.
@@ -63,9 +59,7 @@ void loop()
     lineStartHue += yHueDelta;
     yHueDelta += yd2;
     for (byte x = 0; x < WIDTH; x++) {
-        if (leds.inBounds) {
-            pleds[leds.mXY(x, y)] = ColorFromPaletteExtended(currentPalette, pixelHue >> 7, 255, LINEARBLEND);
-        }
+      leds.drawPixel(x, y, ColorFromPaletteExtended(currentPalette, pixelHue >> 7, 255, LINEARBLEND));
       pixelHue += xhd;
       xhd += xd2;
     }

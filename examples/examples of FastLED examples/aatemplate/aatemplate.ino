@@ -28,6 +28,7 @@
  */
 
 cLEDMatrix leds;
+CRGB* pleds = leds.cLED;   //pointer to your leds[] array to access directly
 
 #define qsubd(x, b) ((x>b)?b:0)                               // Clip. . . . A digital unsigned subtraction macro. if result <0, then x=0. Otherwise, x=b.
 #define qsuba(x, b) ((x>b)?x-b:0)                             // Level shift. . . Unsigned subtraction macro. if result <0, then x=0. Otherwise x=x-b.
@@ -95,8 +96,8 @@ void loop () {
 
 
 void twinkle() {
-   if (random8() < twinkrate) leds.cLED[random16(NUM_LEDS)] += ColorFromPalette(currentPalette, (randhue ? random8() : thishue), 255, currentBlending);
-   fadeToBlackBy(leds.cLED, NUM_LEDS, thisfade);
+   if (random8() < twinkrate) pleds[random16(NUM_LEDS)] += ColorFromPalette(currentPalette, (randhue ? random8() : thishue), 255, currentBlending);
+   fadeToBlackBy(pleds, NUM_LEDS, thisfade);
   
 } // twinkle()
 
