@@ -11,6 +11,8 @@
 **Panel of 3096 leds of 48 8x8 tiles**
 
 <hr>
+	  
+					
 The LEDMatrix_22 library medium weight, two-dimensional graphics library for LED matricies/arrays using FastLED. This is an update and enhancement of previous LEDMatrix libraries. In addition to drawing shapes, and text, this library expands image and animation handling to 24 bit color. Larger displays can be formed using tiles of LED strip/panels - to build one big matrix. New and enhanced feature incude:
 
 * Table based configuration header file defining all matrix parameters with descriptions of each term. Configure once, use with all your Sketches. 
@@ -65,7 +67,7 @@ or your led matix will remain blank. This new show function handles simple, tile
 
 
 ```c
-  void SetLEDArray(struct CRGB *pLED);	// Only used with externally defined LED arrays
+    void SetLEDArray(struct CRGB *pLED);	// Only used with externally defined LED arrays
 
     int Size()  { return(m_WH); }
     int Width() { return(m_Width);  }
@@ -80,7 +82,8 @@ or your led matix will remain blank. This new show function handles simple, tile
     void QuadrantTopTriangleMirror();
     void QuadrantBottomTriangleMirror();
 
-    void drawPixel(int16_t x, int16_t y, CRGB Col);
+    void drawPixel(int16_t x, int16_t y, CRGB Color);	(NEW) Add color to pixel: CRGB array[x]+=color
+    void drawPixelAdd(int16_t x, int16_t y, CRGB ADDCoor);	
     void drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, CRGB Col);
     void drawRectangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, CRGB Col);
     void drawCircle(int16_t xc, int16_t yc, uint16_t r, CRGB Col);
