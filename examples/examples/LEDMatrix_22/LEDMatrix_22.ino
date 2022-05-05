@@ -376,7 +376,7 @@ void memoryTest() {
     ptt("number of FastLED controllers = "); pt(FastLED.count());
     ptt("array size = ");  pt(FastLED.size());
 
-    FastLED.setBrightness(20);
+    leds.setBrightness(20);
     ptt("Brightness = ");  pt(FastLED.getBrightness());
 
     pt("Step 1");

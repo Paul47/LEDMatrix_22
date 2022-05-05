@@ -80,7 +80,7 @@ void setup() {
   FastLED.addLeds< LED_TYPE, LED_DT, LED_CK, COLOR_ORDER>(leds, NUM_LEDS);  // WS2801 and APA102
 //  FastLED.addLeds<LED_TYPE, LED_DT, COLOR_ORDER>(leds, NUM_LEDS);       // WS2812
 
-  FastLED.setBrightness(max_bright);
+  leds.setBrightness(max_bright);
   FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);               // FastLED Power management set at 5V, 500mA.
 
   // Also, RainbowColors_p, RainbowStripeColors_p, OceanColors_p, CloudColors_p, LavaColors_p, ForestColors_p, and PartyColors_p

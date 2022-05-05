@@ -57,7 +57,7 @@ void setup() {
 //  LEDS.addLeds<LED_TYPE, LED_DT, COLOR_ORDER>(leds, NUM_LEDS);    // Use this for WS2812B
   leds.addLeds();
 
-  FastLED.setBrightness(max_bright);
+  leds.setBrightness(max_bright);
   FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);               // FastLED power management set at 5V, 500mA.
 } // setup()
 

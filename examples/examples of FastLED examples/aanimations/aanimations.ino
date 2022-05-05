@@ -49,7 +49,7 @@ void setup() {
   leds.addLeds();       //initiate LEDMatrix
 
 
-  FastLED.setBrightness(max_bright);
+  leds.setBrightness(max_bright);
   FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);               // FastLED Power management set at 5V, 500mA.
   
 } // setup()

@@ -52,10 +52,10 @@ void flowingRainbow() {
         int32_t xHueDelta32 = ((int32_t)cos16(ms * (39 / 1)) * (310 / MATRIX_HEIGHT));
         RainbowDrawOneFrame(ms / 65536, yHueDelta32 / 32768, xHueDelta32 / 32768);
         if (ms < 5000) {
-            FastLED.setBrightness(scale8(BRIGHTNESS, (ms * 256) / 5000));
+            leds.setBrightness(scale8(BRIGHTNESS, (ms * 256) / 5000));
         }
         else {
-            FastLED.setBrightness(BRIGHTNESS);
+            leds.setBrightness(BRIGHTNESS);
         }
          leds.show();   //for Extender - replace leds.show()();
     }
