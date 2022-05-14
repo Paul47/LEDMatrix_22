@@ -93,7 +93,7 @@ void memoryTest() {
         pt("Extender not defined. No Extender memory");
         return;
     #endif
-    #if !EXTENDER      //if no extender or false  then no array --> locks up
+    #if !HAS_EXTENDER      //if no extender or false  then no array --> locks up
         pt("Exetnder option is false. No Extender memory");
         return;
     #endif
