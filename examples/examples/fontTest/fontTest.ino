@@ -97,7 +97,7 @@ void textTest() {
          leds.setCursor(1, 10);
         for (uint8_t i = 0; i < sizeof(my_str); i++) {
             leds.write(my_str[i]);
-             leds.show();   //for Extender - replace leds.show()();
+             leds.show();   
             delay(1000);
         }
         leds.clear();
@@ -111,7 +111,7 @@ void printTest() {
     char text[] = "HELLO WORLD!";
 
     leds.fillScreen(CRGB::Black);
-     leds.show();   //for Extender - replace leds.show()();
+     leds.show();   
     leds.setTextWrap(0);
     for (x = MATRIX_WIDTH; x > -55; x--) {
         leds.setTextColor(CRGB::OrangeRed);
@@ -124,7 +124,7 @@ void printTest() {
     }
     char text1[] = "Wrapping";
     leds.clear();
-     leds.show();   //for Extender - replace leds.show()();
+     leds.show();   
     leds.setTextWrap(1);
     for (x = -55; x < MATRIX_WIDTH; x++) {
         leds.setTextColor(CRGB::Blue);

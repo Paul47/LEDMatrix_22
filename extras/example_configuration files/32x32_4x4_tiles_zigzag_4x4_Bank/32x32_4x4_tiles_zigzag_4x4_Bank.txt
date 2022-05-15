@@ -1,6 +1,6 @@
-32x32_4x4_tiles_zigzag_NO_extender
+32x32 4x4 tiles zigzag with Extender Shield
 
-copy this file to the LEDMatrix_22 library forlder and rename it to LEDMatrix_22.h
+copy this file to the LEDMatrix_22 library folder and rename it to LEDMatrix_22.h
 
 LED Strip Extender:
 (Please read the manual for details on the LED Extender hardware).

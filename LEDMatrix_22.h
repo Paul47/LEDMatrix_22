@@ -153,8 +153,8 @@ TILES block[48];   //48 max
                                             //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
     c.tileFlow         TILES_IN_MATRIX	        //HORIZONTAL_TILES, VERTICAL_TILES,
                                             //HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
-    **Extender**
-    c.numBanks         NUM_BANKS 	            // 1 to 4 extender "banks"
+    **Banks and Extender**
+    c.numBanks         NUM_BANKS 	            // 1 to 4 Extender Shield "banks"
     c.stripsPerBank    STRIPS_PER_BANK	        //1 or more but 4 strips per Bank is the most
     c.ledsPerBank      LEDS_PER_BANK	        //equally split the total number of leds across
     c.ledsPerStrip     LEDS_PER_STRIP 
@@ -260,7 +260,7 @@ TILES block[48];   //48 max
     void blockRestore(uint8_t tileNum);
     void freeBlock(uint8_t tileNum);
 
-    //=====================LEDMatrix_22  EXTENDER hardware ===============================
+    //=====================LEDMatrix_22 Banks & Extender hardware ===============================
     void show();
     void show(uint8_t gBrightness);
     void show(uint8_t Bank, uint8_t gBrightness);
@@ -274,13 +274,13 @@ TILES block[48];   //48 max
     void setControllerD(uint8_t index);
 
 
-#if HAS_EXTENDER  
-    const boolean hasExtender = true;
+#if HAS_BANKS  
+    const boolean hasBanks = true;
     #if (NUM_BANKS > 4) || (STRIPS_PER_BANK > 4)    // 1 to 4 extender "banks"
         #error �    >>> NUM_BANKS and STRIPS_PER_BANK cannot be greater than 4�;
     #endif
 #else
-    const boolean hasExtender = false;
+    const boolean hasBanks = false;
     #define NUM_BANKS           1
     #define STRIPS_PER_BANK     1 
     #define NUM_STRIPS          1 
@@ -402,7 +402,7 @@ public:
     const uint8_t ledVertDir = VERT_DIR;	            //0 = BOTTOM_UP, 1 = TOP_DOWN
     const int16_t numLeds = NUM_LEDS;
 
-    //capture tile & extender info as integers rather than #defines so we don't get undefined errors.
+    //capture Tile & Bank info as integers rather than #defines so we don't get undefined errors.
     //default is 0 if define = 0 or not defined
 #if HAS_TILES
     const uint8_t hasTiles = HAS_TILES; 

@@ -114,13 +114,13 @@ void bitmap24_test1() {
     while (x < leds.matrixWidth + 1) {
         leds.blockStore(blockNum, x, y);    //store only if enough memory
         leds.drawBitmap24(x, y, DigDug01, wd, wh, 0);   //0=transparent background
-        leds.show();   //for Extender - replace leds.show()();
+        leds.show();   
         delay(500);
         leds.blockRestore(blockNum);     //retore at same location
         x = x + step;       //go across
         leds.blockStore(blockNum, x, y);    //store only if enough memory
         leds.drawBitmap24(x, y, DigDug02, wd, wh, 0);
-        leds.show();   //for Extender - replace leds.show()();
+        leds.show();   
         delay(500);
         leds.blockRestore(blockNum);
         x = x + step;       //go across
@@ -153,11 +153,11 @@ void bitmap24_test1() {
 
         leds.blockStore(blockNum, x, y);    //store only if enough memory
         leds.drawBitmap24(x, y, BombJack01, wd, wh, BOMBJACK01_P, BOMBJACK01_Z, 0);   //0=transparent background
-        leds.show();   //for Extender - replace leds.show()();
+        leds.show();   
         delay(500);
 
         leds.drawBitmap24(x, y, BombJack02, wd, wh, BOMBJACK02_P, BOMBJACK02_Z, 0);
-        leds.show();   //for Extender - replace leds.show()();
+        leds.show();   
         delay(500);
         leds.blockRestore(blockNum);     //retore at same location
         loop++;

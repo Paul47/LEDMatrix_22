@@ -59,7 +59,7 @@ void block_test() {
     leds.fillScreen(bg);       //dark color for contrast
     leds.drawLine(0, 0, 30, 30, CRGB::Yellow);
     leds.drawLine(0, 30, 30, 0, CRGB::Green);
-     leds.show();   //for Extender - replace leds.show()
+     leds.show();   
     delay(1000);
 
     //store the pixel block infomation
@@ -74,17 +74,17 @@ void block_test() {
         success = leds.blockStore(blockNum, x, y);
         if (success) {
             leds.fillScreen(newColor);
-             leds.show();   //for Extender - replace leds.show()
+             leds.show();   
             delay(1000);
 
             leds.blockRestore(blockNum);     //retore at same location
-             leds.show();   //for Extender - replace leds.show()
+             leds.show();   
             delay(1000);
   
             x = 1;
             y = 0;
             leds.blockRestore(blockNum, x, y);       //move and retore
-             leds.show();   //for Extender - replace leds.show()
+             leds.show();   
             delay(1000);
         }
     }

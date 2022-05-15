@@ -286,11 +286,11 @@ void cLEDMatrixBase::drawFilledCircle(int16_t xc, int16_t yc, uint16_t r, CRGB C
 
 void cLEDMatrixBase::clear(){
     fillScreen(CRGB::Black);
-    show();                  //trap to extender show
+    show();                  //trap to Bank show
 
 }
 
-//set both Extender and FastLED brightnesses
+//set both Controllers and FastLED brightnesses
 void cLEDMatrixBase::setBrightness(uint8_t bght){
     e_brightness = bght;
     FastLED.setBrightness(bght);
@@ -299,7 +299,7 @@ void cLEDMatrixBase::setBrightness(uint8_t bght){
 //this fills the color then lights the leds
 void cLEDMatrixBase::showColor(CRGB color){
     fillScreen(color);
-    show();                  //trap to extender show
+    show();                  //trap to Bank show
 }
 
 void cLEDMatrixBase::fadeAll(uint16_t value) {
@@ -974,7 +974,7 @@ void cLEDMatrixBase::print(char text[]) {
     for (uint8_t i = 0; i < strlen(text); i++) {
         write(text[i]);      // write the letter
     }
-       show();     //replace FastLED.show() for Extender
+       show();     //replace FastLED.show() for Bank
     }
 
 
@@ -1285,14 +1285,14 @@ void cLEDMatrixBase::freeBlock(uint8_t blockNum) {
     free(block[blockNum].b_ptr);
 }
 
-//============================= show with or without blocks/Extender =================================
+//============================= show with or without Tiles or Banks =================================
 
 /*
 No enable pins - display entire matrix panel WITH DEFAULT _brightness
 */
 
 void cLEDMatrixBase::show() {
-    show(e_brightness);  //Extender show leds 
+    show(e_brightness);  //Controllers show leds 
 }
 
 /*
@@ -1369,7 +1369,7 @@ void cLEDMatrixBase::show(uint8_t Bank1, uint8_t Bank2, uint8_t Bank3, uint8_t g
 
 /*
 * LEDMatrix addleds() version. Creates 1 to 4 controller(s) (1 for simple matrix), or blocks/Entender hardware.
-* Need to do in reverse order to get the hardware stacking correct. With top extender always #1.
+* Need to do in reverse order to get the hardware stacking correct. With top Bank always #1.
 * Enable pin 3,4,5,6 as needed.
 * Otherwise pin 3 moves down as more banks are added.
 */
@@ -1447,7 +1447,7 @@ void cLEDMatrixBase::BankPin3(uint8_t pin) {
 }
 
 /*
-* Create 1 to 4 FastLED controllers as needed for Extender hardware. Create just 1 if no Extender.
+* Create 1 to 4 FastLED controllers as needed for Banks and Extender hardware. Create just 1 if no Extender & just one Bank.
 * FastLED Controller functions require #defined constants in the calls so each controller version must use seperate code. 
 * For example for 2-wire, DATA1 and DATA2 cannot be assigned to a simple array. For clarity its easier just to use #if..#endif.
 * 2-wire format DATA+CLOCK FastLED format:
@@ -1458,7 +1458,7 @@ void cLEDMatrixBase::BankPin3(uint8_t pin) {
 */
 void cLEDMatrixBase::defineBanks() {
     /*
-    Controller index MUST BE IN THIS ORDER from zero up. This is backwards from the extender Banks A B C D order,
+    Controller index MUST BE IN THIS ORDER from zero up. This is backwards from the Extender Banks A B C D order,
     so code must step thru strips in reverse! Controller index MUST BE IN THIS ORDER fron zero up
     */
 #if CLOCK_PIN_REQUIRED        //must be atleast 1 clock pin defined for 2-wire

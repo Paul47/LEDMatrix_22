@@ -17,7 +17,7 @@ Definitons used from the sketch:
        TILES_IN_MATRIX     //HORIZONTAL_TILES, VERTICAL_TILES,
                                 //HORIZONTAL_ZIGZAG_TILES, VERTICAL_ZIGZAG_TILES
     NUM_STRIPS
-    NUM_BANKS           // 1 to 4 extender "banks"
+    NUM_BANKS           // 1 to 4 "banks" for multiple led strips
     STRIPS_PER_BANK     //1 or more but 4 strips per Bank is the most effiicient use of the hardware
     LEDS_PER_BANK   //equally split the total number of leds across the number of active Banks
     LEDS_PER_STRIP  //equally split the number of leds in each banks into the number of strips in each Bank
@@ -203,8 +203,8 @@ void listTiles() {
 
 
 void listBanks(){
-    #ifdef HAS_EXTENDER
-    #if HAS_EXTENDER
+    #ifdef HAS_BANKS
+    #if HAS_BANKS
             uint8_t strip = 0;  //strip loop from 0-3 but physical strips are 1-4
             int16_t ledCount;
             uint8_t col = 10;   //field widths for report
@@ -292,14 +292,14 @@ void listBanks(){
             }else{
                 pt("Error: LED COUNTS DO NOT MATCH - # of LEDs in strips or # of strips is incorrect!");
             }
-    #endif      //#if HAS_EXTENDER
-    #endif      //#ifdefHAS_EXTENDER                   
+    #endif      //#if HAS_BANKS
+    #endif      //#ifdef HAS_BANKS                  
 }
 
 
 void listExtender() {
-    #ifdef HAS_EXTENDER
-    #if HAS_EXTENDER
+    #ifdef HAS_BANKS
+    #if HAS_BANKS
         pt(" ");
         ptt("  Bank Enable Pins = "); ptt(BANK_PIN_0);
         if (NUM_BANKS > 1) {
@@ -346,8 +346,8 @@ void listExtender() {
             }
         #endif
         pt("");
-    #endif  //HAS_EXTENDER
-    #endif  //HAS_EXTENDER                     
+    #endif  //HAS_BANKS
+    #endif  //HAS_BANKS                     
 }
 
 //fmt(i, 3, 0);

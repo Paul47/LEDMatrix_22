@@ -25,7 +25,7 @@ The LEDMatrix_22 library medium weight, two-dimensional graphics library for LED
 * Option to read an XYTable_LookUp.h to replace slower, complex coordinate calculations. 
     * An Arduino sketch utility to create the lookup table is included.
     * The lookup table option allows for irregularly shaped LED physical layouts. 
-* A report generator to comfirm proper LED array mapping configuration - lists ALL configuration parameters and maps out leds in the matrix, tiles, and Extenders.
+* A report generator to comfirm proper LED array mapping configuration - lists ALL configuration parameters and maps out leds in the matrix, tiles, and Banks.
 * Method names now use Adafruit_GFX naming (for similar methods).
 * Along with LED Extender shields (https://github.com/Paul47/FastLED_Extender_boards), 1-wire and 2-wire LEDs can be multiplexed in multiple Banks to total reduce LED strip length or control 16 seperate strings. The extender: 
     * Eliminates LED "sparkle" and flashing (a frustrating problem with 2-wire LED types) by reducing the number of LEDS needed in series.
@@ -151,7 +151,7 @@ or your led matix will remain blank. This new show function handles simple, tile
     void blockRestore(uint8_t blockNum);
     void freeBlock(uint8_t blockNum);
 
-    //=====================LEDMatrix_22  EXTENDER hardware ===============================
+    //=====================LEDMatrix_22  Bankks hardware ===============================
     void show();
     void show(uint8_t gBrightness);
     void show(uint8_t Bank, uint8_t gBrightness);

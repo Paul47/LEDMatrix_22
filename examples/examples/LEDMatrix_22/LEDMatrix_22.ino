@@ -162,7 +162,7 @@ void matrixSpecs() {
 
 
 void showBanks() {
-    if (leds.hasExtender) {         //is it true?
+    if (leds.hasBanks) {         //is it true?
         if (leds.numBanks == 0 || leds.stripsPerBank == 0) {
             pt("ERROR: No Banks or Strips defined");
             return;
@@ -344,18 +344,18 @@ void menu() {
     //  leds.clear();   //clear matrix of last exercise
     //  leds.show();
 
-    pt("*Sketh functionality*");
-    pt("Locate and exercise your matrix panel, Extender Banks and Strips.");
+    pt("*Sketch functionality*");
+    pt("Locate and exercise your matrix panel, Extender, Banks and Strips.");
     pt("This is an interactive menu on serial monitor to select functions:");
     pt("    If no tiles, menu stops after 'd' ");
-    pt("    If no Extender, menu stops after 'e' ");
+    pt("    If no Banks, menu stops after 'e' ");
     pt("");
     pt("a. We will report your configuration.");
     pt("b. Draw triangles in starting corner and each corner of matrix");
     pt("IF HAS_TILES");
     pt("c.    Draw arrows in starting corners and centers of tiles");
     pt("d.    Light up each tile AND print the number of the Tile in sequence");
-    pt("IF HAS_EXTENDER");
+    pt("IF HAS_BANKS");
     pt("e.    Light up each Bank and number in sequence");
     pt("f.    Light up each strips");
     pt("g. Display this MENU");
@@ -396,8 +396,8 @@ void memoryTest() {
     }
 
     pt("Step 3");
-    if (!leds.hasExtender) {     //if no extender or false  then no array --> locks up
-        pt("Exetnder option is false. No Extender memory");
+    if (!leds.hasBanks) {     //if no Banks or false  then no array --> locks up
+        pt("Banks option is false. No Banks memory");
         return;
     }
     leds.show();                     //LOLAD e_LED array
@@ -452,7 +452,7 @@ void stepThruBanks() {
 
 void stepThruStrips() {
 
-    if (leds.hasExtender) {
+    if (leds.hasBanks) {
         uint16_t dly = 1000;
         uint8_t color = 75;
         int16_t index = 0;

@@ -4,7 +4,7 @@ Menu driven mappin tests for LEDMatrix_22 library
 
 This sketch allows you to test the mapping of your matrix panel. These menu functions are available through the serial terminal. The general report is printed first so you can review your settings.
 
-If your setting do not include tiling or the extender hardware, these choices will be disabled.
+If your settings do not include tiling or the Extender Shield hardware, these choices will be disabled.
 
 MOST PROBLEMS ARE CAUSED BY IMPROPER SETTINGS OF THE MATRIX PANEL, TILES. OR EXTENER SETTINGS
 
@@ -23,7 +23,7 @@ MENU tiling and bank sequences.
     c.    Draw arrows in starting corners and centers of tiles
     d.    Light up each tile AND print the number of the tile in
           sequence
-    IF HAS_EXTENDER
+    IF HAS_BANKS
     e.    Light up each Bank and number in sequence
     f.    Light up each strips
     g. Display this MENU

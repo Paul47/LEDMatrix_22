@@ -77,7 +77,7 @@ void loop() {
 			// Set the i'th led to red 
 			leds.drawPixel(x ,y, CHSV(hue++, 255, 255));
 			// Show the leds
-			leds.show();   //for Extender - replace leds.show() 
+			leds.show();   
 			// now that we've shown the leds, reset the i'th led to black
 			// leds[i] = CRGB::Black;
 			leds.fadeAll(value);
@@ -90,7 +90,7 @@ void loop() {
 			// Set the i'th led to red 
 			leds.drawPixel(x ,y, CHSV(hue++, 255, 255));
 			// Show the leds
-			leds.show();   //for Extender - replace leds.show()
+			leds.show();  
 			// now that we've shown the leds, reset the i'th led to black
 			// leds[i] = CRGB::Black;
 			leds.fadeAll(value);

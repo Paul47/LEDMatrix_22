@@ -42,7 +42,7 @@ void stepThruOneBank(uint8_t Bank) {           // simple led step through 1 at a
     for (int16_t y = y0; y < y1; y++) {
         for (int16_t x = 0; x < MATRIX_WIDTH; x++) {
             leds.drawPixel(x, y, CRGB::Red);
-            leds.show(3-Bank, BRIGHTNESS);   //for Extender - replace leds.show()
+            leds.show(3-Bank, BRIGHTNESS);   
             FastLED.delay(20);
             leds.drawPixel(x, y, CRGB::Black);
         }

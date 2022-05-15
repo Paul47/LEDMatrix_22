@@ -89,12 +89,12 @@ void memoryTest() {
     }
 
     pt("Step 3");
-    #ifndef HAS_EXTENDER
-        pt("Extender not defined. No Extender memory");
+    #ifndef HAS_BANKS
+        pt("Banks not defined. No Banks memory");
         return;
     #endif
-    #if !HAS_EXTENDER      //if no extender or false  then no array --> locks up
-        pt("Exetnder option is false. No Extender memory");
+    #if !HAS_BANKS      //if no Banks or false  then no array --> locks up
+        pt("Banks option is false. No Banks memory");
         return;
     #endif
     leds.show();                     //LOLAD e_LED array
