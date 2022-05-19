@@ -11,7 +11,6 @@
 **Panel of 3096 leds of 48 8x8 tiles**
 
 <hr>
-	  
 					
 The LEDMatrix_22 library medium weight, two-dimensional graphics library for LED matricies/arrays using FastLED. This is an update and enhancement of previous LEDMatrix libraries. In addition to drawing shapes, and text, this library expands image and animation handling to 24 bit color. Larger displays can be formed using tiles of LED strip/panels - to build one big matrix. New and enhanced feature incude:
 
