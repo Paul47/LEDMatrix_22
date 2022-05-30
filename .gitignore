@@ -118,3 +118,6 @@ cmake-build-*
 __pycache__
 
 sync.ffs_db
+
+#windows
+Thumbs.db
