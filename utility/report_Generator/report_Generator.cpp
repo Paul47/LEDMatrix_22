@@ -1086,7 +1086,7 @@ _TILES              _MATRIX
     }
 
 #else       /* stubs */  //#ifs are OUTSIDE the functions so need stubs to avoid errors
-    void mapOfTiles() {  }
+    void mapOfLedsInTile() { }
     void  tHTL() { }       //letters for direction ex: horizontal, top down, left 2 right
     void  tHTR() { }
     void  tHBL() { }
