@@ -1303,7 +1303,7 @@ WITH local _brightness
 void cLEDMatrixBase::show(uint8_t gBrightness) {
 
     for (uint8_t Bank = 0; Bank < e_numBanks; Bank++) {
-        #if HAS_TILES
+        #if HAS_BANKS
             digitalWrite(e_enableBank[Bank], HIGH);
         #endif
         for (uint8_t i = 0; i < e_stripsPerBank; i++) {
@@ -1311,7 +1311,7 @@ void cLEDMatrixBase::show(uint8_t gBrightness) {
             memmove8(&e_LED[0], &cLED[e_stripStart[index]], e_ledsPerStrip * sizeof(CRGB)); //FastLED version
             controllers[i]->showLeds(gBrightness);
         }
-        #if HAS_TILES
+        #if HAS_BANKS
             digitalWrite(e_enableBank[Bank], LOW);
         #endif
     }
