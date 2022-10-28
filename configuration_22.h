@@ -81,9 +81,9 @@ arrays, look at the LEDMatrix manual for details.
 
 //======================== set up physical LED type, number ========================= 
 //NOTE: NEOPIXEL is not recognized. USE THE ACTUAL LED TYPE because NEOPIXEL can be WS2811, WS2812, or WS282B.
-#define CHIPSET             APA102  //TX1813	//WS2812, APA102 //see FastLED docs or examples for list
-#define CLOCK_PIN_REQUIRED  true //Does this LED need DATA + CLOCK??
-#define COLOR_ORDER BGR //GRB		//Set the color order. Most 1-wire types like WS2812B are GRB.
+#define CHIPSET     WS2812 //TX1813 //TM1829	//WS2812B //APA102 //WS2811 //see FastLED docs or examples for list
+#define CLOCK_PIN_REQUIRED  false //Does this LED need DATA + CLOCK??
+#define COLOR_ORDER GRB //BGR 	//Set the color order. Most 1-wire types like WS2812B are GRB.
 #define CORRECTION  UncorrectedColor    //setCorrection type - see the FastLED manual or FastLED keywords.txt.
 #define BRIGHTNESS  20  //1-255 CAUTION: Limit this. HIGH brightness can cause pixel breakup, and draws more current.
 
@@ -101,7 +101,7 @@ arrays, look at the LEDMatrix manual for details.
 //See the documentation for how to use these Extenders to support up to 16 LED strips and thousands of leds.
 //If HAS_BANKS is true, complete Sections #1, #2, and #3
 
-#define HAS_BANKS  true    //true/false for more than one led strip (or Banks my LED Extender shields)
+#define HAS_BANKS  false    //true/false for more than one led strip (or Banks my LED Extender shields)
 
 //Section #1. ======= set up physical LED arrangement in overall matrix then tiles within the matrix ============= 
 /*
@@ -110,12 +110,12 @@ arrays, look at the LEDMatrix manual for details.
     and (bottom to top). Use HORIZ_DIR and VERT_DIR below to do this.
     MATRIX_TYPE must match your hardware or will get trash on the panel.
 */
-#define MATRIX_WIDTH    16    //former LEDMatrix use negative value for reversed (right to left)
+#define MATRIX_WIDTH    16*4    //former LEDMatrix use negative value for reversed (right to left)
 #define MATRIX_HEIGHT   16  //former LEDMatrix use negative value for reversed (bottom to top)
 #define NUM_LEDS        MATRIX_WIDTH * MATRIX_HEIGHT 	//the total number of LEDs in your display calculated
 
 //if this is a simple matrix (no tiles), then define the flow of the led strip(s), otherwise ignore
-#define MATRIX_TYPE     HORIZONTAL_MATRIX          //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
+#define MATRIX_TYPE    VERTICAL_MATRIX          //HORIZONTAL_MATRIX, VERTICAL_MATRIX, 
                                                    //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX };
 /*
     what direction does the FIRST row of LEDs in the MATRIX PANEL flow?
@@ -123,7 +123,7 @@ arrays, look at the LEDMatrix manual for details.
     This is also the entry point of the data signal. Example: top left or bottom right.
 */
     #define HORIZ_DIR     LEFT_2_RIGHT //LEFT_2_RIGHT, RIGHT_2_LEFT
-    #define VERT_DIR      TOP_DOWN    //BOTTOM_UP, TOP_DOWN
+    #define VERT_DIR      BOTTOM_UP    //BOTTOM_UP, TOP_DOWN
 	
 /* 
 ================== Selecting the data or data+clock pins =========================
@@ -144,7 +144,7 @@ Unused defined data and clock pins are ignored. DO NOT DELETE THESE DEFINITIONS
     #define CLOCK_2         4			//only 4 or 17					16
 #else   //1-wire DATA only. Teensy pins are limted to just a few
 									  //Teensy4x	Teensy 3.5/3.6	ESP32(typical)
-    #define DATA_1        1		      //	1     		1				2 
+    #define DATA_1        11		      //	1     		1				2 
     #define DATA_2        8		      //	8			8				0
     #define DATA_3        17		  //	17			10				4
     #define DATA_4        20          //	20			26				16
@@ -161,14 +161,14 @@ Unused defined data and clock pins are ignored. DO NOT DELETE THESE DEFINITIONS
     LEDS_IN_TILE & TILES_IN_MATRIX must match your hardware or will get trash on the panel.
 */
 #if HAS_TILES
-    #define MATRIX_TILE_WIDTH   8               			// width of EACH MATRIX "tile" (not total display)
-    #define MATRIX_TILE_HEIGHT  8               			// height of each matrix "tile" 
-    #define MATRIX_TILE_H       2               			// number of matrices arranged horizontally (positive value only)
-    #define MATRIX_TILE_V       2              				// number of matrices arranged vertically (positive value only)
-    #define LEDS_IN_TILE        HORIZONTAL_ZIGZAG_MATRIX           //LED sequence within each tile:
+    #define MATRIX_TILE_WIDTH   16               			// width of EACH MATRIX "tile" (not total display)
+    #define MATRIX_TILE_HEIGHT  16               			// height of each matrix "tile" 
+    #define MATRIX_TILE_H       4               			// number of matrices arranged horizontally (positive value only)
+    #define MATRIX_TILE_V       1              				// number of matrices arranged vertically (positive value only)
+    #define LEDS_IN_TILE        HORIZONTAL_ZIGZAG_MATRIX          //LED sequence within each tile:
                                                             //HORIZONTAL_MATRIX, VERTICAL_MATRIX,
                                                            //HORIZONTAL_ZIGZAG_MATRIX, VERTICAL_ZIGZAG_MATRIX
-    #define LEDS_HORIZ_DIR      LEFT_2_RIGHT  				//LEFT_2_RIGHT, RIGHT_2_LEFT
+    #define LEDS_HORIZ_DIR     LEFT_2_RIGHT				//LEFT_2_RIGHT, RIGHT_2_LEFT
     #define LEDS_VERT_DIR       TOP_DOWN      			    //BOTTOM_UP, TOP_DOWN
 /* 
     Define the order the tiles are laid out in the matrix panel.

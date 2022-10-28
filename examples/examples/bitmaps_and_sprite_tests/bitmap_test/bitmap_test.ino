@@ -61,7 +61,7 @@ void numbersTest() {
 
     uint8_t x = 1, y = 1;
     for (uint8_t i = 0; i < 10; i++){
-        leds.drawBitmap(x, y, num[i], NUM_W, NUM_H, CRGB::Red + 100 * i);        //ppd LOCAL from adafruit
+        leds.drawBitmap(x, y, num[i], NUM_W, NUM_H, CRGB::Red + 100 * i);        //from adafruit
         leds.show();
         delay(2000);
         x = x + NUM_W + 1;

@@ -98,7 +98,7 @@ void loop()
     nblendPaletteTowardPalette( gCurrentPalette, gTargetPalette, 16);
   }
   
-  colorwaves( pleds, NUM_LEDS, gCurrentPalette);    //ppd change leds to pleds
+  colorwaves( pleds, NUM_LEDS, gCurrentPalette);    //changed leds to pleds
 
   leds.show();       // leds.show();
   FastLED.delay(SPEED);
@@ -128,7 +128,7 @@ void colorwaves( CRGB* ledarray, uint16_t numleds, CRGBPalette16& palette)
   sHue16 += deltams * beatsin88( 400, 5,9);
   uint16_t brightnesstheta16 = sPseudotime;
   
-  uint16_t end = MATRIX_WIDTH;              //ppd may change fromwidth to height later
+  uint16_t end = MATRIX_WIDTH; 
 
   for( uint16_t i = 0 ; i < end; i++) {
     hue16 += hueinc16;

@@ -772,7 +772,7 @@ LEDS_IN_TILE   ==   VERTICAL_MATRIX || VERTICAL_ZIGZAG_MATRIX
             LEDS_IN_TILE   ==   VERTICAL_MATRIX
 */
 
-    //===================================================== //ppd
+    //=====================================================
 
 
 /*
@@ -1086,7 +1086,7 @@ _TILES              _MATRIX
     }
 
 #else       /* stubs */  //#ifs are OUTSIDE the functions so need stubs to avoid errors
-    void mapOfLedsInTile() { }
+    void mapOfTiles() {  }
     void  tHTL() { }       //letters for direction ex: horizontal, top down, left 2 right
     void  tHTR() { }
     void  tHBL() { }
@@ -1098,9 +1098,6 @@ _TILES              _MATRIX
     void  tVBR() { }
 #endif  //if HAS_TILES 
 #endif //ifndef HAS_TILES 
-
-
-    //===================================================== //ppd
 
 //quick clug to list bank numbers in reverse order
 void numberBank(uint8_t i){

@@ -14,6 +14,14 @@
 					
 The LEDMatrix_22 library medium weight, two-dimensional graphics library for LED matricies/arrays using FastLED. This is an update and enhancement of previous LEDMatrix libraries. In addition to drawing shapes, and text, this library expands image and animation handling to 24 bit color. Larger displays can be formed using tiles of LED strip/panels - to build one big matrix. New and enhanced feature incude:
 
+NOTE: When using LEDMatrix_22 (which uses FastLED Controllers), some newer NEOPIXELS/WS2812/B do not work properly with FastLED 3.4/3.5. They do not always light up. Editing the following FastLED chipsets.h code around line 576 fixes this issue:
+
+'''c
+class WS2812Controller800Khz : public ClocklessController<DATA_PIN, C_NS(250), C_NS(625), C_NS(375), RGB_ORDER> {};
+'''
+
+insert ', 0, true, 500' **between** 'RGB_ORDER' and '> {};'
+
 * Table based configuration header file defining all matrix parameters with descriptions of each term. Configure once, use with all your Sketches. 
 * 2-wire LEDs: APA102, Adafruit's DotStar, SK9822, HD1701, LPD8806, SM16716, WS2801, and more.
 * 1-wire LEDs: NEOPIXEL, WS2811, WS2812, WS2812B, TX1813N1 (newer 2.2mm x 2.2mm), and more.

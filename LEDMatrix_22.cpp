@@ -13,8 +13,8 @@
 
 #include "LEDMatrix_22.h"
 
-//#define pt(msg)     Serial.println(msg);    //Serial.println MACRO
-//#define ptt(msg)     Serial.print(msg);    //Serial.printl MACRO
+#define pt(msg)     Serial.println(msg);    //Serial.println MACRO
+#define ptt(msg)     Serial.print(msg);    //Serial.printl MACRO
 
 
 #ifdef __AVR__
@@ -303,13 +303,13 @@ void cLEDMatrixBase::showColor(CRGB color){
 }
 
 void cLEDMatrixBase::fadeAll(uint16_t value) {
-  CRGBSet tleds(cLED, NUM_LEDS);           //use FastLED RGBset()
-  tleds(0, NUM_LEDS).nscale8(value);
+    CRGBSet tleds(cLED, NUM_LEDS);           //use FastLED RGBset()
+    tleds(0, NUM_LEDS).nscale8(value);
 } 
 
-void cLEDMatrixBase::fillScreen(CRGB col) {
-   CRGBSet tleds(cLED, NUM_LEDS);            //use FastLED RGBset()
-   tleds(0, NUM_LEDS) = col;
+void cLEDMatrixBase::fillScreen(CRGB color) {
+    CRGBSet tleds(cLED, NUM_LEDS);            //use FastLED RGBset()
+    tleds(0, NUM_LEDS) = color;
 }
 
 /*
@@ -1303,15 +1303,15 @@ WITH local _brightness
 void cLEDMatrixBase::show(uint8_t gBrightness) {
 
     for (uint8_t Bank = 0; Bank < e_numBanks; Bank++) {
-        #if HAS_BANKS
+        #if HAS_TILES
             digitalWrite(e_enableBank[Bank], HIGH);
         #endif
         for (uint8_t i = 0; i < e_stripsPerBank; i++) {
             uint8_t index = i + (Bank * e_stripsPerBank);
             memmove8(&e_LED[0], &cLED[e_stripStart[index]], e_ledsPerStrip * sizeof(CRGB)); //FastLED version
-            controllers[i]->showLeds(gBrightness);
+			controllers[i]->showLeds(gBrightness);
         }
-        #if HAS_BANKS
+        #if HAS_TILES
             digitalWrite(e_enableBank[Bank], LOW);
         #endif
     }

@@ -374,7 +374,7 @@ public:
 
     //>>>>>>>>>>>>>>>>>orientation test variables for debugging<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-//#define  LEDMATRIX_22_DEBUG       //enable debugging variables
+#define  LEDMATRIX_22_DEBUG       //enable debugging variables
 #if defined LEDMATRIX_22_DEBUG           //add to sketch to use these
     static const int16_t tmw = tMWidth;
     static const int16_t tmh = tMHeight;
@@ -396,25 +396,25 @@ public:
     //end of debugging variables
 
    //global declarations for definition replacements with constant variables
-    const uint8_t matrixWidth = MATRIX_WIDTH;
-    const uint8_t matrixHeight = MATRIX_HEIGHT;
-    static const uint8_t ledHorizDir = HORIZ_DIR;	    //0 = LEFT_2_RIGHT, 1 = RIGHT_2_LEFT
-    const uint8_t ledVertDir = VERT_DIR;	            //0 = BOTTOM_UP, 1 = TOP_DOWN
+    const int8_t matrixWidth = MATRIX_WIDTH;
+    const int8_t matrixHeight = MATRIX_HEIGHT;
+    static const int8_t ledHorizDir = HORIZ_DIR;	    //0 = LEFT_2_RIGHT, 1 = RIGHT_2_LEFT
+    const int8_t ledVertDir = VERT_DIR;	            //0 = BOTTOM_UP, 1 = TOP_DOWN
     const int16_t numLeds = NUM_LEDS;
 
     //capture Tile & Bank info as integers rather than #defines so we don't get undefined errors.
     //default is 0 if define = 0 or not defined
 #if HAS_TILES
-    const uint8_t hasTiles = HAS_TILES; 
-    const uint8_t numTiles = MATRIX_TILE_H * MATRIX_TILE_V;
-    const uint8_t tilesPerRow = MATRIX_TILE_H;
-    const uint8_t tilesPerCol = MATRIX_TILE_V;
-    const uint8_t tileWidth = MATRIX_TILE_WIDTH;      //leds in a tile's row
-    const uint8_t tileHeight = MATRIX_TILE_HEIGHT;    //leds in a tile's column
-    const uint8_t tileLedsFlow = LEDS_IN_TILE;        //0 = HORIZONTAL_MATRIX, 1 = VERTICAL_MATRIX, 2 = HORIZONTAL_ZIGZAG_MATRIX, 3 = VERTICAL_ZIGZAG_MATRIX
-    const uint8_t tileFlow = TILES_IN_MATRIX;        //0 = HORIZONTAL_TILES, 1 = VERTICAL_TILES, 2 = HORIZONTAL_ZIGZAG_TILES, 3 = VERTICAL_ZIGZAG_TILES
-    const uint8_t tileLedsHDir = LEDS_HORIZ_DIR;     //L0 - EFT_2_RIGHT, 1 = RIGHT_2_LEFT
-    const uint8_t tileLedsVDir = LEDS_VERT_DIR;      //0 = TOP_DOWN, 1= BOTTOM_UP
+    const int8_t hasTiles = HAS_TILES; 
+    const int8_t numTiles = MATRIX_TILE_H * MATRIX_TILE_V;
+    const int8_t tilesPerRow = MATRIX_TILE_H;
+    const int8_t tilesPerCol = MATRIX_TILE_V;
+    const int8_t tileWidth = MATRIX_TILE_WIDTH;      //leds in a tile's row
+    const int8_t tileHeight = MATRIX_TILE_HEIGHT;    //leds in a tile's column
+    const int8_t tileLedsFlow = LEDS_IN_TILE;        //0 = HORIZONTAL_MATRIX, 1 = VERTICAL_MATRIX, 2 = HORIZONTAL_ZIGZAG_MATRIX, 3 = VERTICAL_ZIGZAG_MATRIX
+    const int8_t tileFlow = TILES_IN_MATRIX;        //0 = HORIZONTAL_TILES, 1 = VERTICAL_TILES, 2 = HORIZONTAL_ZIGZAG_TILES, 3 = VERTICAL_ZIGZAG_TILES
+    const int8_t tileLedsHDir = LEDS_HORIZ_DIR;     //L0 - EFT_2_RIGHT, 1 = RIGHT_2_LEFT
+    const int8_t tileLedsVDir = LEDS_VERT_DIR;      //0 = TOP_DOWN, 1= BOTTOM_UP
 
     //TOTAL LEDS IN THE ENTIRE MATRIX
     #define NUM_LEDS_CALC          MATRIX_TILE_WIDTH * MATRIX_TILE_H * MATRIX_TILE_HEIGHT * MATRIX_TILE_V	//leds total on entire matrix panel
@@ -423,21 +423,21 @@ public:
     #endif
  
 #else
-    const uint8_t hasTiles = 0;
-    const uint8_t numTiles = 0;
-    const uint8_t tilesPerRow = 0;
-    const uint8_t tilesPerCol = 0;
-    const uint8_t tileWidth = 0;
-    const uint8_t tileHeight = 0;
-    const uint8_t tileLedsFlow = 0;
-    const uint8_t tileFlow = 0;
-    const uint8_t tileLedsHDir = 0;
-    const uint8_t tileLedsVDir = 0;
+    const int8_t hasTiles = 0;
+    const int8_t numTiles = 0;
+    const int8_t tilesPerRow = 0;
+    const int8_t tilesPerCol = 0;
+    const int8_t tileWidth = 0;
+    const int8_t tileHeight = 0;
+    const int8_t tileLedsFlow = 0;
+    const int8_t tileFlow = 0;
+    const int8_t tileLedsHDir = 0;
+    const int8_t tileLedsVDir = 0;
 #endif  //if has_tiles
 
     bool inBounds = true;           //new flag to detect index out of bounds in mXY()
-    const uint8_t numBanks = NUM_BANKS;
-    const uint8_t stripsPerBank = STRIPS_PER_BANK;
+    const int8_t numBanks = NUM_BANKS;
+    const int8_t stripsPerBank = STRIPS_PER_BANK;
     const int16_t ledsPerBank = LEDS_PER_BANK;
     const int16_t ledsPerStrip = LEDS_PER_STRIP;
     const int16_t numStrips = NUM_STRIPS;

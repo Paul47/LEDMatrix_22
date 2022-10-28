@@ -257,7 +257,6 @@ void matrix_reorg() {
         break;
     case VERTICAL_ZIGZAG_MATRIX:
         if (!_vflag) {
-            pt("                         //ppd need flag for current h or v");
             Diagonal_swap(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS );
         }
         Vertical_zig(0, 0, MATRIX_WIDTH_ABS, MATRIX_HEIGHT_ABS ); 
