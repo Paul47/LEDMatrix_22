@@ -16,9 +16,9 @@ The LEDMatrix_22 library medium weight, two-dimensional graphics library for LED
 
 NOTE: When using LEDMatrix_22 (which uses FastLED Controllers), some newer NEOPIXELS/WS2812/B do not work properly with FastLED 3.4/3.5. They do not always light up. Editing the following FastLED chipsets.h code around line 576 fixes this issue:
 
-'''c
+```c
 class WS2812Controller800Khz : public ClocklessController<DATA_PIN, C_NS(250), C_NS(625), C_NS(375), RGB_ORDER> {};
-'''
+```
 
 insert ', 0, true, 500' **between** 'RGB_ORDER' and '> {};'
 
